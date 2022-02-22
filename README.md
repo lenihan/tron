@@ -10,7 +10,7 @@
    2.  Select *"Desktop development with C++"* Workload
    3.  Click *"Install"* button
 
-### Ubuntu 20.04
+### Linux
 
 1. [Installing PowerShell on Ubuntu](https://docs.microsoft.com/en-us/powershell/scripting/install/install-ubuntu)
 
@@ -27,9 +27,22 @@
 
 3. `.\setup.ps1`
 
-## Build
+## Generate Build Files
+
+`cmake .`
 
 ## Run
+
+### Windows
+
+1. Open `tron.sln` in Visual Studio 2022
+2. Right click project you want to run in *Solution Explorer > Set as Startup Project* (project becomes **bold**)
+3. Run via *Visual Studio > Debug > Start Debugging* (`F5`)
+
+### Linux
+
+### Mac
+
 
 ## Search
 

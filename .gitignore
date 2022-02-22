@@ -13,6 +13,7 @@ bld/
 [Oo]bj/
 [Ll]og/
 [Ll]ogs/
+.vs/
 
 # Output directory
 out/
@@ -31,6 +32,5 @@ CTestTestfile.cmake
 _deps
 # Visual Studio generated build files
 *.sln
-*.vcxproj
-*.vcxproj.filters
+*.vcxproj*
 
