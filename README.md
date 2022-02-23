@@ -5,10 +5,12 @@
 ### Windows
 
 1. Install [PowerShell 7+ from Microsoft Store](https://www.microsoft.com/en-us/p/powershell/9mz1snwt0n5d)
-2. Install Visual Studio 2022 Community
+2. Install *Visual Studio 2022 Community*
    1. Download and open [vs_Community.exe](https://aka.ms/vs/17/release/vs_community.exe)
    2.  Select *"Desktop development with C++"* Workload
    3.  Click *"Install"* button
+3.  Install [Qt Visual Studio Tools](https://marketplace.visualstudio.com/items?itemName=TheQtCompany.QtVisualStudioTools2022)
+    * Adds debugging extensions for Qt data types
 
 ### Linux
 
