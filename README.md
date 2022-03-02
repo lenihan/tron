@@ -26,8 +26,9 @@
 2. Update environment for dev tools
    * *WINDOWS* `& "$env:ProgramFiles\Microsoft Visual Studio\2022\Community\Common7\Tools\Launch-VsDevShell.ps1"`
 3. `cd <TRON_REPO>`
+4.  `.\setup.ps1`
 
-3. `.\setup.ps1`
+TODO: Make `setup` do all steps. Should be able to run from anywhere: cmd, bash, powershell 5, etc.
 
 ## Generate Build Files
 
@@ -68,7 +69,7 @@ out/meta
   * propertyGrid
   * simEd_app
   * precompiled_header
-* out
+* build
   * precompiled_header
   * public_includes
   * meta
@@ -95,3 +96,18 @@ out/meta
   * README.md
   * setup.ps1
 
+
+## Create A CMake Project 
+
+1. Create project folder under `~/repos/tron/src`
+2. Create `CMakeLists.txt` in project folder
+   1. [add_executable](https://cmake.org/cmake/help/latest/command/add_executable.html)
+      * Links source code to executable 
+   2. [find_package](https://cmake.org/cmake/help/latest/command/find_package.html)
+      * Add third party header/library paths
+   3. [target_link_libraries](https://cmake.org/cmake/help/latest/command/target_link_libraries.html)
+      * Link executable to third party libaries 
+3. Update `CmakeLists.txt` in root
+   1. Add project folder via [add_subdirectory](https://cmake.org/cmake/help/latest/command/add_subdirectory.html)
+4. Generate build files in `~/repos/tron/out`: `generate.ps1` `cmake -S ~/repos/tron -B ~/repos/tron/out`
+5. Open IDE: `Invoke-Expression ~/repos/tron/out/tron.sln`

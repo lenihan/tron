@@ -14,4 +14,6 @@ include_directories("${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/include")
 
 # Include sub-projects.
 add_subdirectory ("src/sandbox/parseJson_app")
+add_subdirectory ("src/sandbox/QTreeView_app")
+
 
