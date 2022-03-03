@@ -1,3 +1,4 @@
 {
-    "cmake.buildDirectory": "${workspaceFolder}/out"
+    "cmake.buildDirectory": "${workspaceFolder}/out",
+    "cmake.configureOnEdit": false
 }

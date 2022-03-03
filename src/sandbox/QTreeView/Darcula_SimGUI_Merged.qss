@@ -37,6 +37,7 @@ QAbstractButton:disabled {
     color: #5f5f5f;
 }
 
+/* CAUSES PROBLEMS WITH SELECTION COLOR, CHECKBOX MISSING, EMPTY CHECKBOX BLACK (INSTEAD OF WHITE)
 QCheckBox::indicator:checked, QTreeView::indicator:checked {
     background-color: #007672;
     border: 2px solid;
@@ -51,6 +52,7 @@ QCheckBox::indicator:disabled, QTreeView::indicator:disabled {
     background-color: #303030;
     border: 1px solid #2f2f2f;
 }
+*/
 
 QComboBox {
     selection-background-color: #232B2B;
@@ -71,6 +73,7 @@ QLineEdit:disabled {
     background: #3c3f41;
 }
 
+/* WORKS ^^^^^^^^^ */
 QMenu {
     background-color: #3c3f41;
     padding: 0;
@@ -242,7 +245,7 @@ QToolTip {
     border: 1px solid #2d2d2d;
     color: #bbb;
 }
-
+/* CAUSES PROBLEMS WITH SELECTION COLOR AND HOVER 
 QTreeView::item {
     padding: 1px;
     border-right: 1px solid #2d2d2d;
@@ -252,6 +255,8 @@ QTreeView::item:selected {
     background-color: #2f65ca;
     color: #bbbbbb;
 }
+*/
+
 
 /* Argo::Sim::GUI::CollapsiblePanel/CollapsiblePanelGroup */
 

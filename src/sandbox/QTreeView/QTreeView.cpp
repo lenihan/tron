@@ -23,8 +23,8 @@ int main(int argc, char* argv[])
 {
     QApplication app(argc, argv);
     auto x = QDir::currentPath();
-    QFile f("Darcula_SimGUI_Merged.qss");
-    //QFile f("C:/Users/david/repos/tron/src/sandbox/QTreeView/Darcula_SimGUI_Merged.qss");
+    //QFile f("Darcula_SimGUI_Merged.qss"); TODO - figure out how to get copy newer to work
+    QFile f("C:/Users/david/repos/tron/src/sandbox/QTreeView/Darcula_SimGUI_Merged.qss");
     if (f.open(QFile::ReadOnly | QFile::Text))
     {
         QTextStream in(&f);
@@ -38,6 +38,13 @@ int main(int argc, char* argv[])
     row1->setData("ONE", Qt::DisplayRole);
     row2->setData("TWO", Qt::DisplayRole);
     row3->setData("THREE", Qt::DisplayRole);
+    row1->setCheckable(true);
+    row2->setCheckable(true);
+    row3->setCheckable(true);
+    row1->setUserTristate(true);
+    row2->setUserTristate(true);
+    row3->setUserTristate(true);
+
     row1->setData(QBrush(Qt::red), Qt::ForegroundRole);
 
     QStandardItemModel model;
