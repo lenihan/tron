@@ -1,29 +1,28 @@
 #include <QApplication>
 #include <QPushButton>
+#include <QTreeView>
+#include <QStandardItemModel>
 
 int main(int argc, char* argv[])
 {
-    QApplication a(argc, argv);
+    QApplication app(argc, argv);
+    
+    QStandardItem *row1 = new QStandardItem();
+    QStandardItem *row2 = new QStandardItem(); 
+    QStandardItem *row3 = new QStandardItem();
+    row1->setData("ONE", Qt::DisplayRole);
+    row2->setData("TWO", Qt::DisplayRole);
+    row3->setData("THREE", Qt::DisplayRole);
 
-#if defined(Q_OS_WINDOWS)
-    QString os = "Windows";
-#elif defined(Q_OS_LINUX)
-    QString os = "Linux";
-#elif defined(Q_OS_MAC)
-    QString os = "Mac";
-#endif 
+    QStandardItemModel model;
+    model.appendRow(row1);
+    model.appendRow(row2);
+    model.appendRow(row3);
 
-#if defined(Q_CC_MSVC)
-    QString cc = "Microsoft Visual C++";
-#elif defined (Q_CC_GNU)
-    QString cc = "gcc";
-#elif defined (Q_CC_CLANG)
-    QString cc = "Clang";
-#endif
+    QTreeView view;
+    view.setModel(&model);
+    view.resize(300, 300);
+    view.show();
 
-    QString msg = QString("Hello Qt\nOS: %1\nCC: %2").arg(os).arg(cc);
-    QPushButton b(msg);
-    b.resize(300, 100);
-    b.show();
-    return a.exec();
+    return app.exec();
 }
