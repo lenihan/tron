@@ -1,0 +1,136 @@
+/* Note: current implementation limit: must use absolute path for the url */
+@import url("sim/resources/stylesheets/Darcula/Darcula.qss")
+
+/* Argo::Sim::GUI::CollapsiblePanel/CollapsiblePanelGroup */
+
+Argo--Sim--GUI--CollapsiblePanelGroup {
+    padding: 0px;
+    margin: 0px;
+}
+
+Argo--Sim--GUI--CollapsiblePanel QWidget#header {
+    border-bottom: 1px solid #cccccc;
+}
+Argo--Sim--GUI--CollapsiblePanel QPushButton#collapse_button {
+    background-color: rgba(0,0,0,0);
+    min-width: 16px;
+    qproperty-icon: none;
+    qproperty-iconSize: 16px 16px;
+    image: url(sim/resources/images/arrow_up_button.png);
+}
+Argo--Sim--GUI--CollapsiblePanel QPushButton#collapse_button:checked {
+    image: url(sim/resources/images/arrow_down_button.png);
+}
+
+/* Argo::Sim::GUI::MapSearchWidget */
+
+Argo--Sim--GUI--MapSearchWidget QWidget#query_view,
+Argo--Sim--GUI--MapSearchWidget QWidget#result_view,
+Argo--Sim--GUI--MapSearchWidget QWidget#result_label {
+    border: 1px solid #2d2d2d;
+}
+
+/* Argo::Sim::GUI::ModelLibraryWidget */
+
+Argo--Sim--GUI--ModelLibraryWidget {
+    border: 1px solid #2d2d2d;
+}
+Argo--Sim--GUI--ModelLibraryWidget QLabel {
+    background: #1f65ca;
+    padding: 3px;
+    text-align: center;
+}
+
+/* Argo::Sim::GUI::ScenarioWidget */
+
+QLineEdit#filter_line_edit {
+    height: 1.5em;
+}
+
+QWidget#scenario_filter_widget QPushButton {
+    min-width: 1em;
+}
+
+/* Argo::Sim::GUI::PlayerWidget */
+
+QWidget#player_mode_widget QPushButton,
+QWidget#player_control_widget QPushButton {
+    min-width: 1em;
+}
+
+QWidget#player_control_widget QPushButton#step_button {
+    qproperty-icon: url(sim/resources/stylesheets/Darcula/images/media_step_forward_button.png),
+    url(sim/resources/stylesheets/Darcula/images/media_step_forward_button_dark.png) disabled;
+}
+
+QWidget#player_control_widget QPushButton#play_button {
+    qproperty-icon: url(sim/resources/stylesheets/Darcula/images/media_play_button.png),
+    url(sim/resources/stylesheets/Darcula/images/media_play_button_dark.png) disabled;
+}
+
+QWidget#player_control_widget QPushButton#pause_button {
+    qproperty-icon: url(sim/resources/stylesheets/Darcula/images/media_pause_button.png),
+    url(sim/resources/stylesheets/Darcula/images/media_pause_button_dark.png) disabled;
+}
+
+QWidget#player_control_widget QPushButton#stop_button {
+    qproperty-icon: url(sim/resources/stylesheets/Darcula/images/media_stop_button.png),
+    url(sim/resources/stylesheets/Darcula/images/media_stop_button_dark.png) disabled;
+}
+
+QWidget#player_control_widget QPushButton#restart_button {
+    qproperty-icon: url(sim/resources/stylesheets/Darcula/images/media_restart_button.png),
+    url(sim/resources/stylesheets/Darcula/images/media_restart_button_dark.png) disabled;
+}
+
+QWidget#ActorPropertyWidget QPushButton {
+    min-width: 1em;
+}
+
+QSlider::handle:disabled {
+    margin: -2 -2px;
+    color: #007672;
+    background-color: #007672;
+    height: 8px;
+    width: 10px;
+    border-radius: 6px;
+    border-width: 2px;
+    border-style: solid;
+    border-color: #1B1B1B;
+}
+
+QSlider::add-page:disabled {
+    background-color: #232B2B;
+    border-radius: 5px;
+}
+
+QSlider::sub-page:disabled {
+    background-color: #007672;
+    border-radius: 5px;
+}
+
+QSlider::handle {
+    margin: -2 -2px;
+    color: #007672;
+    background-color: #E79F56;
+    height: 8px;
+    width: 10px;
+    border-radius: 6px;
+    border-width: 2px;
+    border-style: solid;
+    border-color: #1B1B1B;
+}
+
+QSlider::add-page {
+    background-color: #936b43;
+    border-radius: 5px;
+}
+
+QSlider::sub-page {
+    background-color: #936b43;
+    border-radius: 5px;
+}
+
+QSlider::handle:hover {
+    background: #98cff5;
+}
