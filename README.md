@@ -109,5 +109,35 @@ out/meta
       * Link executable to third party libaries 
 3. Update `CmakeLists.txt` in root
    1. Add project folder via [add_subdirectory](https://cmake.org/cmake/help/latest/command/add_subdirectory.html)
-4. Generate build files in `~/repos/tron/out`: `generate.ps1` `cmake -S ~/repos/tron -B ~/repos/tron/out`
-5. Open IDE: `Invoke-Expression ~/repos/tron/out/tron.sln`
+4. Generate build files in *tron/out*: Run `generate.ps1` 
+   * What it does if you are running from repo root: `cmake -S . -B ./out`
+5. Open IDE
+   * Visual Studio: `.\out\tron.sln`
+
+## CMake Tips
+
+### CMake Comment
+
+[CMake Comment Documentation](https://cmake.org/cmake/help/v3.1/manual/cmake-language.7.html#comments)
+
+* Everything after `#` is a comment 
+  * Like C++ `//`
+* Everthing in betwee `#[[` and `]]` is a comment
+  * Like C++ `/* ... */`
+### Print Message/Variable
+
+[CMake's Message Documentation](https://cmake.org/cmake/help/latest/command/message.html)
+
+```cmake
+message("Hello")
+message(${PROJECT_NAME})
+```
+### Show All CMake Variables
+
+Add this to a `CMakeLists.txt` and generate to see output
+
+```cmake
+foreach (_variableName ${_variableNames})
+  message(STATUS "${_variableName}=${${_variableName}}")
+endforeach()
+```

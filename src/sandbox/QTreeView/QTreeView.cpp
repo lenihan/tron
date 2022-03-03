@@ -23,8 +23,7 @@ int main(int argc, char* argv[])
 {
     QApplication app(argc, argv);
     auto x = QDir::currentPath();
-    //QFile f("Darcula_SimGUI_Merged.qss"); TODO - figure out how to get copy newer to work
-    QFile f("C:/Users/david/repos/tron/src/sandbox/QTreeView/Darcula_SimGUI_Merged.qss");
+    QFile f("Darcula_SimGUI_Merged.qss"); 
     if (f.open(QFile::ReadOnly | QFile::Text))
     {
         QTextStream in(&f);
