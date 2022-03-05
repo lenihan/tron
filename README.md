@@ -14,11 +14,11 @@
 
 ### Linux
 
-1. [Installing PowerShell on Ubuntu](https://docs.microsoft.com/en-us/powershell/scripting/install/install-ubuntu)
+1. [Install PowerShell on Ubuntu](https://docs.microsoft.com/en-us/powershell/scripting/install/install-ubuntu)
 
 ### Mac
 
-1. [Installing PowerShell on macOS](https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell-on-macos)
+1. [Install PowerShell on MacOS](https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell-on-macos)
 
 ## Setup
 
@@ -70,7 +70,7 @@ out/meta
 * Easy - Things should "just work." 
 * Crossplatform - Windows, Linux, Mac
 * Multiple copies of repo 
-* Run locally* 
+* Run locally 
 
 ## Hierarchy
 
@@ -97,6 +97,34 @@ out/meta
 
 ## CMake Tips
 
+### OpenSceneGraph (OSG) CMake 
+
+Add support for an OSG library by adding these lines to CMakeLists.txt
+
+1. Add `find_package(<PKG> REQUIRED)`
+2. Add `target_link_libraries(${PROJECT_NAME} ${<LIB>}`)
+
+With `<PKG>`, `<LIB>` equal to...
+* osg, OSG_LIBRARY
+* osgGA, OSGGA_LIBRARY
+* osgUtil, OSGUTIL_LIBRARY
+* osgDB, OSGDB_LIBRARY
+* osgText, OSGTEXT_LIBRARY
+* osgWidget, OSGWIDGET_LIBRARY
+* osgTerrain, OSGTERRAIN_LIBRARY
+* osgFX, OSGFX_LIBRARY
+* osgViewer, OSGVIEWER_LIBRARY
+* osgVolume, OSGVOLUME_LIBRARY
+* osgManipulator, OSGMANIPULATOR_LIBRARY
+* osgAnimation, OSGANIMATION_LIBRARY
+* osgParticle, OSGPARTICLE_LIBRARY
+* osgShadow, OSGSHADOW_LIBRARY
+* osgPresentation, OSGPRESENTATION_LIBRARY
+* osgSim, OSGSIM_LIBRARY
+* OpenThreads, OPENTHREADS_LIBRARY
+
+This informationcomes from *third_party\vcpkg\buildtrees\osg\src\raph-3.6.5-0028e69d98.clean\CMakeModules\FindOSG.cmake*
+
 ### CMake Comment
 
 [CMake Comment Documentation](https://cmake.org/cmake/help/v3.1/manual/cmake-language.7.html#comments)
@@ -115,10 +143,17 @@ message(${PROJECT_NAME})
 ```
 ### Show All CMake Variables
 
-Add this to a `CMakeLists.txt` and generate to see output
+Add this to a `CMakeLists.txt` to see all CMake variables
 
 ```cmake
+get_cmake_property(_variableNames VARIABLES)
 foreach (_variableName ${_variableNames})
-  message(STATUS "${_variableName}=${${_variableName}}")
+    message(STATUS "${_variableName}=${${_variableName}}")
 endforeach()
 ```
+
+
+## TODO
+
+* Fix missing fonts for hello_osg
+* Make hello_osg do something
