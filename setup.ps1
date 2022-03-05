@@ -1,9 +1,15 @@
 # Install prerequisites, builds third party libraries
 
+# Build environment
+Write-Host "Setup build environment..." -ForegroundColor Cyan
+if ($IsWindows) {
+    & "$env:ProgramFiles\Microsoft Visual Studio\2022\Community\Common7\Tools\Launch-VsDevShell.ps1"
+}
+
+
 # Prerequisites
 Write-Host "Prerequisites..." -ForegroundColor Cyan
-if ($IsWindows)
-{
+if ($IsWindows) {
     $cmd = " winget install --id Kitware.Cmake"
     Write-Host $cmd -ForegroundColor Cyan
     Invoke-Expression $cmd

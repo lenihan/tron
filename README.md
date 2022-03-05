@@ -22,31 +22,42 @@
 
 ## Setup
 
-1. Open PowerShell 7+ (pwsh) prompt
-2. Update environment for dev tools
-   * *WINDOWS* `& "$env:ProgramFiles\Microsoft Visual Studio\2022\Community\Common7\Tools\Launch-VsDevShell.ps1"`
+1. Open Terminal
+2. `pwsh`
 3. `cd <TRON_REPO>`
-4.  `.\setup.ps1`
-
-TODO: Make `setup` do all steps. Should be able to run from anywhere: cmd, bash, powershell 5, etc.
+4. `setup.ps1`
 
 ## Generate Build Files
 
-`cmake .`
+1. Open Terminal
+2. `pwsh`
+3. `cd <TRON_REPO>`
+4. `generate.ps1`
 
 ## Run
 
 ### Windows
 
-1. Open `tron.sln` in Visual Studio 2022
-2. Right click project you want to run in *Solution Explorer > Set as Startup Project* (project becomes **bold**)
-3. Run via *Visual Studio > Debug > Start Debugging* (`F5`)
+#### Visual Studio 2022
 
-### Linux
+1. Open Terminal
+2. `pwsh`
+3. `cd <TRON_REPO>`
+4. `out/tron.sln`
+5. Right click project you want to run in *Solution Explorer > Set as Startup Project* (project becomes **bold**)
+6. Run via *Visual Studio > Debug > Start Debugging* (`F5`)
 
+#### Visual Studio Code
+TODO
+
+#### WSL - Ubuntu
+TODO
+### Linux - Ubuntu
+
+TODO
 ### Mac
 
-
+TODO
 ## Search
 
 src 
@@ -64,37 +75,7 @@ out/meta
 ## Hierarchy
 
 * src
-  * simple
-  * mapView
-  * propertyGrid
-  * simEd_app
-  * precompiled_header
-* build
-  * precompiled_header
-  * public_includes
-  * meta
-  * platform
-    * x64-windows_debug
-      * obj
-      * lib
-      * bin
-      * installed
-        * mapView_app
-        * propertyGrid_app
-        * simEd_app
-    * x64-windows_release
-    * x64-osx_debug
-    * x64-osx_release
-    * x64-linux_debug
-    * x64-linux_release
-  * assets
-  * scripts
-  * third_party
-    * vcpkg
-  * ide
-    * vscode
-  * README.md
-  * setup.ps1
+* out
 
 
 ## Create A CMake Project 
