@@ -1,5 +1,31 @@
 # tron - Qt/OpenSceneGraph based libraries and apps
 
+- [tron - Qt/OpenSceneGraph based libraries and apps](#tron---qtopenscenegraph-based-libraries-and-apps)
+  - [Prerequisites](#prerequisites)
+    - [Windows](#windows)
+    - [Linux](#linux)
+    - [Mac](#mac)
+  - [Setup](#setup)
+  - [Generate Build Files](#generate-build-files)
+  - [Run](#run)
+    - [Windows](#windows-1)
+      - [Visual Studio 2022](#visual-studio-2022)
+      - [Visual Studio Code](#visual-studio-code)
+      - [WSL - Ubuntu](#wsl---ubuntu)
+    - [Linux - Ubuntu](#linux---ubuntu)
+    - [Mac](#mac-1)
+  - [Goals](#goals)
+  - [Hierarchy](#hierarchy)
+  - [Create A CMake Project](#create-a-cmake-project)
+  - [CMake Tips](#cmake-tips)
+    - [Helpful Documentation](#helpful-documentation)
+    - [ALL_BUILD and ZERO_CHECK](#all_build-and-zero_check)
+    - [Copy files](#copy-files)
+    - [OpenSceneGraph (OSG) CMake](#openscenegraph-osg-cmake)
+    - [CMake Comment](#cmake-comment)
+    - [Print Message/Variable](#print-messagevariable)
+    - [Show All CMake Variables](#show-all-cmake-variables)
+  - [TODO](#todo)
 ## Prerequisites
 
 ### Windows
@@ -48,20 +74,11 @@
 6. Run via *Visual Studio > Debug > Start Debugging* (`F5`)
 
 #### Visual Studio Code
-TODO
 
 #### WSL - Ubuntu
-TODO
 ### Linux - Ubuntu
 
-TODO
 ### Mac
-
-TODO
-## Search
-
-src 
-out/meta
 
 ## Goals
 
@@ -75,7 +92,16 @@ out/meta
 ## Hierarchy
 
 * src
+  * sandbox
 * out
+  * 
+* third_party
+  * vcpkg
+* .gitignore
+* CMakeLists.txt
+* generate.ps1
+* README.md
+* setup.ps1
 
 
 ## Create A CMake Project 
@@ -97,31 +123,55 @@ out/meta
 
 ## CMake Tips
 
+### Helpful Documentation
+
+* [CMake Language](https://cmake.org/cmake/help/latest/manual/cmake-language.7.html)
+* [CMake Commands](https://cmake.org/cmake/help/latest/manual/cmake-commands.7.html)
+* [CMake Variables](https://cmake.org/cmake/help/latest/manual/cmake-variables.7.html)
+* [CMake Generators](https://cmake.org/cmake/help/latest/manual/cmake-generators.7.html)
+* [CMake Qt](https://cmake.org/cmake/help/latest/manual/cmake-qt.7.html)
+
+### ALL_BUILD and ZERO_CHECK
+
+CMake creates two predefined projects
+* ALL_BUILD - Build all projects
+* ZERO_CHECK - Check to see if any files are out of date, and re-run CMake if needed.
+
+ALL_BUILD has a dependency on all projects. When you build ALL_BUILD, you build everything.
+
+ZERO_CHECK looks at the timestamp on `generate.stamp` files to determine if CMake needs to be re-run. For example, if you add a new source file to a 'CMakeLists.txt` file, ZERO_CHECK will detect this and regenerate build files. All projects have a dependency on ZERO_CHECK to ensure all build files are up to date before building.
+
+### Copy files
+
+Use `configure_file` to copy files. The copy happens during CMake build file generation. See `src\sandbox\QTreeView` for an example.
 ### OpenSceneGraph (OSG) CMake 
 
 Add support for an OSG library by adding these lines to CMakeLists.txt
 
-1. Add `find_package(<PKG> REQUIRED)`
-2. Add `target_link_libraries(${PROJECT_NAME} ${<LIB>}`)
+1. `find_package(<PKG> REQUIRED)`
+2. `target_link_libraries(${PROJECT_NAME} ${<LIB>})`
 
-With `<PKG>`, `<LIB>` equal to...
-* osg, OSG_LIBRARY
-* osgGA, OSGGA_LIBRARY
-* osgUtil, OSGUTIL_LIBRARY
-* osgDB, OSGDB_LIBRARY
-* osgText, OSGTEXT_LIBRARY
-* osgWidget, OSGWIDGET_LIBRARY
-* osgTerrain, OSGTERRAIN_LIBRARY
-* osgFX, OSGFX_LIBRARY
-* osgViewer, OSGVIEWER_LIBRARY
-* osgVolume, OSGVOLUME_LIBRARY
-* osgManipulator, OSGMANIPULATOR_LIBRARY
-* osgAnimation, OSGANIMATION_LIBRARY
-* osgParticle, OSGPARTICLE_LIBRARY
-* osgShadow, OSGSHADOW_LIBRARY
-* osgPresentation, OSGPRESENTATION_LIBRARY
-* osgSim, OSGSIM_LIBRARY
-* OpenThreads, OPENTHREADS_LIBRARY
+Replace `<PKG>` and `<LIB>` with...
+
+`<PKG>`         | `<LIB>`
+----------------|------------------------
+osg             | OSG_LIBRARY
+osgGA           | OSGGA_LIBRARY
+osgUtil         | OSGUTIL_LIBRARY
+osgDB           | OSGDB_LIBRARY
+osgText         | OSGTEXT_LIBRARY
+osgWidget       | OSGWIDGET_LIBRARY
+osgTerrain      | OSGTERRAIN_LIBRARY
+osgFX           | OSGFX_LIBRARY
+osgViewer       | OSGVIEWER_LIBRARY
+osgVolume       | OSGVOLUME_LIBRARY
+osgManipulator  | OSGMANIPULATOR_LIBRARY
+osgAnimation    | OSGANIMATION_LIBRARY
+osgParticle     | OSGPARTICLE_LIBRARY
+osgShadow       | OSGSHADOW_LIBRARY
+osgPresentation | OSGPRESENTATION_LIBRARY
+osgSim          | OSGSIM_LIBRARY
+OpenThreads     | OPENTHREADS_LIBRARY
 
 This informationcomes from *third_party\vcpkg\buildtrees\osg\src\raph-3.6.5-0028e69d98.clean\CMakeModules\FindOSG.cmake*
 
@@ -155,5 +205,11 @@ endforeach()
 
 ## TODO
 
+* Make QTreeView run from it's build directory
+* Document how to add qt libraries
 * Fix missing fonts for hello_osg
 * Make hello_osg do something
+* Build for VS Code, document
+* Build on WSL - Ubuntu, document
+* Build on Ubuntu, document
+* Build on mac, document

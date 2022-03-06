@@ -12,6 +12,9 @@ project("tron")
 
 include_directories("${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/include")
 
+# Group ALL_BUILD.vcxproj and ZERO_CHECK.vcxproj under "CMakePredifinedTargets"
+set_property(GLOBAL PROPERTY USE_FOLDERS ON)
+
 # Include sub-projects.
 add_subdirectory("src/sandbox/hello_cmake")
 add_subdirectory("src/sandbox/hello_osg")

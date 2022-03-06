@@ -6,6 +6,7 @@
 #include <QStyledItemDelegate>
 #include <QTextStream>
 #include <QDir>
+#include <QFileInfo>
 
 class Delegate : public QStyledItemDelegate
 {
@@ -22,8 +23,12 @@ class Delegate : public QStyledItemDelegate
 int main(int argc, char* argv[])
 {
     QApplication app(argc, argv);
-    auto x = QDir::currentPath();
-    QFile f("Darcula_SimGUI_Merged.qss"); 
+    const QFileInfo app_file_info = QCoreApplication::applicationFilePath();
+    const QDir app_dir = app_file_info.dir();
+    const QString qss_path = app_dir.absoluteFilePath("Darcula_SimGUI_Merged.qss");
+
+    //auto x = QDir::currentPath();
+    QFile f(qss_path);
     if (f.open(QFile::ReadOnly | QFile::Text))
     {
         QTextStream in(&f);
