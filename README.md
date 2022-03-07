@@ -61,8 +61,10 @@
 
 1. Open Terminal
 2. `pwsh`
-3. `cd <TRON_REPO>`
-4. `setup.ps1`
+3. `cd <REPOS_DIR>`
+4. `git clone https://github.com/lenihan/tron.git`
+5. `cd <TRON_REPO>`
+6. `setup.ps1`
 
 ## Generate Build Files
 
