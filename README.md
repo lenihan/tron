@@ -8,6 +8,7 @@
     - [Mac](#mac)
   - [Setup](#setup)
   - [Generate Build Files](#generate-build-files)
+  - [Clean](#clean)
   - [Run](#run)
     - [Windows](#windows-1)
       - [Visual Studio 2022](#visual-studio-2022)
@@ -69,6 +70,15 @@
 2. `pwsh`
 3. `cd <TRON_REPO>`
 4. `generate.ps1`
+
+## Clean
+
+All output (CMake, compiler, linker, etc.) go to *out* directory. To clean up, delete *out*.
+
+1. Open Terminal
+2. `pwsh`
+3. `cd <TRON_REPO>`
+4. `ri out -Recurse -Force`
 
 ## Run
 
