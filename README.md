@@ -273,7 +273,6 @@ endforeach()
 
 ## TODO
 
-* Document how to add qt libraries
 * Fix missing fonts for hello_osg
 * Make hello_osg do something
 * Build for VS Code, document
