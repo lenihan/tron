@@ -63,14 +63,14 @@
 2. `pwsh`
 3. `git clone https://github.com/lenihan/tron.git $HOME/repos/tron`
 4. `cd $HOME/repos/tron`
-5. `setup.ps1`
+5. `./setup.ps1`
 
 ## Generate Build Files
 
 1. Open Terminal
 2. `pwsh`
 3. `cd $HOME/repos/tron`
-4. `generate.ps1`
+4. `./generate.ps1`
 
 ## Clean
 
@@ -90,7 +90,7 @@ All output (CMake, compiler, linker, etc.) go to *out* directory. To clean up, d
 1. Open Terminal
 2. `pwsh`
 3. `cd $HOME/repos/tron`
-4. `out/tron.sln`
+4. `./out/tron.sln`
 5. Right click project you want to run in *Solution Explorer > Set as Startup Project* (project becomes **bold**)
 6. Run via *Visual Studio > Debug > Start Debugging* (`F5`)
 
