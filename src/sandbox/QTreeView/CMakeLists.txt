@@ -2,7 +2,7 @@
 add_executable(
     ${PROJECT_NAME} 
     QTreeView.cpp 
-    assets/Darcula_SimGUI_Merged.qss
+    Assets/Darcula_SimGUI_Merged.qss
 )
 find_package(Qt5 COMPONENTS Core Widgets REQUIRED)  
 target_link_libraries(${PROJECT_NAME} Qt5::Core Qt5::Widgets)

@@ -1,4 +1,4 @@
-﻿add_executable (hello_qt "hello_qt.cpp")
+﻿project(hello_qt)
+add_executable(${PROJECT_NAME} "hello_qt.cpp")
 find_package(Qt5 COMPONENTS Widgets REQUIRED)  
-target_link_libraries(hello_qt Qt5::Widgets)
-
+target_link_libraries(${PROJECT_NAME} Qt5::Widgets)

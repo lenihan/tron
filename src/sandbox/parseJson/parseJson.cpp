@@ -1,8 +1,11 @@
+#include <QApplication>
 #include <QFile>
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QTextStream>
+#include <QDir>
+#include <QFileInfo>
 
 int get_total_variations(QJsonValue value)
 {
@@ -36,14 +39,19 @@ int get_total_variations(QJsonValue value)
 
 int main(int argc, char* argv[])
 {
-    // TODO: open file with ostringstream
+    QApplication app(argc, argv);
+    const QFileInfo app_file_info = QCoreApplication::applicationFilePath();
+    const QDir app_dir = app_file_info.dir();
+    const QString json_path = app_dir.absoluteFilePath("simulation_config_2in1.json");
+    // const QString json_path = app_dir.absoluteFilePath("simulation_config-all_cmds.json");
+    // const QString json_path = app_dir.absoluteFilePath("simulation_config.json");
     
+    // TODO: open file with ostringstream
     // Convert to ostringstream::str().
     // str = ostringstream::str();
     // QByteArray data(str.c_str(), str.length());
     
-    //QFile loadFile("./simulation_config-all_cmds.json");
-    QFile loadFile("./simulation_config_2in1.json");
+    QFile loadFile(json_path);
     if (!loadFile.open(QIODevice::ReadOnly))
     {
         qWarning("Couldn't open file.");

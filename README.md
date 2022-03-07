@@ -1,6 +1,7 @@
 # tron - Qt/OpenSceneGraph based libraries and apps
 
 - [tron - Qt/OpenSceneGraph based libraries and apps](#tron---qtopenscenegraph-based-libraries-and-apps)
+  - [Goals](#goals)
   - [Prerequisites](#prerequisites)
     - [Windows](#windows)
     - [Linux](#linux)
@@ -14,18 +15,27 @@
       - [WSL - Ubuntu](#wsl---ubuntu)
     - [Linux - Ubuntu](#linux---ubuntu)
     - [Mac](#mac-1)
-  - [Goals](#goals)
   - [Hierarchy](#hierarchy)
   - [Create A CMake Project](#create-a-cmake-project)
   - [CMake Tips](#cmake-tips)
     - [Helpful Documentation](#helpful-documentation)
     - [ALL_BUILD and ZERO_CHECK](#all_build-and-zero_check)
     - [Copy files](#copy-files)
+    - [Qt CMake](#qt-cmake)
+  - [|`<QT5_COMPONENT>`|](#qt5_component)
     - [OpenSceneGraph (OSG) CMake](#openscenegraph-osg-cmake)
     - [CMake Comment](#cmake-comment)
     - [Print Message/Variable](#print-messagevariable)
     - [Show All CMake Variables](#show-all-cmake-variables)
   - [TODO](#todo)
+## Goals
+
+* Simple - Err on the side of simple solutions that new users will easily understand
+* Fast - Want to be able to develop fast, debug fast, iterate fast, run fast
+* Easy - Things should "just work" or be easy to figure out 
+* Crossplatform - Windows, Linux, Mac
+* Multiple copies of repo 
+* Run locally 
 ## Prerequisites
 
 ### Windows
@@ -80,21 +90,12 @@
 
 ### Mac
 
-## Goals
-
-* Simple - Err on the side of simple solutions that new users will easily understand
-* Fast - Want to be able to develop fast, debug fast, iterate fast, run fast
-* Easy - Things should "just work." 
-* Crossplatform - Windows, Linux, Mac
-* Multiple copies of repo 
-* Run locally 
 
 ## Hierarchy
 
 * src
   * sandbox
-* out
-  * 
+* out 
 * third_party
   * vcpkg
 * .gitignore
@@ -106,19 +107,20 @@
 
 ## Create A CMake Project 
 
-1. Create project folder under `~/repos/tron/src`
-2. Create `CMakeLists.txt` in project folder
+1. Name your project with `project(<PROJECT_NAME>)`
+2. Create project folder under `~/repos/tron/src`
+3. Create `CMakeLists.txt` in project folder
    1. [add_executable](https://cmake.org/cmake/help/latest/command/add_executable.html)
       * Links source code to executable 
    2. [find_package](https://cmake.org/cmake/help/latest/command/find_package.html)
       * Add third party header/library paths
    3. [target_link_libraries](https://cmake.org/cmake/help/latest/command/target_link_libraries.html)
       * Link executable to third party libaries 
-3. Update `CmakeLists.txt` in root
+4. Update `CmakeLists.txt` in root
    1. Add project folder via [add_subdirectory](https://cmake.org/cmake/help/latest/command/add_subdirectory.html)
-4. Generate build files in *tron/out*: Run `generate.ps1` 
+5. Generate build files in *tron/out*: Run `generate.ps1` 
    * What it does if you are running from repo root: `cmake -S . -B ./out`
-5. Open IDE
+6. Open IDE
    * Visual Studio: `.\out\tron.sln`
 
 ## CMake Tips
@@ -139,11 +141,77 @@ CMake creates two predefined projects
 
 ALL_BUILD has a dependency on all projects. When you build ALL_BUILD, you build everything.
 
-ZERO_CHECK looks at the timestamp on `generate.stamp` files to determine if CMake needs to be re-run. For example, if you add a new source file to a 'CMakeLists.txt` file, ZERO_CHECK will detect this and regenerate build files. All projects have a dependency on ZERO_CHECK to ensure all build files are up to date before building.
+ZERO_CHECK looks at the timestamp on `generate.stamp` files to determine if CMake needs to re-run. For example, if you add a new source file to a 'CMakeLists.txt` file, ZERO_CHECK will detect this and regenerate build files. All projects have a dependency on ZERO_CHECK to ensure all build files are up to date before building.
 
 ### Copy files
 
 Use `configure_file` to copy files. The copy happens during CMake build file generation. See `src\sandbox\QTreeView` for an example.
+
+### Qt CMake
+
+Add support for a Qt component
+1. `find_package(Qt5 COMPONENTS <QT5_COMPONENT> REQUIRED)`
+2. `target_link_libraries(${PROJECT_NAME} Qt5::<QT5_COMPONENT>)`
+
+Replace `<QT_COMPONENT>` with...
+
+|`<QT5_COMPONENT>`|
+---------------
+AccessibilitySupport
+AttributionsScannerTools
+AxBase
+AxContainer
+AxServer
+Concurrent
+Core
+DBus
+Designer
+DesignerComponents
+DeviceDiscoverySupport
+EdidSupport
+EventDispatcherSupport
+FbSupport
+FontDatabaseSupport
+Gui
+Help
+LinguistTools
+Multimedia
+MultimediaQuick
+MultimediaWidgets
+Network
+NetworkAuth
+OpenGL
+OpenGLExtensions
+PacketProtocol
+PlatformCompositorSupport
+PrintSupport
+Qml
+QmlDebug
+QmlDevTools
+QmlImportScanner
+QmlModels
+QmlWorkerScript
+Quick
+QuickCompiler
+QuickControls2
+QuickParticles
+QuickShapes
+QuickTemplates2
+QuickTest
+QuickWidgets
+Sql
+Svg
+Test
+ThemeSupport
+UiPlugin
+UiTools
+Widgets
+WindowsUIAutomationSupport
+Xml
+
+Qt components are defined in *third_party\vcpkg\installed\x64-windows\share\cmake\Qt5\Qt5Config.cmake* which is parsed via `find_package`. In this file, you can see that *modules* are directories with a `qt5` prefix in *third_party\vcpkg\installed\x64-windows\share\cmake*. Learned from [here](https://stackoverflow.com/a/62676473).
+
+
 ### OpenSceneGraph (OSG) CMake 
 
 Add support for an OSG library by adding these lines to CMakeLists.txt
@@ -173,7 +241,7 @@ osgPresentation | OSGPRESENTATION_LIBRARY
 osgSim          | OSGSIM_LIBRARY
 OpenThreads     | OPENTHREADS_LIBRARY
 
-This informationcomes from *third_party\vcpkg\buildtrees\osg\src\raph-3.6.5-0028e69d98.clean\CMakeModules\FindOSG.cmake*
+This informationcomes from *third_party\vcpkg\buildtrees\osg\src\raph-3.6.5-0028e69d98.clean\CMakeModules\FindOSG.cmake* which is parsed via `find_package`.
 
 ### CMake Comment
 
@@ -205,7 +273,6 @@ endforeach()
 
 ## TODO
 
-* Make QTreeView run from it's build directory
 * Document how to add qt libraries
 * Fix missing fonts for hello_osg
 * Make hello_osg do something
