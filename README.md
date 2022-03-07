@@ -78,8 +78,7 @@
 1. Open Terminal
 2. `pwsh`
 3. `$HOME/repos/tron/out/tron.sln`
-5. Right click project you want to run in *Solution Explorer > Set as Startup Project* (project becomes **bold**)
-6. Run via *Visual Studio > Debug > Start Debugging* (`F5`)
+4. Right click project you want to run in *Solution Explorer* and select *Debug > Start New Instance* 
 
 #### Visual Studio Code
 
