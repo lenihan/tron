@@ -23,7 +23,6 @@
     - [ALL_BUILD and ZERO_CHECK](#all_build-and-zero_check)
     - [Copy files](#copy-files)
     - [Qt CMake](#qt-cmake)
-  - [|`<QT5_COMPONENT>`|](#qt5_component)
     - [OpenSceneGraph (OSG) CMake](#openscenegraph-osg-cmake)
     - [CMake Comment](#cmake-comment)
     - [Print Message/Variable](#print-messagevariable)
@@ -165,8 +164,8 @@ Add support for a Qt component
 
 Replace `<QT_COMPONENT>` with...
 
-|`<QT5_COMPONENT>`|
----------------
+| `<QT_COMPONENT>` |
+|------------------|
 AccessibilitySupport
 AttributionsScannerTools
 AxBase
