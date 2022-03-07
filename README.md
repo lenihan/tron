@@ -72,15 +72,6 @@
 3. `cd $HOME/repos/tron`
 4. `./generate.ps1`
 
-## Clean
-
-All output (CMake, compiler, linker, etc.) go to *out* directory. To clean up, delete *out*.
-
-1. Open Terminal
-2. `pwsh`
-3. `cd $HOME/repos/tron`
-4. `ri out -Recurse -Force`
-
 ## Run
 
 ### Windows
@@ -101,6 +92,14 @@ All output (CMake, compiler, linker, etc.) go to *out* directory. To clean up, d
 
 ### Mac
 
+## Clean
+
+All output (CMake, compiler, linker, etc.) go to *out* directory. To clean up, delete *out*.
+
+1. Open Terminal
+2. `pwsh`
+3. `cd $HOME/repos/tron`
+4. `ri out -Recurse -Force`
 
 ## Hierarchy
 
