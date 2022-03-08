@@ -283,3 +283,7 @@ endforeach()
 * Build on WSL - Ubuntu, document
 * Build on Ubuntu, document
 * Build on mac, document
+* You can save ~25GB if you remove .obj files from *third_party/vcpkg/buildtrees*
+  * Should allow you to debug third_party source
+  * Downside: If you re-run setup.ps1, vcpkg will need to build all of these .obj again which could take several hours vs a few seconds if everything is already built
+ 
