@@ -28,33 +28,30 @@
     - [Print Message/Variable](#print-messagevariable)
     - [Show All CMake Variables](#show-all-cmake-variables)
   - [TODO](#todo)
+
 ## Goals
 
-* Simple - Err on the side of simple solutions that new users will easily understand
-* Fast - Want to be able to develop fast, debug fast, iterate fast, run fast
-* Easy - Things should "just work" or be easy to figure out 
-* Crossplatform - Windows, Linux, Mac
-* Multiple copies of repo 
-* Run locally 
+- Simple - Err on the side of simple solutions that new users will easily understand
+- Fast - Want to be able to develop fast, debug fast, iterate fast, run fast
+- Easy - Things should "just work" or be easy to figure out
+- Crossplatform - Windows, Linux, Mac
+- Multiple copies of repo
+- Run locally
+
 ## Prerequisites
 
-### Windows
-
-1. Install [PowerShell 7+ from Microsoft Store](https://www.microsoft.com/en-us/p/powershell/9mz1snwt0n5d)
-2. Install *Visual Studio 2022 Community*
-   1. Download and open [vs_Community.exe](https://aka.ms/vs/17/release/vs_community.exe)
-   2.  Select *"Desktop development with C++"* Workload
-   3.  Click *"Install"* button
-3.  Install [Qt Visual Studio Tools](https://marketplace.visualstudio.com/items?itemName=TheQtCompany.QtVisualStudioTools2022)
-    * Adds debugging extensions for Qt data types
-
-### Linux
-
-1. [Install PowerShell on Ubuntu](https://docs.microsoft.com/en-us/powershell/scripting/install/install-ubuntu)
-
-### Mac
-
-1. [Install PowerShell on MacOS](https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell-on-macos)
+- Windows
+  1. Install [PowerShell 7+ from Microsoft Store](https://www.microsoft.com/en-us/p/powershell/9mz1snwt0n5d)
+  2. Install *Visual Studio 2022 Community*
+     1. Download and open [vs_Community.exe](https://aka.ms/vs/17/release/vs_community.exe)
+     2. Select *"Desktop development with C++"* Workload
+     3. Click *"Install"* button
+  3. Install [Qt Visual Studio Tools](https://marketplace.visualstudio.com/items?itemName=TheQtCompany.QtVisualStudioTools2022)
+     - Adds debugging extensions for Qt data types
+- Linux
+  1. [Install PowerShell on Ubuntu](https://docs.microsoft.com/en-us/powershell/scripting/install/install-ubuntu)
+- Mac
+  1. [Install PowerShell on MacOS](https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell-on-macos)
 
 ## Setup
 
@@ -71,21 +68,16 @@
 
 ## Run
 
-### Windows
-
-#### Visual Studio 2022
-
-1. Open Terminal
-2. `pwsh`
-3. `$HOME/repos/tron/out/tron.sln`
-4. Right click project you want to run in *Solution Explorer* and select *Debug > Start New Instance* 
-
-#### Visual Studio Code
-
-#### WSL - Ubuntu
-### Linux - Ubuntu
-
-### Mac
+- Windows
+  - Visual Studio 2022
+    1. Open Terminal
+    2. `pwsh`
+    3. `$HOME/repos/tron/out/tron.sln`
+    4. Right click project you want to run in *Solution Explorer* and select *Debug > Start New Instance*
+  - Visual Studio Code
+  - WSL - Ubuntu 20.04
+- Linux - Ubuntu 20.04
+- Mac
 
 ## Clean
 
@@ -97,17 +89,16 @@ All output (CMake, compiler, linker, etc.) go to *out* directory. To clean up, d
 
 ## Hierarchy
 
-* src
-  * sandbox
-* out 
-* third_party
-  * vcpkg
-* .gitignore
-* CMakeLists.txt
-* generate.ps1
-* README.md
-* setup.ps1
-
+- src
+  - sandbox
+- out
+- third_party
+  - vcpkg
+- .gitignore
+- CMakeLists.txt
+- generate.ps1
+- README.md
+- setup.ps1
 
 ## Create A CMake Project 
 
@@ -115,33 +106,34 @@ All output (CMake, compiler, linker, etc.) go to *out* directory. To clean up, d
 2. Create project folder under `~/repos/tron/src`
 3. Create `CMakeLists.txt` in project folder
    1. [add_executable](https://cmake.org/cmake/help/latest/command/add_executable.html)
-      * Links source code to executable 
+      - Links source code to executable 
    2. [find_package](https://cmake.org/cmake/help/latest/command/find_package.html)
-      * Add third party header/library paths
+      - Add third party header/library paths
    3. [target_link_libraries](https://cmake.org/cmake/help/latest/command/target_link_libraries.html)
-      * Link executable to third party libaries 
+      - Link executable to third party libaries 
 4. Update `CmakeLists.txt` in root
    1. Add project folder via [add_subdirectory](https://cmake.org/cmake/help/latest/command/add_subdirectory.html)
 5. Generate build files in *tron/out*: Run `generate.ps1` 
-   * What it does if you are running from repo root: `cmake -S . -B ./out`
+   - What it does if you are running from repo root: `cmake -S . -B ./out`
 6. Open IDE
-   * Visual Studio: `.\out\tron.sln`
+   - Visual Studio: `.\out\tron.sln`
 
 ## CMake Tips
 
 ### Helpful Documentation
 
-* [CMake Language](https://cmake.org/cmake/help/latest/manual/cmake-language.7.html)
-* [CMake Commands](https://cmake.org/cmake/help/latest/manual/cmake-commands.7.html)
-* [CMake Variables](https://cmake.org/cmake/help/latest/manual/cmake-variables.7.html)
-* [CMake Generators](https://cmake.org/cmake/help/latest/manual/cmake-generators.7.html)
-* [CMake Qt](https://cmake.org/cmake/help/latest/manual/cmake-qt.7.html)
+- [CMake Language](https://cmake.org/cmake/help/latest/manual/cmake-language.7.html)
+- [CMake Commands](https://cmake.org/cmake/help/latest/manual/cmake-commands.7.html)
+- [CMake Variables](https://cmake.org/cmake/help/latest/manual/cmake-variables.7.html)
+- [CMake Generators](https://cmake.org/cmake/help/latest/manual/cmake-generators.7.html)
+- [CMake Qt](https://cmake.org/cmake/help/latest/manual/cmake-qt.7.html)
 
 ### ALL_BUILD and ZERO_CHECK
 
 CMake creates two predefined projects
-* ALL_BUILD - Build all projects
-* ZERO_CHECK - Check to see if any files are out of date, and re-run CMake if needed.
+
+- ALL_BUILD - Build all projects
+- ZERO_CHECK - Check to see if any files are out of date, and re-run CMake if needed.
 
 ALL_BUILD has a dependency on all projects. When you build ALL_BUILD, you build everything.
 
@@ -154,6 +146,7 @@ Use `configure_file` to copy files. The copy happens during CMake build file gen
 ### Qt CMake
 
 Add support for a Qt component
+
 1. `find_package(Qt5 COMPONENTS <QT5_COMPONENT> REQUIRED)`
 2. `target_link_libraries(${PROJECT_NAME} Qt5::<QT5_COMPONENT>)`
 
@@ -215,8 +208,7 @@ Xml
 
 Qt components are defined in *third_party\vcpkg\installed\x64-windows\share\cmake\Qt5\Qt5Config.cmake* which is parsed via `find_package`. In this file, you can see that *modules* are directories with a `qt5` prefix in *third_party\vcpkg\installed\x64-windows\share\cmake*. Learned from [here](https://stackoverflow.com/a/62676473).
 
-
-### OpenSceneGraph (OSG) CMake 
+### OpenSceneGraph (OSG) CMake
 
 Add support for an OSG library by adding these lines to CMakeLists.txt
 
@@ -251,10 +243,11 @@ This informationcomes from *third_party\vcpkg\buildtrees\osg\src\raph-3.6.5-0028
 
 [CMake Comment Documentation](https://cmake.org/cmake/help/v3.1/manual/cmake-language.7.html#comments)
 
-* Everything after `#` is a comment 
-  * Like C++ `//`
-* Everthing in betwee `#[[` and `]]` is a comment
-  * Like C++ `/* ... */`
+- Everything after `#` is a comment
+  - Like C++ `//`
+- Everthing in betwee `#[[` and `]]` is a comment
+  - Like C++ `/* ... */`
+
 ### Print Message/Variable
 
 [CMake's Message Documentation](https://cmake.org/cmake/help/latest/command/message.html)
@@ -263,6 +256,7 @@ This informationcomes from *third_party\vcpkg\buildtrees\osg\src\raph-3.6.5-0028
 message("Hello")
 message(${PROJECT_NAME})
 ```
+
 ### Show All CMake Variables
 
 Add this to a `CMakeLists.txt` to see all CMake variables
@@ -274,16 +268,14 @@ foreach (_variableName ${_variableNames})
 endforeach()
 ```
 
-
 ## TODO
 
-* Fix missing fonts for hello_osg
-* Make hello_osg do something
-* Build for VS Code, document
-* Build on WSL - Ubuntu, document
-* Build on Ubuntu, document
-* Build on mac, document
-* You can save ~25GB if you remove .obj files from *third_party/vcpkg/buildtrees*
-  * Should allow you to debug third_party source
-  * Downside: If you re-run setup.ps1, vcpkg will need to build all of these .obj again which could take several hours vs a few seconds if everything is already built
- 
+- Fix missing fonts for hello_osg
+- Make hello_osg do something
+- Build for VS Code, document
+- Build on WSL - Ubuntu, document
+- Build on Ubuntu, document
+- Build on mac, document
+- You can save ~25GB if you remove .obj files from *third_party/vcpkg/buildtrees*
+  - Should allow you to debug third_party source
+  - Downside: If you re-run setup.ps1, vcpkg will need to build all of these .obj again which could take several hours vs a few seconds if everything is already built
