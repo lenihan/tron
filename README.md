@@ -58,13 +58,13 @@
 1. Open Terminal
 2. `pwsh`
 3. `git clone https://github.com/lenihan/tron.git $HOME/repos/tron`
-4. `$HOME/repos/tron/setup.ps1`
+4. `~/repos/tron/setup.ps1`
 
 ## Generate Build Files
 
 1. Open Terminal
 2. `pwsh`
-3. `$HOME/repos/tron/generate.ps1`
+3. `~/repos/tron/generate.ps1`
 
 ## Run
 
@@ -72,7 +72,7 @@
   - Visual Studio 2022
     1. Open Terminal
     2. `pwsh`
-    3. `$HOME/repos/tron/out/tron.sln`
+    3. `~/repos/tron/out/tron.sln`
     4. Right click project you want to run in *Solution Explorer* and select *Debug > Start New Instance*
   - Visual Studio Code
   - WSL - Ubuntu 20.04
