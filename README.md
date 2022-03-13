@@ -268,6 +268,10 @@ foreach (_variableName ${_variableNames})
 endforeach()
 ```
 
+## OSG Tips
+
+
+
 ## TODO
 
 - Fix missing fonts for hello_osg
