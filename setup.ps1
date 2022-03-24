@@ -6,7 +6,6 @@ if ($IsWindows) {
     & "$env:ProgramFiles\Microsoft Visual Studio\2022\Community\Common7\Tools\Launch-VsDevShell.ps1"
 }
 
-
 # Prerequisites
 Write-Host "Prerequisites..." -ForegroundColor Cyan
 if ($IsWindows) {
@@ -79,19 +78,19 @@ if ($IsWindows) {
     Write-Host $cmd -ForegroundColor Cyan
     Invoke-Expression $cmd
 }    
-#     # To avoid path length issues building qt5 (qtdeclarative), make root as short as possible
-#     # From https://github.com/microsoft/vcpkg/issues/20604#issuecomment-939091795
-#     subst k: $ROOT_DIR\third_party\vcpkg
-#     Set-Location k:
-# } elseif ($IsLinux) {
-    #     $triplet = "x64-linux"
-    #     ./bootstrap-vcpkg.sh -disableMetrics
-    # }
     
-$packages = 
-    "fontconfig",                       # needed by osg for reading fonts. Windows: 20 min
-    "osg[tools,plugins,examples]",      #                                  Windows: 1.4 hours
-    "qt5"                               #                                  Windows: 1.2 hours
+if ($IsWindows) {
+    # ~2 hours
+    $packages = 
+        "osg[tools,plugins,examples]",      
+        "qt5"                               
+} 
+else {
+    $packages = 
+        "fontconfig",                       # needed by osg for reading fonts. 
+        "osg[tools,plugins,examples]",      
+        "qt5"                               
+}
 foreach ($pkg in $packages) {
     $cmd = "$VCPKG_DIR/vcpkg --triplet=$triplet --recurse install $pkg"
     Write-Host $cmd -ForegroundColor Cyan
