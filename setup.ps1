@@ -96,3 +96,11 @@ foreach ($pkg in $packages) {
     Write-Host $cmd -ForegroundColor Cyan
     Invoke-Expression "$VCPKG_DIR/vcpkg --triplet=$triplet --recurse install $pkg"
 }
+
+# Download OSG data (models, textures)
+Write-Host "Download OpenSceneGraph-Data" -ForegroundColor Cyan
+git clone https://github.com/openscenegraph/OpenSceneGraph-Data.git "$THIRD_PARTY_DIR/OpenSceneGraph-Data"
+
+# Download code samples from OpenSceneGraph 3.0 Cookbook
+Write-Host "Download code samples from OpenSceneGraph 3.0 Cookbook" -ForegroundColor Cyan
+git clone https://github.com/xarray/osgRecipes.git "$THIRD_PARTY_DIR/osgRecipes"
