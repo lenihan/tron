@@ -39,9 +39,10 @@ int main(int argc, char* argv[])
     QStandardItem *row1 = new QStandardItem();
     QStandardItem *row2 = new QStandardItem(); 
     QStandardItem *row3 = new QStandardItem();
-    row1->setData("ONE", Qt::DisplayRole);
+    //row1->setData("ONE", Qt::DisplayRole);
     row2->setData("TWO", Qt::DisplayRole);
     row3->setData("THREE", Qt::DisplayRole);
+    row1->setText("LENIHAN");
     row1->setCheckable(true);
     row2->setCheckable(true);
     row3->setCheckable(true);
@@ -55,6 +56,11 @@ int main(int argc, char* argv[])
     model.appendRow(row1);
     model.appendRow(row2);
     model.appendRow(row3);
+    QObject::connect(&model, &QAbstractItemModel::dataChanged, [=]() {
+        row1->setText("HOWDY!");
+        row1->setIcon(QIcon());
+        row1->setToolTip("TOOLTIP");
+    });
 
     Delegate delegate;
 
@@ -63,6 +69,12 @@ int main(int argc, char* argv[])
     view.setItemDelegate(&delegate);
     view.resize(300, 300);
     view.show();
+
+    // TODO delegate
+    // delegate detects click in icon, emits signal with modelIndex
+    // slot receives, does work
+
+
 
     return app.exec();
 }
