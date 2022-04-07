@@ -20,6 +20,7 @@
     - [Show All CMake Variables](#show-all-cmake-variables)
   - [OSG Tips](#osg-tips)
     - [OSG Tools (.exe's)](#osg-tools-exes)
+    - [Run osgviewer.exe](#run-osgviewerexe)
     - [Run osgconv.exe](#run-osgconvexe)
   - [TODO](#todo)
 
@@ -269,6 +270,13 @@ endforeach()
 ```powershell
 ./Set-Env.ps1
 gci $env:VCPKG_TOOLS_OSG_DIR
+```
+
+### Run osgviewer.exe
+
+```powershell
+./Set-Env.ps1
+osgviewer cow.osg
 ```
 
 ### Run osgconv.exe
