@@ -19,6 +19,8 @@
     - [Print Message/Variable](#print-messagevariable)
     - [Show All CMake Variables](#show-all-cmake-variables)
   - [OSG Tips](#osg-tips)
+    - [OSG Tools (.exe's)](#osg-tools-exes)
+    - [Run osgconv.exe](#run-osgconvexe)
   - [TODO](#todo)
 
 ## Goals
@@ -261,6 +263,20 @@ endforeach()
 ```
 
 ## OSG Tips
+
+### OSG Tools (.exe's)
+
+```powershell
+./Set-Env.ps1
+gci $env:VCPKG_TOOLS_OSG_DIR
+```
+
+### Run osgconv.exe
+
+```powershell
+./Set-Env.ps1
+osgconv
+```
 
 
 
