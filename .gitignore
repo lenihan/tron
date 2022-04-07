@@ -34,3 +34,5 @@ _deps
 # Visual Studio generated build files
 *.sln
 *.vcxproj*
+
+*.env

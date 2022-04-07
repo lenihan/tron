@@ -1,6 +1,6 @@
 # Install prerequisites, builds third party libraries
 
-if( -not (Test-Variable 'variable:IsWindows') )
+if(!(Test-Path variable:IsWindows))
 {
     # We know we're on Windows PowerShell 5.1 or earlier
     $IsWindows = $true
@@ -118,8 +118,7 @@ git clone https://github.com/xarray/osgRecipes.git $OSGRECIPES_DIR
 
 # Generate environment file .env for running apps
 $ENV_FILE = Join-Path $ROOT .env
-$ENV_DEBUG_FILE = Join-Path $ROOT .env_debug
-Write-Host "Generate environment file $ENV_FILE for running apps"  -ForegroundColor Cyan
+$ENV_DEBUG_FILE = Join-Path $ROOT debug.env
 $VCPKG_TOOLS_DIR = Join-Path $VCPKG_DIR installed $triplet tools
 $VCPKG_TOOLS_DEBUG_DIR = Join-Path $VCPKG_DIR installed $triplet debug tools
 $OSG_VERSION_EXE = Join-Path $VCPKG_TOOLS_DIR osg osgversion
@@ -133,20 +132,34 @@ $VCPKG_INCLUDE_DIR = Join-Path $VCPKG_DIR installed $triplet include
 $VCPKG_BIN_DIR = Join-Path $VCPKG_DIR installed $triplet bin
 $VCPKG_BIN_DEBUG_DIR = Join-Path $VCPKG_DIR installed $triplet debug bin
 
+# Add .dll/.so, .exe locations to PATH
+$path_array = $env:PATH -Split [IO.Path]::PathSeparator
+$new_path_array = $VCPKG_BIN_DIR, $VCPKG_TOOLS_DIR + $path_array | Select-Object -Unique
+$PATH = $new_path_array -Join [IO.Path]::PathSeparator
+$new_path_debug_array = $VCPKG_BIN_DEBUG_DIR, $VCPKG_TOOLS_DEBUG_DIR + $new_path_array | Select-Object -Unique
+$PATH_DEBUG = $new_path_debug_array -Join [IO.Path]::PathSeparator
+
+Write-Host "Generate environment file $ENV_FILE for running release apps"  -ForegroundColor Cyan
 @"
-OSG_LIBRARY_PATH="$OSG_PLUGINS_DIR"
-OSG_FILE_PATH="$OPENSCENEGRAPH_DATA_DIR"
-VCPKG_INCLUDE_DIR="$VCPKG_INCLUDE_DIR"
-VCPKG_LIB_DIR="$VCPKG_LIB_DIR"
-VCPKG_BIN_DIR="$VCPKG_BIN_DIR"
+# Environment Variables for Release Configuration
+OSG_FILE_PATH=$OPENSCENEGRAPH_DATA_DIR
+OSG_LIBRARY_PATH=$OSG_PLUGINS_DIR
+PATH=$PATH
+VCPKG_BIN_DIR=$VCPKG_BIN_DIR
+VCPKG_INCLUDE_DIR=$VCPKG_INCLUDE_DIR
+VCPKG_LIB_DIR=$VCPKG_LIB_DIR
 "@ > $ENV_FILE
 
+Write-Host "Generate environment file $ENV_DEBUG_FILE for running debug apps"  -ForegroundColor Cyan
 @"
-OSG_LIBRARY_PATH="$OSG_PLUGINS_DEBUG_DIR"
-OSG_FILE_PATH="$OPENSCENEGRAPH_DATA_DIR"
-VCPKG_INCLUDE_DIR="$VCPKG_INCLUDE_DIR"
-VCPKG_LIB_DEBUG_DIR="$VCPKG_LIB_DEBUG_DIR"
-VCPKG_BIN_DEBUG_DIR="$VCPKG_BIN_DEBUG_DIR"
+# Environment Variables for Debug Configuration
+OSG_FILE_PATH=$OPENSCENEGRAPH_DATA_DIR
+OSG_LIBRARY_PATH=$OSG_PLUGINS_DEBUG_DIR
+PATH=$PATH_DEBUG
+VCPKG_BIN_DEBUG_DIR=$VCPKG_BIN_DEBUG_DIR
+VCPKG_INCLUDE_DIR=$VCPKG_INCLUDE_DIR
+VCPKG_LIB_DEBUG_DIR=$VCPKG_LIB_DEBUG_DIR
 "@ > $ENV_DEBUG_FILE
 
-# TODO: Add this for linux: LD_LIBRARY_PATH="$ROOT/OpenSceneGraph/lib:$ROOT/vcpkg/installed/x64-linux-dynamic/debug/lib"
+# TODO: Add this for linux: LD_LIBRARY_PATH="$VCPKG_LIB_DIR"
+# TODO: Add this for linux debug: LD_LIBRARY_PATH="$VCPKG_LIB_DEBUG_DIR"
