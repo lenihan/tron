@@ -290,7 +290,10 @@ osgconv
 
 ## TODO
 
-- Fix missing fonts for hello_osg
+- List all osg environment variables like from here https://github.com/esmini/esmini/blob/master/docs/osg_options_and_env_variables.txt?msclkid=32f39220b03511ec8ba55e72d8c7b519
+- Document osg .exe's: examples, tools
+- Get Qt apps to run from command line
+- Document qt apps
 - Make hello_osg do something
 - Build for VS Code, document
 - Build on WSL - Ubuntu, document
