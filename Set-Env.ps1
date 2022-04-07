@@ -7,6 +7,7 @@ Param(
     $Path = (Join-Path $PSScriptRoot .env)
 )
 Get-Content $Path | ForEach-Object {
+    if ($_.StartsWith('#')) {continue}
     $name, $value = $_ -Split '='
     Set-Item -Path env:"$name" -Value "$value"
 }
