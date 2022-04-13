@@ -24,8 +24,8 @@ set(RESOURCES_DIR ${PROJECT_SOURCE_DIR}/Resources)
 file(MAKE_DIRECTORY ${RESOURCES_DIR})
 
 # Get `OSG_LIBRARY_PATH=XXX` from .env
-file(STRINGS ${CMAKE_HOME_DIRECTORY}/.env myFile)
-foreach(LINE ${myFile})
+file(STRINGS ${CMAKE_HOME_DIRECTORY}/.env ENV_FILE)
+foreach(LINE ${ENV_FILE})
     string(FIND "${LINE}" "OSG_LIBRARY_PATH" INDEX)
     if(INDEX EQUAL 0)
         set(OSG_LIBRARY_PATH_SETTING ${LINE} )
