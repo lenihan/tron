@@ -80,7 +80,7 @@ $TAG = "2022.02.02"
 Write-Host "Using vcpkg tag $TAG" -ForegroundColor Cyan
 git clone --branch $TAG https://github.com/Microsoft/vcpkg.git $VCPKG_DIR 
 if ($IsWindows) {
-    $triplet = "x64-windows"   # dynamic library, dynamic CRT
+    $TRIPLET = "x64-windows"   # dynamic library, dynamic CRT
     $BOOTSTRAP_VCPKG_EXE = Join-Path $VCPKG_DIR bootstrap-vcpkg
     $cmd = "$BOOTSTRAP_VCPKG_EXE -disableMetrics"
     Write-Host $cmd -ForegroundColor Cyan
@@ -101,7 +101,7 @@ else {
 }
 $VCPKG_EXE = Join-Path $VCPKG_DIR vcpkg
 foreach ($pkg in $packages) {
-    $cmd = "$VCPKG_EXE --triplet=$triplet --recurse install $pkg"
+    $cmd = "$VCPKG_EXE --triplet=$TRIPLET --recurse install $pkg"
     Write-Host $cmd -ForegroundColor Cyan
     Invoke-Expression $cmd
 }
@@ -119,18 +119,27 @@ git clone https://github.com/xarray/osgRecipes.git $OSGRECIPES_DIR
 # Generate environment file .env for running apps
 $ENV_FILE = Join-Path $ROOT_DIR .env
 $ENV_DEBUG_FILE = Join-Path $ROOT_DIR debug.env
-$VCPKG_TOOLS_OSG_DIR = Join-Path $VCPKG_DIR installed $triplet tools osg
-$VCPKG_TOOLS_OSG_DEBUG_DIR = Join-Path $VCPKG_DIR installed $triplet debug tools osg
-$OSG_VERSION_EXE = Join-Path $VCPKG_TOOLS_OSG_DIR osgversion
+
+$VCPKG_INSTALLED_DIR = Join-Path $VCPKG_DIR installed
+$VCPKG_TRIPLET_DIR = Join-Path $VCPKG_INSTALLED_DIR $TRIPLET
+$VCPKG_TOOLS_DIR = Join-Path $VCPKG_TRIPLET_DIR tools
+$VCPKG_TOOLS_OSG_DIR = Join-Path $VCPKG_TOOLS_DIR osg
+
+$VCPKG_TRIPLET_DEBUG_DIR = Join-Path $VCPKG_TRIPLET_DIR debug
+$VCPKG_TOOLS_DEBUG_DIR = Join-Path $VCPKG_TRIPLET_DEBUG_DIR tools
+$VCPKG_TOOLS_OSG_DEBUG_DIR = Join-Path $VCPKG_TOOLS_DEBUG_DIR osg
+
+$OSG_VERSION_EXE = $VCPKG_DIR, 'buildtrees', 'osg', "$TRIPLET-rel", 'bin', 'osgversion' -join [io.Path]::DirectorySeparatorChar
 $OSG_VERSION = &$OSG_VERSION_EXE --version-number
 $OSG_PLUGIN_DIRNAME = "osgPlugins-$OSG_VERSION"
 $OSG_PLUGINS_DIR = Join-Path $VCPKG_TOOLS_OSG_DIR $OSG_PLUGIN_DIRNAME
 $OSG_PLUGINS_DEBUG_DIR = Join-Path $VCPKG_TOOLS_OSG_DEBUG_DIR $OSG_PLUGIN_DIRNAME
-$VCPKG_LIB_DIR = Join-Path $VCPKG_DIR installed $triplet lib
-$VCPKG_LIB_DEBUG_DIR = Join-Path $VCPKG_DIR installed $triplet debug lib
-$VCPKG_INCLUDE_DIR = Join-Path $VCPKG_DIR installed $triplet include
-$VCPKG_BIN_DIR = Join-Path $VCPKG_DIR installed $triplet bin
-$VCPKG_BIN_DEBUG_DIR = Join-Path $VCPKG_DIR installed $triplet debug bin
+
+$VCPKG_INCLUDE_DIR = Join-Path $VCPKG_TRIPLET_DIR include
+$VCPKG_LIB_DIR = Join-Path $VCPKG_TRIPLET_DIR lib
+$VCPKG_BIN_DIR = Join-Path $VCPKG_TRIPLET_DIR bin
+$VCPKG_LIB_DEBUG_DIR = Join-Path $VCPKG_TRIPLET_DEBUG_DIR lib
+$VCPKG_BIN_DEBUG_DIR = Join-Path $VCPKG_TRIPLET_DEBUG_DIR bin
 
 # Add .dll/.so, .exe locations to PATH
 $path_array = $env:PATH -Split [IO.Path]::PathSeparator
@@ -141,7 +150,6 @@ $PATH_DEBUG = $new_path_debug_array -Join [IO.Path]::PathSeparator
 
 Write-Host "Generate environment file $ENV_FILE for running release apps"  -ForegroundColor Cyan
 @"
-# Environment Variables for Release Configuration
 OSG_FILE_PATH=$OPENSCENEGRAPH_DATA_DIR
 OSG_LIBRARY_PATH=$OSG_PLUGINS_DIR
 PATH=$PATH
@@ -149,11 +157,10 @@ VCPKG_BIN_DIR=$VCPKG_BIN_DIR
 VCPKG_INCLUDE_DIR=$VCPKG_INCLUDE_DIR
 VCPKG_LIB_DIR=$VCPKG_LIB_DIR
 VCPKG_TOOLS_OSG_DIR=$VCPKG_TOOLS_OSG_DIR
-"@ > $ENV_FILE
+"@ | Set-Content $ENV_FILE
 
 Write-Host "Generate environment file $ENV_DEBUG_FILE for running debug apps"  -ForegroundColor Cyan
 @"
-# Environment Variables for Debug Configuration
 OSG_FILE_PATH=$OPENSCENEGRAPH_DATA_DIR
 OSG_LIBRARY_PATH=$OSG_PLUGINS_DEBUG_DIR
 PATH=$PATH_DEBUG
@@ -161,7 +168,7 @@ VCPKG_BIN_DEBUG_DIR=$VCPKG_BIN_DEBUG_DIR
 VCPKG_INCLUDE_DIR=$VCPKG_INCLUDE_DIR
 VCPKG_LIB_DEBUG_DIR=$VCPKG_LIB_DEBUG_DIR
 VCPKG_TOOLS_OSG_DEBUG_DIR=$VCPKG_TOOLS_OSG_DEBUG_DIR
-"@ > $ENV_DEBUG_FILE
+"@ | Set-Content $ENV_DEBUG_FILE
 
 # TODO: Add this for linux: LD_LIBRARY_PATH="$VCPKG_LIB_DIR"
 # TODO: Add this for linux debug: LD_LIBRARY_PATH="$VCPKG_LIB_DEBUG_DIR"
