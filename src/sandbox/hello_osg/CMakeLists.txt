@@ -28,6 +28,8 @@ file(MAKE_DIRECTORY ${RESOURCES_DIR})
 # TODO: switch backslash to double backslash
 # TODO: Figure out how to add more dirs to PATH
 # TODO: Figure out how to uncoment other variables
+
+
 file(STRINGS ${CMAKE_HOME_DIRECTORY}/.env ENV_FILE)
 foreach(LINE ${ENV_FILE})
     if(LINE MATCHES "^#.*$")
@@ -51,15 +53,22 @@ set(ENV_VARS "${OSG_LIBRARY_PATH_SETTING} ${PATH_SETTING}")
 set(EXE_PATH ${VCPKG_TOOLS_DIR}/osg/osgconv.exe)
 set(INPUT_PATH ${OSG_DATA_DIR}/Images/reflect.rgb)
 set(OUTPUT_PATH ${RESOURCES_DIR}/reflect.png)
-set(CMD cmake -E env ${ENV} ${EXE_PATH} ${INPUT_PATH} ${OUTPUT_PATH})
+# set(CMD cmake -E env ${ENV} ${EXE_PATH} ${INPUT_PATH} ${OUTPUT_PATH})
 # set(CMD cmake -E env ${OSG_LIBRARY_PATH_SETTING} ${PATH_SETTING} ${EXE_PATH} ${INPUT_PATH} ${OUTPUT_PATH})
+set(CMD -c "\"$HOME\\repos\\tron\\set-env.ps1\;osgconv ${INPUT_PATH} ${OUTPUT_PATH}\"")
 message("HERE")
-foreach(X ${CMD})
-    message(${X})
-endforeach()
-# message(${CMD})
-execute_process(COMMAND ${CMD})
-message("blah")
+set(XXX "-nop -c \". $HOME\\repos\\tron\\set-env.ps1 && osgconv ${INPUT_PATH} ${OUTPUT_PATH}\"")
+# TODO pwsh -c "$HOME\repos\tron\set-env.ps1;osgconv"
+execute_process(
+    COMMAND pwsh -nop -c ". $HOME\\repos\\tron\\set-env.ps1 && osgconv C:\\Users\\david\\repos\\tron\\third_party\\OpenSceneGraph-Data\\Images\\reflect.rgb C:\\Users\\david\\repos\\tron\\src\\sandbox\\hello_osg\\Resources\\reflect.png"
+    # WORKS COMMAND pwsh -nop -c ". $HOME\\repos\\tron\\set-env.ps1 && osgconv"
+    OUTPUT_VARIABLE blah_out
+    ERROR_VARIABLE blah_err
+    RESULT_VARIABLE blah_result
+)
+message("--> OUTPUT_VARIABLE ${blah_out}")
+message("--> ERROR_VARIABLE ${blah_err}") 
+message("--> RESULT_VARIABLE ${blah_result}")
 
 
 # TODO: 
