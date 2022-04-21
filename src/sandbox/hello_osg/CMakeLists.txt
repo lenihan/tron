@@ -23,54 +23,12 @@ target_link_libraries(${PROJECT_NAME} ${OPENGL_LIBRARIES})
 set(RESOURCES_DIR ${PROJECT_SOURCE_DIR}/Resources)
 file(MAKE_DIRECTORY ${RESOURCES_DIR})
 
-
-# TODO - read .env and load into cmake -E env ${ENV}
-# TODO: switch backslash to double backslash
-# TODO: Figure out how to add more dirs to PATH
-# TODO: Figure out how to uncoment other variables
-
-
-file(STRINGS ${CMAKE_HOME_DIRECTORY}/.env ENV_FILE)
-foreach(LINE ${ENV_FILE})
-    if(LINE MATCHES "^#.*$")
-        continue() # skip comments lines that start with `#`
-    endif()
-    set(ENV ${ENV} ${LINE})
-    if(LINE MATCHES "^OSG_LIBRARY_PATH=.*$")
-        set(OSG_LIBRARY_PATH_SETTING ${LINE})
-    endif()
-endforeach()
-
-# Setup variables
-set(VCPKG_TOOLS_DIR ${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/tools)
-set(VCPKG_BIN_DIR ${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/bin)
-set(OSG_DATA_DIR ${CMAKE_HOME_DIRECTORY}/third_party/OpenSceneGraph-Data)
-# set(PATH_SETTING PATH=${VCPKG_BIN_DIR})
-# set(PATH_SETTING PATH=C:/Users/david/repos/tron/third_party/vcpkg/installed/x64-windows/bin;C:/Users/david/repos/tron/third_party/vcpkg/installed/x64-windows/tools/osg)
-set(PATH_SETTING "PATH=C:/Users/david/repos/tron/third_party/vcpkg/installed/x64-windows/bin\\\;C:/Users/david/repos/tron/third_party/vcpkg/installed/x64-windows/tools/osg")
 # convert reflect.rgb to reflect.png
-set(ENV_VARS "${OSG_LIBRARY_PATH_SETTING} ${PATH_SETTING}")
-set(EXE_PATH ${VCPKG_TOOLS_DIR}/osg/osgconv.exe)
+set(OSG_DATA_DIR ${CMAKE_HOME_DIRECTORY}/third_party/OpenSceneGraph-Data)
 set(INPUT_PATH ${OSG_DATA_DIR}/Images/reflect.rgb)
 set(OUTPUT_PATH ${RESOURCES_DIR}/reflect.png)
-# set(CMD cmake -E env ${ENV} ${EXE_PATH} ${INPUT_PATH} ${OUTPUT_PATH})
-# set(CMD cmake -E env ${OSG_LIBRARY_PATH_SETTING} ${PATH_SETTING} ${EXE_PATH} ${INPUT_PATH} ${OUTPUT_PATH})
-message("HERE")
-set(CMD pwsh -nop -c ". $HOME\\repos\\tron\\set-env.ps1 && osgconv ${INPUT_PATH} ${OUTPUT_PATH}")
-# WORKS set(XXX pwsh -nop -c ". $HOME\\repos\\tron\\set-env.ps1 && osgconv C:\\Users\\david\\repos\\tron\\third_party\\OpenSceneGraph-Data\\Images\\reflect.rgb C:\\Users\\david\\repos\\tron\\src\\sandbox\\hello_osg\\Resources\\reflect.png")
-# TODO pwsh -c "$HOME\repos\tron\set-env.ps1;osgconv"
-execute_process(
-    COMMAND ${CMD}
-    # WORKS COMMAND pwsh -nop -c ". $HOME\\repos\\tron\\set-env.ps1 && osgconv C:\\Users\\david\\repos\\tron\\third_party\\OpenSceneGraph-Data\\Images\\reflect.rgb C:\\Users\\david\\repos\\tron\\src\\sandbox\\hello_osg\\Resources\\reflect.png"
-    # WORKS COMMAND pwsh -nop -c ". $HOME\\repos\\tron\\set-env.ps1 && osgconv"
-    OUTPUT_VARIABLE blah_out
-    ERROR_VARIABLE blah_err
-    RESULT_VARIABLE blah_result
-)
-message("--> OUTPUT_VARIABLE ${blah_out}")
-message("--> ERROR_VARIABLE ${blah_err}") 
-message("--> RESULT_VARIABLE ${blah_result}")
-
+set(CMD pwsh -nop -c "${CMAKE_HOME_DIRECTORY}/Set-Env.ps1 && osgconv ${INPUT_PATH} ${OUTPUT_PATH}")
+execute_process(COMMAND ${CMD})
 
 # TODO: 
 # Copy to Debug "C:\Users\david\repos\tron\third_party\vcpkg\installed\x64-windows\debug\tools\osg\osgPlugins-3.6.5\osgdb_pngd.dll"
