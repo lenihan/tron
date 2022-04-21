@@ -55,12 +55,13 @@ set(INPUT_PATH ${OSG_DATA_DIR}/Images/reflect.rgb)
 set(OUTPUT_PATH ${RESOURCES_DIR}/reflect.png)
 # set(CMD cmake -E env ${ENV} ${EXE_PATH} ${INPUT_PATH} ${OUTPUT_PATH})
 # set(CMD cmake -E env ${OSG_LIBRARY_PATH_SETTING} ${PATH_SETTING} ${EXE_PATH} ${INPUT_PATH} ${OUTPUT_PATH})
-set(CMD -c "\"$HOME\\repos\\tron\\set-env.ps1\;osgconv ${INPUT_PATH} ${OUTPUT_PATH}\"")
 message("HERE")
-set(XXX "-nop -c \". $HOME\\repos\\tron\\set-env.ps1 && osgconv ${INPUT_PATH} ${OUTPUT_PATH}\"")
+set(CMD pwsh -nop -c ". $HOME\\repos\\tron\\set-env.ps1 && osgconv ${INPUT_PATH} ${OUTPUT_PATH}")
+# WORKS set(XXX pwsh -nop -c ". $HOME\\repos\\tron\\set-env.ps1 && osgconv C:\\Users\\david\\repos\\tron\\third_party\\OpenSceneGraph-Data\\Images\\reflect.rgb C:\\Users\\david\\repos\\tron\\src\\sandbox\\hello_osg\\Resources\\reflect.png")
 # TODO pwsh -c "$HOME\repos\tron\set-env.ps1;osgconv"
 execute_process(
-    COMMAND pwsh -nop -c ". $HOME\\repos\\tron\\set-env.ps1 && osgconv C:\\Users\\david\\repos\\tron\\third_party\\OpenSceneGraph-Data\\Images\\reflect.rgb C:\\Users\\david\\repos\\tron\\src\\sandbox\\hello_osg\\Resources\\reflect.png"
+    COMMAND ${CMD}
+    # WORKS COMMAND pwsh -nop -c ". $HOME\\repos\\tron\\set-env.ps1 && osgconv C:\\Users\\david\\repos\\tron\\third_party\\OpenSceneGraph-Data\\Images\\reflect.rgb C:\\Users\\david\\repos\\tron\\src\\sandbox\\hello_osg\\Resources\\reflect.png"
     # WORKS COMMAND pwsh -nop -c ". $HOME\\repos\\tron\\set-env.ps1 && osgconv"
     OUTPUT_VARIABLE blah_out
     ERROR_VARIABLE blah_err
