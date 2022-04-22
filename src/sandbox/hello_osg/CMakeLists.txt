@@ -10,13 +10,15 @@ find_package(osgViewer REQUIRED)
 find_package(osgGA REQUIRED)
 find_package(osgSim REQUIRED)
 find_package(osgDB REQUIRED)
-find_package(OpenGL)
+find_package(OpenThreads REQUIRED)
+find_package(OpenGL REQUIRED)
 
 target_link_libraries(${PROJECT_NAME} ${OSG_LIBRARY})
 target_link_libraries(${PROJECT_NAME} ${OSGVIEWER_LIBRARY})
 target_link_libraries(${PROJECT_NAME} ${OSGGA_LIBRARY})
 target_link_libraries(${PROJECT_NAME} ${OSGSIM_LIBRARY})
 target_link_libraries(${PROJECT_NAME} ${OSGDB_LIBRARY})
+target_link_libraries(${PROJECT_NAME} ${OPENTHREADS_LIBRARY})
 target_link_libraries(${PROJECT_NAME} ${OPENGL_LIBRARIES})
 
 # Create Resources directory
@@ -29,6 +31,14 @@ set(INPUT_PATH ${OSG_DATA_DIR}/Images/reflect.rgb)
 set(OUTPUT_PATH ${RESOURCES_DIR}/reflect.png)
 set(CMD pwsh -nop -c "${CMAKE_HOME_DIRECTORY}/Set-Env.ps1 && osgconv ${INPUT_PATH} ${OUTPUT_PATH}")
 execute_process(COMMAND ${CMD})
+
+foreach(CONFIG IN LISTS CMAKE_CONFIGURATION_TYPES)
+    configure_file(
+        Resources/reflect.png
+        ${CONFIG}/reflect.png
+        COPYONLY
+    )
+endforeach()
 
 # TODO: 
 # Copy to Debug "C:\Users\david\repos\tron\third_party\vcpkg\installed\x64-windows\debug\tools\osg\osgPlugins-3.6.5\osgdb_pngd.dll"
