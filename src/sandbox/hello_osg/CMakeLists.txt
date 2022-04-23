@@ -38,11 +38,26 @@ foreach(CONFIG IN LISTS CMAKE_CONFIGURATION_TYPES)
         ${CONFIG}/reflect.png
         COPYONLY
     )
+    if (CONFIG STREQUAL "Debug")
+        message("XXXXXXXX")
+
+        execute_process(COMMAND pwsh -nop -c "${CMAKE_HOME_DIRECTORY}/Set-Env.ps1 -Path debug.env && mkdir ${CMAKE_CURRENT_BINARY_DIR}/${CONFIG}/$((Get-Item $env:OSG_LIBRARY_PATH).BaseName)")
+        execute_process(COMMAND pwsh -nop -c "${CMAKE_HOME_DIRECTORY}/Set-Env.ps1 -Path debug.env && Copy-Item $env:OSG_LIBRARY_PATH/osgdb_pngd.dll ${CMAKE_CURRENT_BINARY_DIR}/${CONFIG}/$((Get-Item $env:OSG_LIBRARY_PATH).BaseName)/osgdb_pngd.dll")
+        execute_process(COMMAND pwsh -nop -c "${CMAKE_HOME_DIRECTORY}/Set-Env.ps1 -Path debug.env && Copy-Item $env:OSG_LIBRARY_PATH/osgdb_pngd.pdb ${CMAKE_CURRENT_BINARY_DIR}/${CONFIG}/$((Get-Item $env:OSG_LIBRARY_PATH).BaseName)/osgdb_pngd.pdb")
+        else()
+        message("YYYYY")
+        execute_process(COMMAND pwsh -nop -c "${CMAKE_HOME_DIRECTORY}/Set-Env.ps1 -Path .env && mkdir ${CMAKE_CURRENT_BINARY_DIR}/${CONFIG}/$((Get-Item $env:OSG_LIBRARY_PATH).BaseName)")
+        execute_process(COMMAND pwsh -nop -c "${CMAKE_HOME_DIRECTORY}/Set-Env.ps1 -Path .env && Copy-Item $env:OSG_LIBRARY_PATH/osgdb_png.dll ${CMAKE_CURRENT_BINARY_DIR}/${CONFIG}/$((Get-Item $env:OSG_LIBRARY_PATH).BaseName)/osgdb_png.dll")
+    endif()
+
 endforeach()
 
 # TODO: 
+
+# OSG_LIBRARY_PATH=C:\Users\david\repos\tron\third_party\vcpkg\installed\x64-windows\tools\osg\osgPlugins-3.6.5
 # Copy to Debug "C:\Users\david\repos\tron\third_party\vcpkg\installed\x64-windows\debug\tools\osg\osgPlugins-3.6.5\osgdb_pngd.dll"
 # Copy to Debug "C:\Users\david\repos\tron\third_party\vcpkg\installed\x64-windows\debug\tools\osg\osgPlugins-3.6.5\osgdb_pngd.pdb"
 # Copy to Release "C:\Users\david\repos\tron\third_party\vcpkg\installed\x64-windows\tools\osg\osgPlugins-3.6.5\osgdb_png.dll"
-# Copy to Debug/Release: "C:\Users\david\repos\tron\third_party\OpenSceneGraph-Data\Images\reflect.rgb"
+
 # Load points from "C:\Users\david\Downloads\test\00a282b3-4f02-4588-a380-9dcc9a87548c\log_map_archive_00a282b3-4f02-4588-a380-9dcc9a87548c.json"
+

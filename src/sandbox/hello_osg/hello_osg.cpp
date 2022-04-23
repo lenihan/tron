@@ -319,7 +319,7 @@ osg::Geode* createTeapot()
     geode->addDrawable(new Teapot);
 
     // add a reflection map to the teapot.
-    osg::ref_ptr<osg::Image> image = osgDB::readRefImageFile("C:\\Users\\david\\repos\\tron\\out\\src\\sandbox\\hello_osg\\Debug\\Images\\reflect.rgb");
+    osg::ref_ptr<osg::Image> image = osgDB::readRefImageFile("reflect.png");
     if (image)
     {
         osg::Texture2D* texture = new osg::Texture2D;
