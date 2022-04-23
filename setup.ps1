@@ -10,7 +10,9 @@ if(!(Test-Path variable:IsWindows))
 # Build environment
 Write-Host "Setup build environment..." -ForegroundColor Cyan
 if ($IsWindows) {
+    Push-Location .  # Next line can put us in ~/source/repos, fix that with Pop-Location
     & "$env:ProgramFiles\Microsoft Visual Studio\2022\Community\Common7\Tools\Launch-VsDevShell.ps1"
+    Pop-Location
 }
 
 # Prerequisites
@@ -106,6 +108,7 @@ foreach ($pkg in $packages) {
     Invoke-Expression $cmd
 }
 
+
 # Download OSG data (models, textures)
 Write-Host "Clone OpenSceneGraph-Data" -ForegroundColor Cyan
 $OPENSCENEGRAPH_DATA_DIR = Join-Path $THIRD_PARTY_DIR OpenSceneGraph-Data
@@ -116,8 +119,8 @@ Write-Host "Clone osgRecipes - code samples from 'OpenSceneGraph 3.0 Cookbook'" 
 $OSGRECIPES_DIR = Join-Path $THIRD_PARTY_DIR osgRecipes
 git clone https://github.com/xarray/osgRecipes.git $OSGRECIPES_DIR
 
-# Generate environment file .env for running apps
-$ENV_FILE = Join-Path $ROOT_DIR .env
+# Generate environment files (release.env, debug.env) for running apps
+$ENV_FILE = Join-Path $ROOT_DIR release.env
 $ENV_DEBUG_FILE = Join-Path $ROOT_DIR debug.env
 
 $VCPKG_INSTALLED_DIR = Join-Path $VCPKG_DIR installed

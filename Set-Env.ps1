@@ -4,7 +4,7 @@
 Param(
     [ValidateScript({Test-Path $_})]
     [String]
-    $Path = (Join-Path $PSScriptRoot .env)
+    $Path = (Join-Path $PSScriptRoot release.env)
 )
 foreach($line in (Get-Content $Path)) {
     if ($line.StartsWith('#')) {continue}
