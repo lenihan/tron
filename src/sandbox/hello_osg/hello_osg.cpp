@@ -16,6 +16,9 @@
 *  THE SOFTWARE.
 */
 
+#include <QCoreApplication>
+#include <QFile>
+
 #include <osg/Geode>
 #include <osg/MatrixTransform>
 #include <osg/Notify>
@@ -319,7 +322,10 @@ osg::Geode* createTeapot()
     geode->addDrawable(new Teapot);
 
     // add a reflection map to the teapot.
-    osg::ref_ptr<osg::Image> image = osgDB::readRefImageFile("reflect.png");
+    assert(QCoreApplication::instance());
+    const QString app_path = QCoreApplication::instance()->applicationDirPath();
+    const QString image_path = app_path + "/reflect.png";
+    osg::ref_ptr<osg::Image> image = osgDB::readRefImageFile(qPrintable(image_path));
     if (image)
     {
         osg::Texture2D* texture = new osg::Texture2D;
@@ -338,8 +344,35 @@ osg::Geode* createTeapot()
     return geode;
 }
 
-int main(int, char**)
+int main(int argc, char** argv)
 {
+    QCoreApplication app(argc, argv);
+    try
+    {
+        // Load enviroment variables from .env file
+        const QString app_dir = app.applicationDirPath();
+        const QString env_path = app_dir + "/.env";
+        QFile file(env_path);
+        if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+        {
+            const QString error_string = "Could not open " + env_path;
+            throw std::runtime_error(qPrintable(error_string));
+        }
+        while (!file.atEnd()) 
+        {
+            const QString line = file.readLine();
+            const QStringList variable_value = line.split('=');
+            assert(variable_value.size() == 2);
+            const QString variable = variable_value.first();
+            const QString value = variable_value.last();
+            qputenv(qPrintable(variable), value.toUtf8());
+        }
+    }
+    catch (const std::exception& exc)
+    {
+        std::cout << "ERROR: " << exc.what() << std::endl;
+        return EXIT_FAILURE;
+    }
     // show all messages
     osg::setNotifyLevel(osg::INFO);
     // osg::setNotifyLevel(osg::DEBUG_FP);
@@ -405,6 +438,7 @@ int main(int, char**)
     // 'l' - lighting toggle
     // 'b' - backface culling toggle
     viewer->addEventHandler(new osgGA::StateSetManipulator(viewer->getCamera()->getOrCreateStateSet()));
+
 
     return viewer->run();
 }

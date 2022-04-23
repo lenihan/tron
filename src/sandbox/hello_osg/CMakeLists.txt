@@ -5,6 +5,9 @@ add_executable (
     Resources/reflect.png
 )
 
+find_package(Qt5 COMPONENTS Core REQUIRED)
+target_link_libraries(${PROJECT_NAME} Qt5::Core)
+
 find_package(osg REQUIRED)
 find_package(osgViewer REQUIRED)
 find_package(osgGA REQUIRED)
@@ -39,17 +42,18 @@ foreach(CONFIG IN LISTS CMAKE_CONFIGURATION_TYPES)
         COPYONLY
     )
     if (CONFIG STREQUAL "Debug")
-        message("XXXXXXXX")
-
-        execute_process(COMMAND pwsh -nop -c "${CMAKE_HOME_DIRECTORY}/Set-Env.ps1 -Path debug.env && mkdir ${CMAKE_CURRENT_BINARY_DIR}/${CONFIG}/$((Get-Item $env:OSG_LIBRARY_PATH).BaseName)")
-        execute_process(COMMAND pwsh -nop -c "${CMAKE_HOME_DIRECTORY}/Set-Env.ps1 -Path debug.env && Copy-Item $env:OSG_LIBRARY_PATH/osgdb_pngd.dll ${CMAKE_CURRENT_BINARY_DIR}/${CONFIG}/$((Get-Item $env:OSG_LIBRARY_PATH).BaseName)/osgdb_pngd.dll")
-        execute_process(COMMAND pwsh -nop -c "${CMAKE_HOME_DIRECTORY}/Set-Env.ps1 -Path debug.env && Copy-Item $env:OSG_LIBRARY_PATH/osgdb_pngd.pdb ${CMAKE_CURRENT_BINARY_DIR}/${CONFIG}/$((Get-Item $env:OSG_LIBRARY_PATH).BaseName)/osgdb_pngd.pdb")
-        else()
-        message("YYYYY")
-        execute_process(COMMAND pwsh -nop -c "${CMAKE_HOME_DIRECTORY}/Set-Env.ps1 -Path .env && mkdir ${CMAKE_CURRENT_BINARY_DIR}/${CONFIG}/$((Get-Item $env:OSG_LIBRARY_PATH).BaseName)")
-        execute_process(COMMAND pwsh -nop -c "${CMAKE_HOME_DIRECTORY}/Set-Env.ps1 -Path .env && Copy-Item $env:OSG_LIBRARY_PATH/osgdb_png.dll ${CMAKE_CURRENT_BINARY_DIR}/${CONFIG}/$((Get-Item $env:OSG_LIBRARY_PATH).BaseName)/osgdb_png.dll")
+        configure_file(
+            ${CMAKE_HOME_DIRECTORY}/debug.env
+            ${CMAKE_CURRENT_BINARY_DIR}/${CONFIG}/.env
+            COPYONLY
+        )
+    else()
+        configure_file(
+            ${CMAKE_HOME_DIRECTORY}/release.env
+            ${CMAKE_CURRENT_BINARY_DIR}/${CONFIG}/.env
+            COPYONLY
+        )    
     endif()
-
 endforeach()
 
 # TODO: 
