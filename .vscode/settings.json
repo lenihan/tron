@@ -97,6 +97,7 @@
         "xutility": "cpp",
         "*.ipp": "cpp",
         "math": "cpp",
-        "geometry": "cpp"
+        "geometry": "cpp",
+        "geode": "cpp"
     }
 }
