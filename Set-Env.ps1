@@ -1,10 +1,10 @@
 # Set environment variables from .env file
-#   `Set-Env.ps1` with no parameters loads debug.env in same location as this script
-#   `Set-Env.ps1 -Path release.env` loads release.env
+#   `Set-Env.ps1` with no parameters loads .env in same location as this script
+#   `Set-Env.ps1 -Path ~\.env` loads ~\.env
 Param(
     [ValidateScript({Test-Path $_})]
     [String]
-    $Path = (Join-Path $PSScriptRoot debug.env)
+    $Path = (Join-Path $PSScriptRoot .env)
 )
 foreach($line in (Get-Content $Path)) {
     $name, $value = $line -Split '='

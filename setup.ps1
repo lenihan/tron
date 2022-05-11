@@ -119,9 +119,8 @@ Write-Host "Clone osgRecipes - code samples from 'OpenSceneGraph 3.0 Cookbook'" 
 $OSGRECIPES_DIR = Join-Path $THIRD_PARTY_DIR osgRecipes
 git clone https://github.com/xarray/osgRecipes.git $OSGRECIPES_DIR
 
-# Generate environment files (release.env, debug.env) for running apps
-$ENV_FILE = Join-Path $ROOT_DIR release.env
-$ENV_DEBUG_FILE = Join-Path $ROOT_DIR debug.env
+# Generate environment file for running apps
+$ENV_FILE = Join-Path $ROOT_DIR .env
 
 $VCPKG_INSTALLED_DIR = Join-Path $VCPKG_DIR installed
 $VCPKG_TRIPLET_DIR = Join-Path $VCPKG_INSTALLED_DIR $TRIPLET
@@ -132,46 +131,23 @@ $VCPKG_TRIPLET_DEBUG_DIR = Join-Path $VCPKG_TRIPLET_DIR debug
 $VCPKG_TOOLS_DEBUG_DIR = Join-Path $VCPKG_TRIPLET_DEBUG_DIR tools
 $VCPKG_TOOLS_OSG_DEBUG_DIR = Join-Path $VCPKG_TOOLS_DEBUG_DIR osg
 
-$OSG_VERSION_EXE = $VCPKG_DIR, 'buildtrees', 'osg', "$TRIPLET-rel", 'bin', 'osgversion' -join [io.Path]::DirectorySeparatorChar
-$OSG_VERSION = &$OSG_VERSION_EXE --version-number
-$OSG_PLUGIN_DIRNAME = "osgPlugins-$OSG_VERSION"
-$OSG_PLUGINS_DIR = Join-Path $VCPKG_TOOLS_OSG_DIR $OSG_PLUGIN_DIRNAME
-$OSG_PLUGINS_DEBUG_DIR = Join-Path $VCPKG_TOOLS_OSG_DEBUG_DIR $OSG_PLUGIN_DIRNAME
-
-$VCPKG_INCLUDE_DIR = Join-Path $VCPKG_TRIPLET_DIR include
-$VCPKG_LIB_DIR = Join-Path $VCPKG_TRIPLET_DIR lib
 $VCPKG_BIN_DIR = Join-Path $VCPKG_TRIPLET_DIR bin
-$VCPKG_LIB_DEBUG_DIR = Join-Path $VCPKG_TRIPLET_DEBUG_DIR lib
 $VCPKG_BIN_DEBUG_DIR = Join-Path $VCPKG_TRIPLET_DEBUG_DIR bin
 
 # Add .dll/.so, .exe locations to PATH
 $path_array = $env:PATH -Split [IO.Path]::PathSeparator
-$new_path_array = $VCPKG_BIN_DIR, $VCPKG_TOOLS_OSG_DIR + $path_array | Select-Object -Unique
-$new_path_debug_array = $VCPKG_BIN_DEBUG_DIR, $VCPKG_TOOLS_OSG_DEBUG_DIR + $new_path_array | Select-Object -Unique
+$new_path_array = 
+    $VCPKG_BIN_DIR, 
+    $VCPKG_BIN_DEBUG_DIR, 
+    $VCPKG_TOOLS_OSG_DIR, 
+    $VCPKG_TOOLS_OSG_DEBUG_DIR + $path_array | Select-Object -Unique
 $PATH = $new_path_array -Join [IO.Path]::PathSeparator
-$PATH_DEBUG = $new_path_debug_array -Join [IO.Path]::PathSeparator
 
-Write-Host "Generate environment file $ENV_FILE for running release apps"  -ForegroundColor Cyan
+Write-Host "Generate environment file $ENV_FILE for running apps"  -ForegroundColor Cyan
 @"
 OSG_FILE_PATH=$OPENSCENEGRAPH_DATA_DIR
-OSG_LIBRARY_PATH=$OSG_PLUGINS_DIR
 PATH=$PATH
-VCPKG_BIN_DIR=$VCPKG_BIN_DIR
-VCPKG_INCLUDE_DIR=$VCPKG_INCLUDE_DIR
-VCPKG_LIB_DIR=$VCPKG_LIB_DIR
-VCPKG_TOOLS_OSG_DIR=$VCPKG_TOOLS_OSG_DIR
 "@ | Set-Content $ENV_FILE
-
-Write-Host "Generate environment file $ENV_DEBUG_FILE for running debug apps"  -ForegroundColor Cyan
-@"
-OSG_FILE_PATH=$OPENSCENEGRAPH_DATA_DIR
-OSG_LIBRARY_PATH=$OSG_PLUGINS_DEBUG_DIR
-PATH=$PATH_DEBUG
-VCPKG_BIN_DEBUG_DIR=$VCPKG_BIN_DEBUG_DIR
-VCPKG_INCLUDE_DIR=$VCPKG_INCLUDE_DIR
-VCPKG_LIB_DEBUG_DIR=$VCPKG_LIB_DEBUG_DIR
-VCPKG_TOOLS_OSG_DEBUG_DIR=$VCPKG_TOOLS_OSG_DEBUG_DIR
-"@ | Set-Content $ENV_DEBUG_FILE
 
 # TODO: Add this for linux: LD_LIBRARY_PATH="$VCPKG_LIB_DIR"
 # TODO: Add this for linux debug: LD_LIBRARY_PATH="$VCPKG_LIB_DEBUG_DIR"

@@ -43,19 +43,6 @@ foreach(CONFIG IN LISTS CMAKE_CONFIGURATION_TYPES)
         ${CONFIG}/reflect.png
         COPYONLY
     )
-    if (CONFIG STREQUAL "Debug")
-        configure_file(
-            ${CMAKE_HOME_DIRECTORY}/debug.env
-            ${CMAKE_CURRENT_BINARY_DIR}/${CONFIG}/.env
-            COPYONLY
-        )
-    else()
-        configure_file(
-            ${CMAKE_HOME_DIRECTORY}/release.env
-            ${CMAKE_CURRENT_BINARY_DIR}/${CONFIG}/.env
-            COPYONLY
-        )    
-    endif()
 endforeach()
 
 # TODO: 

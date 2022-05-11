@@ -22,10 +22,12 @@
     - [OSG Tools (.exe's)](#osg-tools-exes)
     - [Run osgviewer.exe](#run-osgviewerexe)
     - [Run osgconv.exe](#run-osgconvexe)
-  - [Visual Studio Code: CMake Building, Running, Debugging](#visual-studio-code-cmake-building-running-debugging)
-  - [One Time Setup](#one-time-setup)
-  - [To reset](#to-reset)
-  - [To run CMake configure](#to-run-cmake-configure)
+  - [Visual Studio Code](#visual-studio-code)
+  - [Environment](#environment)
+    - [CMake Building, Running, Debugging](#cmake-building-running-debugging)
+    - [One Time Setup](#one-time-setup)
+    - [To reset](#to-reset)
+    - [To run CMake configure](#to-run-cmake-configure)
   - [TODO](#todo)
 
 ## Goals
@@ -290,7 +292,12 @@ osgviewer cow.osg
 osgconv
 ```
 
-## Visual Studio Code: CMake Building, Running, Debugging
+## Visual Studio Code
+
+## Environment
+
+Run `./Set-Env.ps1` prior to launching Visual Studio Code so that paths are setup correctly for debugging.
+### CMake Building, Running, Debugging
 
 From <https://code.visualstudio.com/docs/cpp/cmake-linux>
 
@@ -304,7 +311,7 @@ You control CMake via buttons in the status bar on the bottom. Button descriptio
 6. Launch selected target in terminal window (play icon).
 7. Set the target to launch. Launch target listed in brackets.
 
-## One Time Setup
+### One Time Setup
 
 1. Verify Build Variant (i.e `Debug`)
 2. Verify active kit in status bar is expected (i.e. `Visual Studio Community 2022 Release - amd64`)
@@ -312,15 +319,17 @@ You control CMake via buttons in the status bar on the bottom. Button descriptio
 4. Verify launch target (i.e. `hello_osg`)
 5. To start debugging, click on bug icon in status bar
 
-## To reset
+### To reset
 
 Delete ./out directory
 
-## To run CMake configure
+### To run CMake configure
 
 This should happen automatically as needed (for example, when you click on Build).
 
 To run manually: Ctrl+Shift+P > CMake: Configure
+
+To start debugger (CMake): Ctrl+F5
 
 
 

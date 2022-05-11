@@ -353,90 +353,90 @@ int main(int argc, char** argv)
 {
     // Load enviroment variables from .env file
     QCoreApplication app(argc, argv);
-    try
-    {
-        const QString app_dir = app.applicationDirPath();
-        const QString env_path = app_dir + "/.env";
-        QFile file(env_path);
-        if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-        {
-            const QString error_string = "Could not open " + env_path;
-            throw std::runtime_error(qPrintable(error_string));
-        }
-        while (!file.atEnd()) 
-        {
-            const QString line = file.readLine();
-            const QStringList variable_value = line.split('=');
-            assert(variable_value.size() == 2);
-            const QString variable = variable_value.first();
-            const QString value = variable_value.last();
-            qputenv(qPrintable(variable), value.toUtf8());
-        }
-    }
-    catch (const std::exception& exc)
-    {
-        std::cout << "ERROR: " << exc.what() << std::endl;
-        return EXIT_FAILURE;
-    }
+    // try
+    // {
+    //     const QString app_dir = app.applicationDirPath();
+    //     const QString env_path = app_dir + "/.env";
+    //     QFile file(env_path);
+    //     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+    //     {
+    //         const QString error_string = "Could not open " + env_path;
+    //         throw std::runtime_error(qPrintable(error_string));
+    //     }
+    //     while (!file.atEnd()) 
+    //     {
+    //         const QString line = file.readLine();
+    //         const QStringList variable_value = line.split('=');
+    //         assert(variable_value.size() == 2);
+    //         const QString variable = variable_value.first();
+    //         const QString value = variable_value.last();
+    //         qputenv(qPrintable(variable), value.toUtf8());
+    //     }
+    // }
+    // catch (const std::exception& exc)
+    // {
+    //     std::cout << "ERROR: " << exc.what() << std::endl;
+    //     return EXIT_FAILURE;
+    // }
 
     osg::ref_ptr<osg::Group> root = new osg::Group;
 
     // Load test data
-    QFile test_data_file(R"(C:\Users\david\Downloads\test\00a282b3-4f02-4588-a380-9dcc9a87548c\log_map_archive_00a282b3-4f02-4588-a380-9dcc9a87548c.json)");
-    assert(test_data_file.open(QIODevice::ReadOnly));
-    QByteArray test_data = test_data_file.readAll();
-    QJsonDocument json_doc(QJsonDocument::fromJson(test_data));
-    assert(json_doc.isObject());
-    if (json_doc.object().contains("drivable_areas"))
-    {
-        QJsonValue drivable_areas = json_doc.object().value("drivable_areas");
-        assert(drivable_areas.isObject());
-        for (const QString key : drivable_areas.toObject().keys())
-        {
-            const QJsonValue id = drivable_areas.toObject().value(key);
-            const QJsonValue area_boundary = id.toObject()["area_boundary"];
-            assert(area_boundary.isArray());
-            const int num_verts = area_boundary.toArray().size();
-            osg::ref_ptr<osg::Vec3Array> va = new osg::Vec3Array(num_verts);
-            //for (const QJsonValue point : area_boundary.toArray())
-            for(int i = 0; i < num_verts; ++i)
-            {
-                QJsonValue point = area_boundary.toArray()[i];
-                assert(point.isObject());
-                assert(point.toObject()["x"].isDouble());
-                assert(point.toObject()["y"].isDouble());
-                assert(point.toObject()["z"].isDouble());
-                const double x = point.toObject()["x"].toDouble();
-                const double y = point.toObject()["y"].toDouble();
-                const double z = point.toObject()["z"].toDouble();
-                std::cout << "x=" << x << "; y=" << y << "; z=" << z << std::endl;
-                (*va)[i].set(x, y, z);
-            }
-            osg::ref_ptr<osgUtil::DelaunayTriangulator> dt = new osgUtil::DelaunayTriangulator;
-            dt->setInputPointArray(va.get());
-            dt->setOutputNormalArray(new osg::Vec3Array);
-            dt->triangulate();
+    // QFile test_data_file(R"(C:\Users\david\Downloads\test\00a282b3-4f02-4588-a380-9dcc9a87548c\log_map_archive_00a282b3-4f02-4588-a380-9dcc9a87548c.json)");
+    // assert(test_data_file.open(QIODevice::ReadOnly));
+    // QByteArray test_data = test_data_file.readAll();
+    // QJsonDocument json_doc(QJsonDocument::fromJson(test_data));
+    // assert(json_doc.isObject());
+    // if (json_doc.object().contains("drivable_areas"))
+    // {
+    //     QJsonValue drivable_areas = json_doc.object().value("drivable_areas");
+    //     assert(drivable_areas.isObject());
+    //     for (const QString key : drivable_areas.toObject().keys())
+    //     {
+    //         const QJsonValue id = drivable_areas.toObject().value(key);
+    //         const QJsonValue area_boundary = id.toObject()["area_boundary"];
+    //         assert(area_boundary.isArray());
+    //         const int num_verts = area_boundary.toArray().size();
+    //         osg::ref_ptr<osg::Vec3Array> va = new osg::Vec3Array(num_verts);
+    //         //for (const QJsonValue point : area_boundary.toArray())
+    //         for(int i = 0; i < num_verts; ++i)
+    //         {
+    //             QJsonValue point = area_boundary.toArray()[i];
+    //             assert(point.isObject());
+    //             assert(point.toObject()["x"].isDouble());
+    //             assert(point.toObject()["y"].isDouble());
+    //             assert(point.toObject()["z"].isDouble());
+    //             const double x = point.toObject()["x"].toDouble();
+    //             const double y = point.toObject()["y"].toDouble();
+    //             const double z = point.toObject()["z"].toDouble();
+    //             std::cout << "x=" << x << "; y=" << y << "; z=" << z << std::endl;
+    //             (*va)[i].set(x, y, z);
+    //         }
+    //         osg::ref_ptr<osgUtil::DelaunayTriangulator> dt = new osgUtil::DelaunayTriangulator;
+    //         dt->setInputPointArray(va.get());
+    //         dt->setOutputNormalArray(new osg::Vec3Array);
+    //         dt->triangulate();
 
-            osg::ref_ptr<osg::Geometry> geometry = new osg::Geometry;
-            geometry->setVertexArray(dt->getInputPointArray());
-            geometry->setNormalArray(dt->getOutputNormalArray());
-            //geometry->setNormalBinding(osg::Geometry::BIND_PER_PRIMITIVE); Deprecated, use next line
-            va->setBinding(osg::Array::BIND_PER_PRIMITIVE_SET);
-            geometry->addPrimitiveSet(dt->getTriangles());
+    //         osg::ref_ptr<osg::Geometry> geometry = new osg::Geometry;
+    //         geometry->setVertexArray(dt->getInputPointArray());
+    //         geometry->setNormalArray(dt->getOutputNormalArray());
+    //         //geometry->setNormalBinding(osg::Geometry::BIND_PER_PRIMITIVE); Deprecated, use next line
+    //         va->setBinding(osg::Array::BIND_PER_PRIMITIVE_SET);
+    //         geometry->addPrimitiveSet(dt->getTriangles());
 
-            osg::ref_ptr<osg::Geode> geode = new osg::Geode;
-            geode->addDrawable(geometry.get());
-            root->addChild(geode);
-        }
-    }
-    if (json_doc.object().contains("lane_segments"))
-    {
-        QJsonValue lane_segments = json_doc.object().value("lane_segments");
-    }
-    if (json_doc.object().contains("pedestrian_crossings"))
-    {
-        QJsonValue pedestrian_crossings = json_doc.object().value("pedestrian_crossings");
-    }
+    //         osg::ref_ptr<osg::Geode> geode = new osg::Geode;
+    //         geode->addDrawable(geometry.get());
+    //         root->addChild(geode);
+    //     }
+    // }
+    // if (json_doc.object().contains("lane_segments"))
+    // {
+    //     QJsonValue lane_segments = json_doc.object().value("lane_segments");
+    // }
+    // if (json_doc.object().contains("pedestrian_crossings"))
+    // {
+    //     QJsonValue pedestrian_crossings = json_doc.object().value("pedestrian_crossings");
+    // }
 
 
 
