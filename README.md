@@ -73,7 +73,7 @@
   - Visual Studio 2022
     1. Open Terminal
     2. `pwsh`
-    3. `~/repos/tron/out/tron.sln`
+    3. `~/repos/tron/build/tron.sln`
     4. Right click project you want to run in *Solution Explorer* and select *Debug > Start New Instance*
   - Visual Studio Code
   - WSL - Ubuntu 20.04
@@ -82,17 +82,17 @@
 
 ## Clean
 
-All output (CMake, compiler, linker, etc.) go to *out* directory. To clean up, delete *out*.
+All output (CMake, compiler, linker, etc.) go to *./build* directory. To clean up, delete *./build*.
 
 1. Open Terminal
 2. `pwsh`
-3. `ri $HOME/repos/tron/out -Recurse -Force`
+3. `ri $HOME/repos/tron/build -Recurse -Force`
 
 ## Hierarchy
 
 - src
   - sandbox
-- out
+- build
 - third_party
   - vcpkg
 - .gitignore
@@ -114,10 +114,10 @@ All output (CMake, compiler, linker, etc.) go to *out* directory. To clean up, d
       - Link executable to third party libaries 
 4. Update `CmakeLists.txt` in root
    1. Add project folder via [add_subdirectory](https://cmake.org/cmake/help/latest/command/add_subdirectory.html)
-5. Generate build files in *tron/out*: Run `generate.ps1` 
-   - What it does if you are running from repo root: `cmake -S . -B ./out`
+5. Generate build files in *./build*: Run `generate.ps1` 
+   - What it does if you are running from repo root: `cmake -S . -B ./build`
 6. Open IDE
-   - Visual Studio: `.\out\tron.sln`
+   - Visual Studio: `.\build\tron.sln`
 
 ## CMake Tips
 
@@ -321,7 +321,7 @@ You control CMake via buttons in the status bar on the bottom. Button descriptio
 
 ### To reset
 
-Delete ./out directory
+Delete ./build directory
 
 ### To run CMake configure
 
@@ -331,12 +331,27 @@ To run manually: Ctrl+Shift+P > CMake: Configure
 
 To start debugger (CMake): Ctrl+F5
 
-
-
-
 ## TODO
 
+- Create a library that goes to ./include and ./build/lib
 - cpack: create .msi/.deb installer https://cmake.org/cmake/help/latest/manual/cpack.1.html#manual:cpack(1)
+- ctest - unit test
+- cmake vs bazel - pro/con
+  - VS Code plugins
+    - CMake - <https://github.com/microsoft/vscode-cmake-tools>
+      - 2,674 commits
+      - 117 contributors
+      - As of 5/13/22: 20 hours since last commit
+    - Bazel - <https://github.com/bazelbuild/vscode-bazel>
+      - 182 commits
+      - 25 contributors
+      - As of 5/13/22, 3.5 months since last commit
+- Test in Qt Creator, Clion, others?
+- Document Visual Studio, Visual Studio Code building, debugging, running
+- Integration with Bazel: 
+  - Bazel ingest CMake
+    - <https://github.com/bazelbuild/rules_foreign_cc>
+  - CMake to bazel generator
 - List all osg environment variables like from here https://github.com/esmini/esmini/blob/master/docs/osg_options_and_env_variables.txt?msclkid=32f39220b03511ec8ba55e72d8c7b519
 - Document osg .exe's: examples, tools
 - Get Qt apps to run from command line
