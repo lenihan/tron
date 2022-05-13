@@ -1,5 +1,4 @@
 {
-    "cmake.buildDirectory": "${workspaceFolder}/out/build",
     "files.associations": {
             "**/include/**": "cpp",
     }

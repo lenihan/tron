@@ -4,6 +4,7 @@ add_executable(
     QTreeView.cpp 
     Assets/Darcula_SimGUI_Merged.qss
 )
+set_target_postfix()
 find_package(Qt5 COMPONENTS Core Widgets REQUIRED)  
 target_link_libraries(${PROJECT_NAME} Qt5::Core Qt5::Widgets)
 

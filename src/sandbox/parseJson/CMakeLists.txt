@@ -6,6 +6,7 @@ add_executable(
     Assets/simulation_config-all_cmds.json
     Assets/simulation_config.json
 )
+set_target_postfix()
 find_package(Qt5 COMPONENTS Core REQUIRED)  
 target_link_libraries(${PROJECT_NAME} Qt5::Core)
 find_package(Qt5 COMPONENTS Widgets REQUIRED)  

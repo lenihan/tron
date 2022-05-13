@@ -16,7 +16,7 @@ bld/
 .vs/
 
 # Output directory
-out/
+build/
 
 # CMake
 CMakeLists.txt.user

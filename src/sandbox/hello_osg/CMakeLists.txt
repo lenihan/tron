@@ -5,6 +5,8 @@ add_executable (
     Resources/reflect.png
 )
 
+set_target_postfix()
+
 find_package(Qt5 COMPONENTS Core REQUIRED)
 target_link_libraries(${PROJECT_NAME} Qt5::Core)
 
@@ -40,10 +42,33 @@ execute_process(COMMAND ${CMD})
 foreach(CONFIG IN LISTS CMAKE_CONFIGURATION_TYPES)
     configure_file(
         Resources/reflect.png
-        ${CONFIG}/reflect.png
+        ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/reflect.png
         COPYONLY
     )
 endforeach()
+
+# CMAKE_CURRENT_BINARY_DIR=C:/Users/david/repos/tron/out/build/src/sandbox/hello_osg
+# CMAKE_ARCHIVE_OUTPUT_DIRECTORY_<CONFIG> - .lib, .a 
+# CMAKE_LIBRARY_OUTPUT_DIRECTORY_<CONFIG> - .dll, .so
+# CMAKE_RUNTIME_OUTPUT_DIRECTORY - .exe, .dll
+# out/build
+# out/bin/Debug
+# out/bin/Release
+# out/lib/Debug
+# out/lib/Release
+# src/include/sim
+
+#https://cmake.org/cmake/help/latest/variable/CMAKE_ARCHIVE_OUTPUT_DIRECTORY_CONFIG.html
+# add_custom_command(
+#     OUTPUT
+#     COMMAND
+# )
+# CMAKE_HOME_DIRECTORY
+# get_cmake_property(_variableNames VARIABLES)
+# foreach (_variableName ${_variableNames})
+#     message(STATUS "${_variableName}=${${_variableName}}")
+# endforeach()
+
 
 # TODO: 
 # Load points from "C:\Users\david\Downloads\test\00a282b3-4f02-4588-a380-9dcc9a87548c\log_map_archive_00a282b3-4f02-4588-a380-9dcc9a87548c.json"
