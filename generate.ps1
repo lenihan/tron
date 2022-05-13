@@ -1,2 +1,2 @@
 $ROOT = $PSScriptRoot
-cmake -S $ROOT -B $ROOT/out
+cmake -S $ROOT -B $ROOT/build
