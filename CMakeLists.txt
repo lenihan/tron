@@ -46,8 +46,8 @@ function(set_target_postfix)
 endfunction()
 
 # Include sub-projects.
-add_subdirectory("src/sandbox/hello_cmake")
-add_subdirectory("src/sandbox/hello_osg")
-add_subdirectory("src/sandbox/hello_qt")
+add_subdirectory("src/hello/hello_cmake")
+add_subdirectory("src/hello/hello_osg")
+add_subdirectory("src/hello/hello_qt")
 add_subdirectory("src/sandbox/parseJson")
 add_subdirectory("src/sandbox/QTreeView")
