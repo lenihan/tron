@@ -12,24 +12,22 @@ target_link_libraries(${PROJECT_NAME} Qt5::Core)
 find_package(Qt5 COMPONENTS Widgets REQUIRED)  
 target_link_libraries(${PROJECT_NAME} Qt5::Widgets)
 
-# Copy json to location of built application
-foreach(CONFIG IN LISTS CMAKE_CONFIGURATION_TYPES)
-    configure_file(
-        Assets/simulation_config_2in1.json
-        ${CONFIG}/simulation_config_2in1.json
-        COPYONLY
-    )
-    configure_file(
-        Assets/simulation_config-all_cmds.json
-        ${CONFIG}/simulation_config-all_cmds.json
-        COPYONLY
-    )
-    configure_file(
-        Assets/simulation_config.json
-        ${CONFIG}/simulation_config.json
-        COPYONLY
-    )
-endforeach()
+# Copy json to bin location
+configure_file(
+    Assets/simulation_config_2in1.json
+    ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/simulation_config_2in1.json
+    COPYONLY
+)
+configure_file(
+    Assets/simulation_config-all_cmds.json
+    ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/simulation_config-all_cmds.json
+    COPYONLY
+)
+configure_file(
+    Assets/simulation_config.json
+    ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/simulation_config.json
+    COPYONLY
+)
 
 # Create "Asset" folder for style sheet in Visual Studio
 source_group(

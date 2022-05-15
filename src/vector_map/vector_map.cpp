@@ -351,10 +351,94 @@ osg::Geode* createTeapot()
 
 int main(int argc, char** argv)
 {
-    // Setup QCoreApplication so we can get the app path
+    // Load enviroment variables from .env file
     QCoreApplication app(argc, argv);
+    // try
+    // {
+    //     const QString app_dir = app.applicationDirPath();
+    //     const QString env_path = app_dir + "/.env";
+    //     QFile file(env_path);
+    //     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+    //     {
+    //         const QString error_string = "Could not open " + env_path;
+    //         throw std::runtime_error(qPrintable(error_string));
+    //     }
+    //     while (!file.atEnd()) 
+    //     {
+    //         const QString line = file.readLine();
+    //         const QStringList variable_value = line.split('=');
+    //         assert(variable_value.size() == 2);
+    //         const QString variable = variable_value.first();
+    //         const QString value = variable_value.last();
+    //         qputenv(qPrintable(variable), value.toUtf8());
+    //     }
+    // }
+    // catch (const std::exception& exc)
+    // {
+    //     std::cout << "ERROR: " << exc.what() << std::endl;
+    //     return EXIT_FAILURE;
+    // }
 
     osg::ref_ptr<osg::Group> root = new osg::Group;
+
+    // Load test data
+    // QFile test_data_file(R"(C:\Users\david\Downloads\test\00a282b3-4f02-4588-a380-9dcc9a87548c\log_map_archive_00a282b3-4f02-4588-a380-9dcc9a87548c.json)");
+    // assert(test_data_file.open(QIODevice::ReadOnly));
+    // QByteArray test_data = test_data_file.readAll();
+    // QJsonDocument json_doc(QJsonDocument::fromJson(test_data));
+    // assert(json_doc.isObject());
+    // if (json_doc.object().contains("drivable_areas"))
+    // {
+    //     QJsonValue drivable_areas = json_doc.object().value("drivable_areas");
+    //     assert(drivable_areas.isObject());
+    //     for (const QString key : drivable_areas.toObject().keys())
+    //     {
+    //         const QJsonValue id = drivable_areas.toObject().value(key);
+    //         const QJsonValue area_boundary = id.toObject()["area_boundary"];
+    //         assert(area_boundary.isArray());
+    //         const int num_verts = area_boundary.toArray().size();
+    //         osg::ref_ptr<osg::Vec3Array> va = new osg::Vec3Array(num_verts);
+    //         //for (const QJsonValue point : area_boundary.toArray())
+    //         for(int i = 0; i < num_verts; ++i)
+    //         {
+    //             QJsonValue point = area_boundary.toArray()[i];
+    //             assert(point.isObject());
+    //             assert(point.toObject()["x"].isDouble());
+    //             assert(point.toObject()["y"].isDouble());
+    //             assert(point.toObject()["z"].isDouble());
+    //             const double x = point.toObject()["x"].toDouble();
+    //             const double y = point.toObject()["y"].toDouble();
+    //             const double z = point.toObject()["z"].toDouble();
+    //             std::cout << "x=" << x << "; y=" << y << "; z=" << z << std::endl;
+    //             (*va)[i].set(x, y, z);
+    //         }
+    //         osg::ref_ptr<osgUtil::DelaunayTriangulator> dt = new osgUtil::DelaunayTriangulator;
+    //         dt->setInputPointArray(va.get());
+    //         dt->setOutputNormalArray(new osg::Vec3Array);
+    //         dt->triangulate();
+
+    //         osg::ref_ptr<osg::Geometry> geometry = new osg::Geometry;
+    //         geometry->setVertexArray(dt->getInputPointArray());
+    //         geometry->setNormalArray(dt->getOutputNormalArray());
+    //         //geometry->setNormalBinding(osg::Geometry::BIND_PER_PRIMITIVE); Deprecated, use next line
+    //         va->setBinding(osg::Array::BIND_PER_PRIMITIVE_SET);
+    //         geometry->addPrimitiveSet(dt->getTriangles());
+
+    //         osg::ref_ptr<osg::Geode> geode = new osg::Geode;
+    //         geode->addDrawable(geometry.get());
+    //         root->addChild(geode);
+    //     }
+    // }
+    // if (json_doc.object().contains("lane_segments"))
+    // {
+    //     QJsonValue lane_segments = json_doc.object().value("lane_segments");
+    // }
+    // if (json_doc.object().contains("pedestrian_crossings"))
+    // {
+    //     QJsonValue pedestrian_crossings = json_doc.object().value("pedestrian_crossings");
+    // }
+
+
 
     // show all messages
     osg::setNotifyLevel(osg::INFO);
@@ -374,8 +458,33 @@ int main(int argc, char** argv)
     // turn off swap buffer sync
     // osg::DisplaySettings::instance()->setSyncSwapBuffers(0);
 
-    osg::Geode* teapot = createTeapot();
-    root->addChild(teapot);
+
+    // Create grid of teapots
+    auto teapots = new osg::Group();
+    for (int y = 0; y < 1; y++)
+    //for (int y = -5; y < 6; y++)
+    {
+        for (int x = 0; x < 1; x++)
+        //for (int x = -5; x < 6; x++)
+        {
+            auto trans = new osg::MatrixTransform;
+            trans->setDataVariance(osg::Object::STATIC);
+            trans->setMatrix(osg::Matrix::translate(x * 6, y * 6, 0));
+            trans->addChild(createTeapot());
+
+            auto impostor = new osgSim::Impostor;
+            impostor->setRangeMode(osg::LOD::PIXEL_SIZE_ON_SCREEN);
+            impostor->setImpostorThreshold(200.0f);
+            // impostor->setImpostorThreshold(FLT_MAX); // disable imposter
+            // impostor->setImpostorThreshold(0.0f); // always imposter
+            impostor->addChild(createTeapot(), 0.0f, FLT_MAX); // always show teapot
+
+            trans->addChild(impostor);
+            teapots->addChild(trans);
+        }
+    }
+
+    root->addChild(teapots);
 
     // add model to viewer.
     viewer->setSceneData(root.get());
@@ -400,6 +509,7 @@ int main(int argc, char** argv)
     // 'l' - lighting toggle
     // 'b' - backface culling toggle
     viewer->addEventHandler(new osgGA::StateSetManipulator(viewer->getCamera()->getOrCreateStateSet()));
+
 
     return viewer->run();
 }
