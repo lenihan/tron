@@ -116,28 +116,4 @@ int main(int argc, char** argv)
     {
         QJsonValue pedestrian_crossings = json_doc.object().value("pedestrian_crossings");
     }    
-
-
-/*
-cd ~/Downloads
-
-# Download test.tar: ~6GB, about an hour
-Invoke-WebRequest -Uri https://s3.amazonaws.com/argoai-argoverse/av2/tars/motion-forecasting/test.tar -OutFile ./test.tar
-tar -xvf test.tar
-
-# Install PSParquet 
-Install-Module PSParquet
-Import-Module PSParquet
-
-# dir name GUID is "scenario_id" according to .parquet file
-$parquet_files = gci test -Recurse -Filter *.parquet
-$parquet_files | % {
-    $city = (Import-Parquet $_)[0].city
-    md cities/$city/json -ea Ignore
-    cp "test/$($_.Directory.name)/*.json" cities/$city/json 
-}
-
-#TODO test_json_to_osgb on every .json for each city
-#TODO make this a .ps1 script
-*/
 }
