@@ -1,6 +1,8 @@
 #include <QDir>
+#include <QFileInfo>
 #include <QtDebug>
 
+#include <osg/ProxyNode>
 #include <osgDB/ReadFile>
 #include <osgGA/StateSetManipulator>
 #include <osgViewer/config/SingleWindow>
@@ -30,7 +32,9 @@
 
 int main(int argc, char** argv)
 {
-    const QString city = "austin"; // austin, dearborn, miami, palo-alto, pittsburgh, washington-dc 
+    // austin, dearborn, miami, palo-alto, pittsburgh, washington-dc
+    // const QString city = "austin";  
+    const QString city = "miami"; 
     
     QDir osgb_dir(QDir::homePath() + "/Downloads/vector_map/cities/" + city);
     osgb_dir.setFilter(QDir::Files);
@@ -39,14 +43,28 @@ int main(int argc, char** argv)
         qFatal("Expected directory does not exist: %s", qPrintable(osgb_dir.absolutePath()));
     }
 
-    osg::ref_ptr<osg::Group> root = new osg::Group;
     
-    for (const QFileInfo& osgb_fi : osgb_dir.entryInfoList())
+
+#if 1       
+    osg::ref_ptr<osg::Group> root = new osg::Group;
+    for (int i = 0; i < osgb_dir.entryInfoList().size(); ++i)
     {
-        osg::Object* obj = osgDB::readObjectFile(osgb_fi.absoluteFilePath().toStdString());
-        osg::Node* node = dynamic_cast<osg::Node*>(obj);
-        root->addChild(node);
+        const std::string file_name = osgb_dir.entryInfoList().at(i).absoluteFilePath().toStdString();
+        osg::Object* obj = osgDB::readObjectFile(file_name);
+        root->addChild(dynamic_cast<osg::Node*>(obj));
     }
+#else
+    osg::ref_ptr<osg::ProxyNode> root = new osg::ProxyNode;
+    for (int i = 0; i < osgb_dir.entryInfoList().size(); ++i)
+    {
+        const QString file_name = osgb_dir.entryInfoList().at(i).absoluteFilePath();
+        if (!QFileInfo::exists(file_name))
+        {
+            qFatal("Expected file does not exist: %s", qPrintable(file_name));
+        }
+        root->setFileName(i, file_name.toStdString());
+    }
+#endif
     
     // show all messages
     // osg::setNotifyLevel(osg::ALWAYS);
@@ -60,8 +78,8 @@ int main(int argc, char** argv)
     // Run at fastest frame rate possible
     // NOTE: "Sync to VBlank" will limit frame rate to that of monitor (60 fps). To turn off:
     //       Start > Nvidia X Server Settigns > OpenGL Settings > [ ] Sync to VBlank
-    // viewer->setRunFrameScheme(osgViewer::ViewerBase::CONTINUOUS);
-    viewer->setRunFrameScheme(osgViewer::ViewerBase::ON_DEMAND);
+    viewer->setRunFrameScheme(osgViewer::ViewerBase::CONTINUOUS);
+    // viewer->setRunFrameScheme(osgViewer::ViewerBase::ON_DEMAND);
 
     // Set max frame rate to high number
     // viewer->setRunMaxFrameRate(100);
