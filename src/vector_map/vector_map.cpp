@@ -1,55 +1,35 @@
-#include <QCoreApplication>
 #include <QDir>
-#include <QFile>
-#include <QJsonDocument>
-#include <QJsonObject>
-#include <QJsonArray>
 #include <QtDebug>
 
-#include <osg/Geode>
-#include <osg/Geometry>
-#include <osg/MatrixTransform>
-#include <osg/Notify>
-#include <osg/Point>
-#include <osg/State>
-#include <osg/TexGen>
-#include <osg/Texture2D>
-#include <osg/ShapeDrawable>
-#include <osgUtil/DelaunayTriangulator>
-
 #include <osgDB/ReadFile>
-#include <osgDB/WriteFile>
 #include <osgGA/StateSetManipulator>
-
-#include <osgSim/Impostor>
-
 #include <osgViewer/config/SingleWindow>
 #include <osgViewer/View>
 #include <osgViewer/Viewer>
 #include <osgViewer/ViewerEventHandlers>
 
 
-// Select higest preforming graphics card
+// TODO: Select higest preforming graphics card
 // https://stackoverflow.com/questions/6036292/select-a-graphic-device-in-windows-opengl
 // extern "C" {
 //     _declspec(dllexport) int32_t NvOptimusEnablement = 1;
 //     _declspec(dllexport) int AmdPowerXpressRequestHighPerformance = 1;
 // }
 
-// TODO: convert to binary file
 // TODO: optimizations for 60fps full map
-// TODO: Make this reproducible: argoverse2 -> cities in osg binary
 // TODO: Get natvis file for Qt, make QString work in debugger. "Use "visualizerFile" and "showDisplayString" in launch.vs.json https://stackoverflow.com/questions/58624914/using-natvis-file-to-visualise-c-objects-in-vs-code
-// TODO: remove dup verts (average?)
 // TODO: save as single vertex array...can we do that with osg::PagedLOD?
 // TODO: Report compiling hello_cmake.cpp gives this error: "Unable to find compilation information for this file". Does it work with makefile?
 // TODO: Use different number formats (short, int?) to see if it speeds up map
 // TODO: Use osg::PagedLOD per tile
 // TODO: Use osg::ProxyNode
+// TODO: Triangluate points with osgUtil/DelaunayTriangulator
+// TODO: Add lanes
+// TODO: Add crosswalks
+// TOOD: Add LOD
 
 int main(int argc, char** argv)
 {
-    QCoreApplication app(argc, argv);
     const QString city = "austin"; // austin, dearborn, miami, palo-alto, pittsburgh, washington-dc 
     
     QDir osgb_dir(QDir::homePath() + "/Downloads/vector_map/cities/" + city);
