@@ -30,9 +30,12 @@ cmake --build $ROOT/build --config Release --target test_json_to_osgb
 # Create .osgb in $ROOT/assets/vector_map/cities
 $json_files =  Get-ChildItem $HOME/Downloads/cities -Filter *.json -Recurse
 $json_files | ForEach-Object {
-    $source = $_
-    $city = $source.Directory.Name
-    $destination = "$ROOT/assets/vector_map/cities/$city" 
-    mkdir $destination -e Ignore
+    $i = $json_files.IndexOf($_)
+    $count = $json_files.Count
+    Write-Progress -Activity "Convert .json to .osgb" -PercentComplete ($i/$count*100) -Status "$i of $count"   
+    $source = $_.FullName
+    $city = $_.Directory.Name
+    $destination = "$HOME/Downloads/vector_map/cities/$city" 
+    mkdir $destination -ea Ignore
     & "$ROOT/build/bin/test_json_to_osgb.exe" $source $destination 
 }

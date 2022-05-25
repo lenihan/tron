@@ -67,8 +67,6 @@ int main(int argc, char** argv)
         assert(drivable_areas.isObject());
         for (const QString key : drivable_areas.toObject().keys())
         {
-            qInfo("Key: %s", qPrintable(key));
-       
             const QJsonValue id = drivable_areas.toObject().value(key);
             const QJsonValue area_boundary = id.toObject()["area_boundary"];
             assert(area_boundary.isArray());
@@ -105,7 +103,6 @@ int main(int argc, char** argv)
             {
                 qFatal("Could not write file: %s", qPrintable(osgb_file_path));               
             }
-            qInfo("Created %s", qPrintable(osgb_file_path));
         }
     }
     if (json_doc.object().contains("lane_segments"))
