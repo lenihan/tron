@@ -46,7 +46,7 @@ int main(int argc, char** argv)
 
     
 
-#if 0       
+#if 0      
     osg::ref_ptr<osg::Group> root = new osg::Group;
     for (int i = 0; i < osgb_dir.entryInfoList().size(); ++i)
     {
@@ -55,19 +55,11 @@ int main(int argc, char** argv)
         root->addChild(dynamic_cast<osg::Node*>(obj));
     }
 #else
-    osg::ref_ptr<osg::Group> root = new osg::Group;
-    osg::ref_ptr<osg::ProxyNode> proxy = new osg::ProxyNode;
-    root->addChild(proxy);
-    for (int i = 0; i < osgb_dir.entryInfoList().size(); ++i)
-    //for (int i = 0; i < 500; ++i)
+    osg::ref_ptr<osg::ProxyNode> root = new osg::ProxyNode;
+    root->setDatabasePath(osgb_dir.absolutePath().toStdString());
+    for (uint i = 0; i < osgb_dir.count(); ++i)
     {
-            //geode->addDrawable( _selector.get() );    
-        const QString file_name = osgb_dir.entryInfoList().at(i).absoluteFilePath();
-        if (!QFileInfo::exists(file_name))
-        {
-            qFatal("Expected file does not exist: %s", qPrintable(file_name));
-        }
-        proxy->setFileName(i, file_name.toStdString());
+        root->setFileName(i, osgb_dir[i].toStdString());
     }
 #endif
     

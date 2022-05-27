@@ -4,24 +4,24 @@
 
 $ROOT = "$PSScriptRoot\.."
 
-# # Download test.tar: ~6GB, about an hour
-# Invoke-WebRequest -Uri https://s3.amazonaws.com/argoai-argoverse/av2/tars/motion-forecasting/test.tar -OutFile ~/Downloads/test.tar
-# tar -xvf $HOME/Downloads/test.tar --directory $HOME/Downloads
+# Download test.tar: ~6GB, about an hour
+Invoke-WebRequest -Uri https://s3.amazonaws.com/argoai-argoverse/av2/tars/motion-forecasting/test.tar -OutFile ~/Downloads/test.tar
+tar -xvf $HOME/Downloads/test.tar --directory $HOME/Downloads
 
-# # Install PSParquet 
-# Install-Module PSParquet
-# Import-Module PSParquet
+# Install PSParquet 
+Install-Module PSParquet
+Import-Module PSParquet
 
-# # Create city folders with .json files
-# $parquet_files = Get-ChildItem $HOME/Downloads/test -Recurse -Filter *.parquet
-# $parquet_files | ForEach-Object -Parallel {
-#     $i = $(using:parquet_files).IndexOf($_)
-#     $count = $using:parquet_files.Count
-#     Write-Progress -Activity "Copy .json to city directories" -PercentComplete ($i/$count*100) -Status "$i of $count"   
-#     $city = (Import-Parquet $_)[0].city
-#     mkdir $using:HOME/Downloads/cities/$city -ea Ignore
-#     Copy-Item "$using:HOME/Downloads/test/$($_.Directory.name)/*.json" $HOME/Downloads/cities/$city 
-# }
+# Create city folders with .json files
+$parquet_files = Get-ChildItem $HOME/Downloads/test -Recurse -Filter *.parquet
+$parquet_files | ForEach-Object -Parallel {
+    $i = $(using:parquet_files).IndexOf($_)
+    $count = $using:parquet_files.Count
+    Write-Progress -Activity "Copy .json to city directories" -PercentComplete ($i/$count*100) -Status "$i of $count"   
+    $city = (Import-Parquet $_)[0].city
+    mkdir $using:HOME/Downloads/cities/$city -ea Ignore
+    Copy-Item "$using:HOME/Downloads/test/$($_.Directory.name)/*.json" $HOME/Downloads/cities/$city 
+}
 
 # Create test_json_to_osgb.exe
 cmake -S $ROOT -B $ROOT/build
