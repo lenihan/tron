@@ -94,11 +94,12 @@ int main(int argc, char** argv)
             _selector->setColorBinding( osg::Geometry::BIND_OVERALL );
             _selector->addPrimitiveSet( new osg::DrawArrays(GL_POINTS, 0, num_verts) );
 
-            osg::ref_ptr<osg::Geode> geode = new osg::Geode;
-            geode->addDrawable( _selector.get() );
-            geode->setStateSet(state_set);
+            //osg::ref_ptr<osg::Geode> geode = new osg::Geode;
+            //geode->addDrawable( _selector.get() );
+            //geode->setStateSet(state_set);
             const QString osgb_file_path = destination + "/" + key + ".osgb";
-            const bool success = osgDB::writeObjectFile(*geode, osgb_file_path.toStdString());
+            const bool success = osgDB::writeObjectFile(*_selector, osgb_file_path.toStdString());
+            //const bool success = osgDB::writeObjectFile(*geode, osgb_file_path.toStdString());
             if (!success)
             {
                 qFatal("Could not write file: %s", qPrintable(osgb_file_path));               

@@ -19,6 +19,7 @@
 // }
 
 // TODO: optimizations for 60fps full map
+// TODO: Clean up points: multiple points in same place
 // TODO: Get natvis file for Qt, make QString work in debugger. "Use "visualizerFile" and "showDisplayString" in launch.vs.json https://stackoverflow.com/questions/58624914/using-natvis-file-to-visualise-c-objects-in-vs-code
 // TODO: save as single vertex array...can we do that with osg::PagedLOD?
 // TODO: Report compiling hello_cmake.cpp gives this error: "Unable to find compilation information for this file". Does it work with makefile?
@@ -45,7 +46,7 @@ int main(int argc, char** argv)
 
     
 
-#if 1       
+#if 0       
     osg::ref_ptr<osg::Group> root = new osg::Group;
     for (int i = 0; i < osgb_dir.entryInfoList().size(); ++i)
     {
@@ -54,15 +55,19 @@ int main(int argc, char** argv)
         root->addChild(dynamic_cast<osg::Node*>(obj));
     }
 #else
-    osg::ref_ptr<osg::ProxyNode> root = new osg::ProxyNode;
+    osg::ref_ptr<osg::Group> root = new osg::Group;
+    osg::ref_ptr<osg::ProxyNode> proxy = new osg::ProxyNode;
+    root->addChild(proxy);
     for (int i = 0; i < osgb_dir.entryInfoList().size(); ++i)
+    //for (int i = 0; i < 500; ++i)
     {
+            //geode->addDrawable( _selector.get() );    
         const QString file_name = osgb_dir.entryInfoList().at(i).absoluteFilePath();
         if (!QFileInfo::exists(file_name))
         {
             qFatal("Expected file does not exist: %s", qPrintable(file_name));
         }
-        root->setFileName(i, file_name.toStdString());
+        proxy->setFileName(i, file_name.toStdString());
     }
 #endif
     
