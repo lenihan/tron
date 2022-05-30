@@ -19,6 +19,8 @@
     - [Print Message/Variable](#print-messagevariable)
     - [Show All CMake Variables](#show-all-cmake-variables)
   - [OSG Tips](#osg-tips)
+    - [OSG Examples](#osg-examples)
+    - [OSG Terrain Example](#osg-terrain-example)
     - [OSG Tools (.exe's)](#osg-tools-exes)
     - [Run osgviewer.exe](#run-osgviewerexe)
     - [Run osgconv.exe](#run-osgconvexe)
@@ -271,11 +273,25 @@ endforeach()
 
 ## OSG Tips
 
+### OSG Examples
+
+```powershell
+./Set-Env.ps1
+gci .\third_party\vcpkg\buildtrees\osg\src\raph-3.6.5-0028e69d98.clean\examples
+```
+
+### OSG Terrain Example
+
+```powershell
+./Set-Env.ps1
+osgterrain.exe lz.osgt
+```
+
 ### OSG Tools (.exe's)
 
 ```powershell
 ./Set-Env.ps1
-gci $env:VCPKG_TOOLS_OSG_DIR
+gci .\third_party\vcpkg\packages\osg_x64-windows\tools\osg
 ```
 
 ### Run osgviewer.exe
