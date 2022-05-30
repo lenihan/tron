@@ -19,6 +19,7 @@
 #include <osg/ArgumentParser>
 #include <osgDB/ReadFile>
 
+#include <osgViewer/config/SingleWindow>
 #include <osgViewer/Viewer>
 #include <osgViewer/ViewerEventHandlers>
 
@@ -274,6 +275,13 @@ int main(int argc, char** argv)
 
     // construct the viewer.
     osgViewer::Viewer viewer(arguments);
+
+    // windowed
+    const int x = 100;
+    const int y = 100;
+    const int width = 640;
+    const int height = 480;
+    viewer.apply(new osgViewer::SingleWindow(x, y, width, height));
 
     // set up the camera manipulators.
     {
