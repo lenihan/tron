@@ -70,6 +70,3 @@ endforeach()
 # endforeach()
 
 
-# TODO: 
-# Load points from "C:\Users\david\Downloads\test\00a282b3-4f02-4588-a380-9dcc9a87548c\log_map_archive_00a282b3-4f02-4588-a380-9dcc9a87548c.json"
-
