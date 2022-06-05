@@ -349,6 +349,7 @@ To start debugger (CMake): Ctrl+F5
 
 ## TODO
 
+- Get pdb to work for osgTerrain (symbols not loading for some reason, works for other OSG elements)
 - Create a library that goes to ./include and ./build/lib
 - cpack: create .msi/.deb installer https://cmake.org/cmake/help/latest/manual/cpack.1.html#manual:cpack(1)
 - ctest - unit test
