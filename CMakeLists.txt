@@ -54,3 +54,9 @@ add_subdirectory("src/osgterrain")
 add_subdirectory("src/test_json_to_osgb")
 add_subdirectory("src/sandbox/parseJson")
 add_subdirectory("src/sandbox/QTreeView")
+
+# show variables
+# get_cmake_property(_variableNames VARIABLES)
+# foreach (_variableName ${_variableNames})
+#     message(STATUS "${_variableName}=${${_variableName}}")
+# endforeach()
