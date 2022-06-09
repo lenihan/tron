@@ -78,7 +78,8 @@ $ROOT_DIR = $PSScriptRoot
 $THIRD_PARTY_DIR = Join-Path $ROOT_DIR third_party
 mkdir $THIRD_PARTY_DIR -Force | Out-Null
 $VCPKG_DIR = Join-Path $THIRD_PARTY_DIR vcpkg
-$TAG = "2022.05.10"
+# $TAG = "2022.05.10"    # got opengl draw errors...need to test more
+$TAG = "2022.02.02"    # works
 Write-Host "Using vcpkg tag $TAG" -ForegroundColor Cyan
 git clone --branch $TAG https://github.com/Microsoft/vcpkg.git $VCPKG_DIR 
 if ($IsWindows) {
