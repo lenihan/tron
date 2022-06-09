@@ -99,7 +99,7 @@ osg::Drawable* createAxis(const osg::Vec3& corner,const osg::Vec3& xdir,const os
 
     geom->setVertexArray(coords);
 
-    osg::Vec4 x_color(0.0f,1.0f,1.0f,1.0f);
+    osg::Vec4 x_color(0.0f,0.0f,1.0f,1.0f);
     osg::Vec4 y_color(0.0f,1.0f,1.0f,1.0f);
     osg::Vec4 z_color(1.0f,0.0f,0.0f,1.0f);
 
@@ -180,7 +180,7 @@ osg::ref_ptr<osg::Node> createModel()
 int main(int, char**)
 {
     
-    osg::setNotifyLevel(osg::ALWAYS);   // show all messages
+    osg::setNotifyLevel(osg::DEBUG_FP);   // show all messages
 
     // construct the viewer
     osgViewer::Viewer viewer;
