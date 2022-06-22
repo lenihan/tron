@@ -11,7 +11,7 @@ if(!(Test-Path variable:IsWindows))
 Write-Host "Setup build environment..." -ForegroundColor Cyan
 if ($IsWindows) {
     Push-Location .  # Next line can put us in ~/source/repos, fix that with Pop-Location
-    & "$env:ProgramFiles\Microsoft Visual Studio\2022\Community\Common7\Tools\Launch-VsDevShell.ps1"
+    & "$env:ProgramFiles\Microsoft Visual Studio\2022\Community\Common7\Tools\Launch-VsDevShell.ps1" -Arch amd64
     Pop-Location
 }
 
@@ -93,7 +93,8 @@ if ($IsWindows) {
 if ($IsWindows) {
     # ~2 hours
     $packages = 
-        "osg[tools,plugins,examples]",      
+        "osg[plugins]",   # avoid .exe/.dll name collision problem for osgTerraind.pdb, osgViewerd.pdb, osgTextd.pdb   
+        # "osg[tools,plugins,examples]",      
         "qt5"                               
 } 
 else {
@@ -148,6 +149,7 @@ Write-Host "Generate environment file $ENV_FILE for running apps"  -ForegroundCo
 @"
 OSG_FILE_PATH=$OPENSCENEGRAPH_DATA_DIR
 PATH=$PATH
+VSCMD_ARG_TGT_ARCH=$env:VSCMD_ARG_TGT_ARCH
 "@ | Set-Content $ENV_FILE
 
 # TODO: Add this for linux: LD_LIBRARY_PATH="$VCPKG_LIB_DIR"

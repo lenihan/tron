@@ -271,7 +271,9 @@ class CleanTechniqueReadFileCallback : public osgDB::ReadFileCallback
 
 int main(int argc, char** argv)
 {
+    osg::setNotifyLevel(osg::DEBUG_FP);   // show all messages
     osg::ArgumentParser arguments(&argc, argv);
+    
 
     // construct the viewer.
     osgViewer::Viewer viewer(arguments);
@@ -352,7 +354,8 @@ int main(int argc, char** argv)
 
     // load the nodes from the commandline arguments.
     // osg::ref_ptr<osg::Node> rootnode = osgDB::readRefNodeFiles(arguments);
-    osg::ref_ptr<osg::Node> rootnode = osgDB::readRefNodeFile("lz.osgt");
+    osg::ref_ptr<osg::Node> rootnode = osgDB::readRefNodeFile("lz.osg");
+    // osg::ref_ptr<osg::Node> rootnode = osgDB::readRefNodeFile("lz.osgt");
     if (!rootnode)
     {
         osg::notify(osg::NOTICE)<<"Warning: no valid data loaded, please specify a database on the command line."<<std::endl;
