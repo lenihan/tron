@@ -80,8 +80,11 @@ mkdir $THIRD_PARTY_DIR -Force | Out-Null
 $VCPKG_DIR = Join-Path $THIRD_PARTY_DIR vcpkg
 # $TAG = "2022.05.10"    # got opengl draw errors...need to test more
 $TAG = "2022.02.02"    # works
-Write-Host "Using vcpkg tag $TAG" -ForegroundColor Cyan
-git clone --branch $TAG https://github.com/Microsoft/vcpkg.git $VCPKG_DIR 
+# $REPO_URL = "https://github.com/Microsoft/vcpkg.git"
+$REPO_URL = "https://github.com/lenihan/vcpkg.git"   # this is a fork with local fixes, ultimately we should use the Microsoft repo
+$cmd = "git clone --branch $TAG $REPO_URL $VCPKG_DIR"
+Write-Host $cmd -ForegroundColor Cyan
+Invoke-Expression $cmd
 if ($IsWindows) {
     $TRIPLET = "x64-windows"   # dynamic library, dynamic CRT
     $BOOTSTRAP_VCPKG_EXE = Join-Path $VCPKG_DIR bootstrap-vcpkg
@@ -93,8 +96,7 @@ if ($IsWindows) {
 if ($IsWindows) {
     # ~2 hours
     $packages = 
-        "osg[plugins]",   # avoid .exe/.dll name collision problem for osgTerraind.pdb, osgViewerd.pdb, osgTextd.pdb   
-        # "osg[tools,plugins,examples]",      
+        "osg[tools,plugins,examples]",      
         "qt5"                               
 } 
 else {
