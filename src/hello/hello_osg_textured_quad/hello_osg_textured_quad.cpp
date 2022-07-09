@@ -8,7 +8,17 @@
 #include <osgViewer/Viewer>
 #include <osgViewer/ViewerEventHandlers>
 
-
+// Automatically select more powerful GPU (Nvidia/AMD).
+// Helpful for laptops that have Intel graphics and Nvidia/AMD
+// and you want to run on Nvidia/AMD.
+// To verify, use `osg::setNotifyLevel(osg::INFO)` and you 
+// will see `GL_VENDOR = [NVIDIA_Corporation]` in console
+// if Nvidia card is selected.
+// From https://stackoverflow.com/a/27881472
+extern "C" {
+    _declspec(dllexport) unsigned long NvOptimusEnablement = 1;
+    _declspec(dllexport) int AmdPowerXpressRequestHighPerformance = 1;
+}
 
 osg::ref_ptr<osg::Geode> createTexturedQuad()
 {
@@ -35,6 +45,7 @@ osg::ref_ptr<osg::Geode> createTexturedQuad()
     quad->addPrimitiveSet(new osg::DrawArrays(GL_QUADS, 0, 4));
 
     osg::ref_ptr<osg::Texture2D> texture = new osg::Texture2D;
+    texture->setUnRefImageDataAfterApply(true);
     osg::ref_ptr<osg::Image> image = osgDB::readImageFile("test/mipmap/mipmap_level_test-11_levels-bc1.dds");
     texture->setImage(image.get());
 
@@ -92,18 +103,18 @@ int main(int argc, char** argv)
     //   Each white line that goes from Event to GPU is the start of a frame
     //   Most recent frame is on left, then previous frames to the right
     //   Categories
-    //     Event:  time processing events (mouse/keyboard/etc.)
-    //     Update: time updating scene graph
-    //     Cull:   time culling scene graph
-    //     Draw:   time drawing scene graph
+    //     Event:  APP thread: time processing events (mouse/keyboard/etc.)
+    //     Update: APP thread: time updating scene graph
+    //     Cull:   CULL thread: time culling scene graph
+    //     Draw:   DRAW thread: time drawing scene graph
     //     GPU:    time spent waiting on GPU
     // Graph:
     //   Frame Rate: white
-    //   Event:      green
-    //   Update:     green
-    //   Cull:       cyan
-    //   Draw:       yellow
-    //   GPU:        orange
+    //   Event (APP):      green
+    //   Update (APP):     green
+    //   Cull:             cyan
+    //   Draw:             yellow
+    //   GPU:              orange
     viewer->addEventHandler(new osgViewer::StatsHandler);
 
 
