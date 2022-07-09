@@ -126,6 +126,9 @@ git clone https://github.com/xarray/osgRecipes.git $OSGRECIPES_DIR
 # Generate environment file for running apps
 $ENV_FILE = Join-Path $ROOT_DIR .env
 
+$RESOURCE_DIR = Join-Path $ROOT_Dir resources
+$OSG_FILE_PATH = $RESOURCE_DIR, $OPENSCENEGRAPH_DATA_DIR -join [IO.Path]::PathSeparator
+
 $VCPKG_INSTALLED_DIR = Join-Path $VCPKG_DIR installed
 $VCPKG_TRIPLET_DIR = Join-Path $VCPKG_INSTALLED_DIR $TRIPLET
 $VCPKG_TOOLS_DIR = Join-Path $VCPKG_TRIPLET_DIR tools
@@ -145,11 +148,11 @@ $new_path_array =
     $VCPKG_BIN_DEBUG_DIR, 
     $VCPKG_TOOLS_OSG_DIR, 
     $VCPKG_TOOLS_OSG_DEBUG_DIR + $path_array | Select-Object -Unique
-$PATH = $new_path_array -Join [IO.Path]::PathSeparator
+$PATH = $new_path_array -join [IO.Path]::PathSeparator
 
 Write-Host "Generate environment file $ENV_FILE for running apps"  -ForegroundColor Cyan
 @"
-OSG_FILE_PATH=$OPENSCENEGRAPH_DATA_DIR
+OSG_FILE_PATH=$OSG_FILE_PATH
 PATH=$PATH
 VSCMD_ARG_TGT_ARCH=$env:VSCMD_ARG_TGT_ARCH
 "@ | Set-Content $ENV_FILE

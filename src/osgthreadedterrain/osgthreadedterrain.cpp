@@ -37,6 +37,7 @@
 
 #include <osgText/FadeText>
 
+#include <osgViewer/config/SingleWindow>
 #include <osgViewer/Viewer>
 #include <osgViewer/ViewerEventHandlers>
 
@@ -651,7 +652,6 @@ int main(int argc, char** argv)
         masterOperation = new MasterOperation(masterFilename, viewer.getIncrementalCompileOperation());
     }
 
-
     osg::ref_ptr<osgTerrain::TerrainTile> terrainTile = new osgTerrain::TerrainTile;
     osg::ref_ptr<osgTerrain::Locator> locator = new osgTerrain::Locator;
     osg::ref_ptr<osgTerrain::ValidDataOperator> validDataOperator = new osgTerrain::NoDataValue(0.0);
@@ -666,11 +666,12 @@ int main(int argc, char** argv)
 
     osg::Texture::FilterMode filter = osg::Texture::LINEAR;
 
-    float minValue, maxValue;
+    // float minValue, maxValue;
     float scale = 1.0f;
     float offset = 0.0f;
 
     int pos = 1;
+#if 0
     while(pos<arguments.argc())
     {
         std::string filename;
@@ -858,12 +859,14 @@ int main(int argc, char** argv)
         }
 
     }
-
+#endif    
+ osg::ref_ptr<osg::Group> scene = new osg::Group;
+ 
 {
-                locator->setCoordinateSystemType(osgTerrain::Locator::PROJECTED);
-            locator->setTransformAsExtents(x,y,x+w,y+h);
-
+    locator->setCoordinateSystemType(osgTerrain::Locator::PROJECTED);
+    locator->setTransformAsExtents(x,y,x+w,y+h);
     std::string filename;
+#if 1 // works    
     filename = R"(C:\Users\david\OneDrive\Desktop\mipmap\mipmap_level_test-11_levels-bc1.dds)";
     {
         osg::notify(osg::NOTICE)<<"--image "<<filename<<" x="<<x<<" y="<<y<<" w="<<w<<" h="<<h<<std::endl;
@@ -897,13 +900,112 @@ int main(int argc, char** argv)
         scale = 1.0f;
         offset = 0.0f;
 
+
     }
+#endif     
+#if 0    
+        // filename = R"(C:\Users\david\OneDrive\Desktop\heightmap\heightmap-8bit-gray.png)"; // scale = 0.01f;
+        // filename = R"(C:\Users\david\OneDrive\Desktop\heightmap\heightmap-16bit-gray.png)"; // scale = 0.0001f;
+        // filename = R"(C:\Users\david\OneDrive\Desktop\heightmap\heightmap-32bit-gray-float.png)"; // scale = 0.0001f;
+        filename = R"(C:\Users\david\OneDrive\Desktop\heightmap\heightmap-32bit-gray-float.dds)";  // WORKS BEST
+
+        // RETRY ALL THESE WITH SCALE = 1.0
+        // filename = R"(C:\Users\david\OneDrive\Desktop\heightmap\heightmap-16bit-gray-half.dds)"; // DOESN'T WORK
+        // filename = R"(C:\Users\david\OneDrive\Desktop\heightmap\heightmap-16bit-gray.dds)"; // DOESN'T WORK
+         //filename = R"(C:\Users\david\OneDrive\Desktop\heightmap\heightmap-8bit-gray.dds)"; // DOESN'T WORK
+        // filename = R"(C:\Users\david\OneDrive\Desktop\heightmap\heightmap-bc1.dds)"; 
+        // else if (arguments.read(pos, "-d",filename) || arguments.read(pos, "--elevation-image",filename))
+        {
+            osg::notify(osg::NOTICE)<<"--elevation-image "<<filename<<std::endl;
+
+            osg::ref_ptr<osg::Image> image = osgDB::readRefImageFile(filename);
+            if (image.valid())
+            {
+                osg::ref_ptr<osgTerrain::ImageLayer> imageLayer = new osgTerrain::ImageLayer;
+                imageLayer->setImage(image.get());
+                imageLayer->setLocator(locator.get());
+                imageLayer->setValidDataOperator(validDataOperator.get());
+                imageLayer->setMagFilter(filter);
+                offset = 0.0f;
+                scale = 1.0f;
+                if (offset!=0.0f || scale!=1.0f)
+                {
+                    imageLayer->transform(offset,scale);
+                }
+
+                terrainTile->setElevationLayer(imageLayer.get());
+
+                lastAppliedLayer = imageLayer.get();
+
+                osg::notify(osg::NOTICE)<<"created Elevation osgTerrain::ImageLayer"<<std::endl;
+            }
+            else
+            {
+                osg::notify(osg::NOTICE)<<"failed to create osgTerrain::ImageLayer"<<std::endl;
+            }
+
+            scale = 1.0f;
+            offset = 0.0f;
+
+        }
+        #endif
+#if 0
+    {
+            osg::ref_ptr<osg::HeightField> grid = new osg::HeightField;
+            unsigned int numX = 3; //200;
+            unsigned int numY = 3; //200;
+            double sizeX = 1; //30.0;
+            double sizeY = 1; //30.0;
+            grid->allocate(numX, numY);
+            // grid->setXInterval(sizeX/float(numX));
+            // grid->setYInterval(sizeY/float(numY));
+            grid->zeroRotation();
+
+            for( unsigned int r=0; r < grid->getNumRows(); ++r)
+            {
+                for(unsigned int c=0; c < grid->getNumColumns(); ++c)
+                {
+                    grid->setHeight(c, r, c + r); //c + r * 200.0f);
+                }
+            }
+            if (grid.valid())
+            {
+                osg::Geode* geode = new osg::Geode;
+                geode->addDrawable(new osg::ShapeDrawable(grid));
+                scene->addChild(geode);
+
+// TODO: grid draws above...try to manipulate autogenerated grid when you just do a color for terrain tile.
+
+                // osg::ref_ptr<osgTerrain::HeightFieldLayer> hfl = new osgTerrain::HeightFieldLayer;
+                // hfl->setHeightField(grid.get());
+
+                // hfl->setLocator(locator.get());
+                // hfl->setValidDataOperator(validDataOperator.get());
+                // hfl->setMagFilter(filter);
+
+                // if (offset!=0.0f || scale!=1.0f)
+                // {
+                //     hfl->transform(offset,scale);
+                // }
+
+                // terrainTile->setElevationLayer(hfl.get());
+
+                // lastAppliedLayer = hfl.get();
+
+                osg::notify(osg::NOTICE)<<"created osgTerrain::HeightFieldLayer"<<std::endl;
+            }
+            else
+            {
+                osg::notify(osg::NOTICE)<<"failed to create osgTerrain::HeightFieldLayer"<<std::endl;
+            }
+        }        
+#endif        
 }
 
 
 
-    osg::ref_ptr<osg::Group> scene = new osg::Group;
-
+#if 1
+   
     if (terrainTile.valid() && (terrainTile->getElevationLayer() || terrainTile->getColorLayer(0)))
     {
         osg::notify(osg::NOTICE)<<"Terrain created"<<std::endl;
@@ -928,10 +1030,10 @@ int main(int argc, char** argv)
         osg::notify(osg::NOTICE)<<"No model created, please specify terrain or master file on command line."<<std::endl;
         return 0;
     }
-
+#endif
     viewer.setSceneData(scene.get());
 
-
+#if 0
     // start operation thread if a master file has been used.
     osg::ref_ptr<osg::OperationThread> masterOperationThread;
 
@@ -961,14 +1063,29 @@ int main(int argc, char** argv)
 
         viewer.addUpdateOperation(masterOperation.get());
     }
-
+#endif
+    if(terrainTile->getElevationLayer())
+    {
+        int i = 0;
+    }
     viewer.setThreadingModel(osgViewer::Viewer::SingleThreaded);
 
     // enable the use of compile contexts and associated threads.
     // osg::DisplaySettings::instance()->setCompileContextsHint(true);
 
+    viewer.setRunFrameScheme(osgViewer::ViewerBase::ON_DEMAND);
+
     // realize the graphics windows.
     viewer.realize();
+
+    {
+        // windowed
+        const int x = 100;
+        const int y = 100;
+        const int width = 640;
+        const int height = 480;
+        viewer.apply(new osgViewer::SingleWindow(x, y, width, height));
+    }
 
     // run the viewers main loop
     return viewer.run();

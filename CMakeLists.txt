@@ -48,6 +48,8 @@ endfunction()
 # Include sub-projects.
 add_subdirectory("src/hello/hello_cmake")
 add_subdirectory("src/hello/hello_osg")
+add_subdirectory("src/hello/hello_osg_terrain_tile")
+add_subdirectory("src/hello/hello_osg_textured_quad")
 add_subdirectory("src/hello/hello_qt")
 add_subdirectory("src/vector_map")
 add_subdirectory("src/osgbillboard")

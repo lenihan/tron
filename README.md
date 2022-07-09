@@ -19,6 +19,7 @@
     - [Print Message/Variable](#print-messagevariable)
     - [Show All CMake Variables](#show-all-cmake-variables)
   - [OSG Tips](#osg-tips)
+    - [OSG Google Group](#osg-google-group)
     - [OSG Examples](#osg-examples)
     - [OSG Terrain Example](#osg-terrain-example)
     - [OSG Tools (.exe's)](#osg-tools-exes)
@@ -272,6 +273,12 @@ endforeach()
 ```
 
 ## OSG Tips
+
+### OSG Google Group
+
+Email forum. This is where most questions are posted/answered. Still active. 
+
+<https://groups.google.com/g/osg-users>
 
 ### OSG Examples
 
