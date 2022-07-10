@@ -87,9 +87,12 @@
 
 All output (CMake, compiler, linker, etc.) go to *./build* directory. To clean up, delete *./build*.
 
+To rebuild everything, including third party libraries...
 1. Open Terminal
 2. `pwsh`
 3. `ri $HOME/repos/tron/build -Recurse -Force`
+4. `ri $HOME/repos/tron/third_party -Recurse -Force`
+5. `ri $HOME/AppData/Local/vcpkg -Recurse -Force`
 
 ## Hierarchy
 
