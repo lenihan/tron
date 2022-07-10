@@ -8,12 +8,23 @@
 #include <osgViewer/Viewer>
 #include <osgViewer/ViewerEventHandlers>
 
-// Automatically select more powerful GPU (Nvidia/AMD).
-// Helpful for laptops that have Intel graphics and Nvidia/AMD
-// and you want to run on Nvidia/AMD.
-// To verify, use `osg::setNotifyLevel(osg::INFO)` and you 
-// will see `GL_VENDOR = [NVIDIA_Corporation]` in console
-// if Nvidia card is selected.
+#ifdef _DEBUG
+#define DEBUG_CLIENTBLOCK   new( _CLIENT_BLOCK, __FILE__, __LINE__)
+#else
+#define DEBUG_CLIENTBLOCK
+#endif // _DEBUG
+
+#include "crtdbg.h"
+
+#ifdef _DEBUG
+#define new DEBUG_CLIENTBLOCK
+#endif
+
+
+// Automatically select more powerful GPU (Nvidia/AMD). Helpful for laptops 
+// that have Intel graphics and Nvidia/AMD and you want to run on Nvidia/AMD.
+// To verify, use `osg::setNotifyLevel(osg::INFO)` and you will see 
+// `GL_VENDOR = [NVIDIA_Corporation]` in console if Nvidia card is selected.
 // From https://stackoverflow.com/a/27881472
 extern "C" {
     _declspec(dllexport) unsigned long NvOptimusEnablement = 1;
@@ -32,10 +43,10 @@ osg::ref_ptr<osg::Geode> createTexturedQuad()
     normals->push_back(osg::Vec3(0.0f, -1.0f, 0.0f));
 
     osg::ref_ptr<osg::Vec2Array> texcoords = new osg::Vec2Array;
-    texcoords->push_back(osg::Vec2(0.0f, 0.0f));
     texcoords->push_back(osg::Vec2(0.0f, 1.0f));
     texcoords->push_back(osg::Vec2(1.0f, 1.0f));
     texcoords->push_back(osg::Vec2(1.0f, 0.0f));
+    texcoords->push_back(osg::Vec2(0.0f, 0.0f));
 
     osg::ref_ptr<osg::Geometry> quad = new osg::Geometry;
     quad->setVertexArray(vertices.get());
@@ -45,9 +56,13 @@ osg::ref_ptr<osg::Geode> createTexturedQuad()
     quad->addPrimitiveSet(new osg::DrawArrays(GL_QUADS, 0, 4));
 
     osg::ref_ptr<osg::Texture2D> texture = new osg::Texture2D;
+    //texture->setInternalFormat(GL_RGBA);
     texture->setUnRefImageDataAfterApply(true);
-    osg::ref_ptr<osg::Image> image = osgDB::readImageFile("test/mipmap/mipmap_level_test-11_levels-bc1.dds");
+    //osg::ref_ptr<osg::Image> image = osgDB::readImageFile("test/mipmap/mipmap_level_test-11_levels-bc1.dds");
+    osg::ref_ptr<osg::Image> image = osgDB::readImageFile("test/mipmap/mipmap_alpha_test-11_levels-bc1.dds");
+    //osg::ref_ptr<osg::Image> image = osgDB::readImageFile("test/mipmap/mipmap_alpha_test-11_levels-bc1.png");
     texture->setImage(image.get());
+
 
     osg::ref_ptr <osg::Geode> geode = new osg::Geode;
     geode->addDrawable(quad.get());
@@ -57,6 +72,18 @@ osg::ref_ptr<osg::Geode> createTexturedQuad()
 
 int main(int argc, char** argv)
 {
+    // Get current flag
+    int tmpFlag = _CrtSetDbgFlag(_CRTDBG_REPORT_FLAG);
+
+    // Turn on leak-checking bit.
+    tmpFlag |= _CRTDBG_LEAK_CHECK_DF;
+
+    // Turn off CRT block checking bit.
+    tmpFlag &= ~_CRTDBG_CHECK_CRT_DF;
+
+    // Set flag to the new value.
+    _CrtSetDbgFlag(tmpFlag);
+
     osg::setNotifyLevel(osg::DEBUG_FP);  // everything
     
     // build scene graph
@@ -66,6 +93,18 @@ int main(int argc, char** argv)
 
     // construct the viewer
     osg::ref_ptr<osgViewer::Viewer> viewer = new osgViewer::Viewer;
+
+// DEBUG!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    //viewer->setThreadingModel(osgViewer::ViewerBase::SingleThreaded);                             // SEEMS TO WORK
+    //viewer->setThreadingModel(osgViewer::ViewerBase::CullDrawThreadPerContext);                   // SEEMS TO WORK
+    //viewer->setThreadingModel(osgViewer::ViewerBase::ThreadPerContext);                           // CullDrawThreadPerContext SEEMS TO WORK
+    viewer->setThreadingModel(osgViewer::ViewerBase::DrawThreadPerContext);                       // CRASHES
+    //viewer->setThreadingModel(osgViewer::ViewerBase::CullThreadPerCameraDrawThreadPerContext);    // CRASHES
+    //viewer->setThreadingModel(osgViewer::ViewerBase::ThreadPerCamera);                            // CullThreadPerCameraDrawThreadPerContext
+    //viewer->setThreadingModel(osgViewer::ViewerBase::AutomaticSelection);                         // CRASHES Same as DrawThreadPerContext
+
+// DEBUG!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
 
     // add scene graph to viewer
     viewer->setSceneData(root.get());
@@ -80,7 +119,8 @@ int main(int argc, char** argv)
     // Run at fastest frame rate possible
     // NOTE: "Sync to VBlank" will limit frame rate to that of monitor (60 fps). To turn off:
     //       Start > Nvidia X Server Settigns > OpenGL Settings > [ ] Sync to VBlank
-    viewer->setRunFrameScheme(osgViewer::ViewerBase::ON_DEMAND);
+    viewer->setRunFrameScheme(osgViewer::ViewerBase::CONTINUOUS);
+    //viewer->setRunFrameScheme(osgViewer::ViewerBase::ON_DEMAND);
 
     // Set max frame rate to high number
     // viewer->setRunMaxFrameRate(100);
