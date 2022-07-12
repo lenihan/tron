@@ -72,6 +72,7 @@ osg::ref_ptr<osg::Geode> createTexturedQuad()
 
 int main(int argc, char** argv)
 {
+    osg::DisplaySettings::instance()->setShaderHint(osg::DisplaySettings::ShaderHint::SHADER_GL2);
     // Get current flag
     int tmpFlag = _CrtSetDbgFlag(_CRTDBG_REPORT_FLAG);
 

@@ -78,9 +78,12 @@ $ROOT_DIR = $PSScriptRoot
 $THIRD_PARTY_DIR = Join-Path $ROOT_DIR third_party
 mkdir $THIRD_PARTY_DIR -Force | Out-Null
 $VCPKG_DIR = Join-Path $THIRD_PARTY_DIR vcpkg
+# $TAG = "2022.06.16.1"
 # $TAG = "2022.05.10"    # got opengl draw errors...need to test more
-$TAG = "2022.02.02"    # works
+# $TAG = "2022.02.02"    # works
+# $TAG = "LATEST_OSG"
 # $REPO_URL = "https://github.com/Microsoft/vcpkg.git"
+$TAG = "GL3_TO_GL2_FIX"
 $REPO_URL = "https://github.com/lenihan/vcpkg.git"   # this is a fork with local fixes, ultimately we should use the Microsoft repo
 $cmd = "git clone --branch $TAG $REPO_URL $VCPKG_DIR"
 Write-Host $cmd -ForegroundColor Cyan
@@ -96,7 +99,7 @@ if ($IsWindows) {
 if ($IsWindows) {
     # ~2 hours
     $packages = 
-        "osg[tools,plugins,examples]",      
+        "osg[tools,plugins,examples]",
         "qt5"                               
 } 
 else {
