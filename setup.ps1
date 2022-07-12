@@ -73,18 +73,14 @@ elseif ($IsLinux) {
 }
 
 # Build third party libraries
+
 Write-Host "Building third party libraries..." -ForegroundColor Cyan
 $ROOT_DIR = $PSScriptRoot
 $THIRD_PARTY_DIR = Join-Path $ROOT_DIR third_party
 mkdir $THIRD_PARTY_DIR -Force | Out-Null
 $VCPKG_DIR = Join-Path $THIRD_PARTY_DIR vcpkg
-# $TAG = "2022.06.16.1"
-# $TAG = "2022.05.10"    # got opengl draw errors...need to test more
-# $TAG = "2022.02.02"    # works
-# $TAG = "LATEST_OSG"
-# $REPO_URL = "https://github.com/Microsoft/vcpkg.git"
-$TAG = "GL3_TO_GL2_FIX"
-$REPO_URL = "https://github.com/lenihan/vcpkg.git"   # this is a fork with local fixes, ultimately we should use the Microsoft repo
+$TAG = "2022.06.16.1"
+$REPO_URL = "https://github.com/Microsoft/vcpkg.git"
 $cmd = "git clone --branch $TAG $REPO_URL $VCPKG_DIR"
 Write-Host $cmd -ForegroundColor Cyan
 Invoke-Expression $cmd
@@ -109,8 +105,16 @@ else {
         "qt5"                               
 }
 $VCPKG_EXE = Join-Path $VCPKG_DIR vcpkg
+$SRC_DIR = Join-Path $ROOT_DIR src
+$CMAKE_DIR = Join-Path $SRC_DIR cmake 
+$CUSTOM_PORTS_DIR = Join-Path $CMAKE_DIR custom_ports
+
+# This overrides vcpkg's change to default opengl profile of GL3 back to GL2. 
+# Detailed here: https://github.com/microsoft/vcpkg/issues/25705
+$CUSTOM_PORTS_OSG = Join-Path $CUSTOM_PORTS_DIR osg             
+
 foreach ($pkg in $packages) {
-    $cmd = "$VCPKG_EXE --triplet=$TRIPLET --recurse install $pkg"
+    $cmd = "$VCPKG_EXE --triplet=$TRIPLET --recurse install $pkg --overlay-ports=$CUSTOM_PORTS_OSG"
     Write-Host $cmd -ForegroundColor Cyan
     Invoke-Expression $cmd
 }
