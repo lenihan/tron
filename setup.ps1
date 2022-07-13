@@ -1,22 +1,26 @@
 # Install prerequisites, builds third party libraries
 
+# Global variables 
 if(!(Test-Path variable:IsWindows))
 {
     # We know we're on Windows PowerShell 5.1 or earlier
     $IsWindows = $true
     $IsLinux = $IsMacOS = $false
 }
+$ROOT_DIR = $PSScriptRoot
+
 
 # Build environment
-Write-Host "Setup build environment..." -ForegroundColor Cyan
+Write-Host "Setup build environment..." -ForegroundColor Green
 if ($IsWindows) {
     Push-Location .  # Next line can put us in ~/source/repos, fix that with Pop-Location
     & "$env:ProgramFiles\Microsoft Visual Studio\2022\Community\Common7\Tools\Launch-VsDevShell.ps1" -Arch amd64
     Pop-Location
 }
 
+
 # Prerequisites
-Write-Host "Prerequisites..." -ForegroundColor Cyan
+Write-Host "Prerequisites..." -ForegroundColor Green
 if ($IsWindows) {
     $cmd = " winget install --id Kitware.Cmake"
     Write-Host $cmd -ForegroundColor Cyan
@@ -72,26 +76,41 @@ elseif ($IsLinux) {
     sudo apt install -y libxcb-xinput-dev
 }
 
-# Build third party libraries
 
-Write-Host "Building third party libraries..." -ForegroundColor Cyan
-$ROOT_DIR = $PSScriptRoot
+# git clone vcpkg
+Write-Host "git clone vcpkg..." -ForegroundColor Green
 $THIRD_PARTY_DIR = Join-Path $ROOT_DIR third_party
-mkdir $THIRD_PARTY_DIR -Force | Out-Null
+New-Item -ItemType Directory $THIRD_PARTY_DIR -Force | Out-Null
 $VCPKG_DIR = Join-Path $THIRD_PARTY_DIR vcpkg
 $TAG = "2022.06.16.1"
 $REPO_URL = "https://github.com/Microsoft/vcpkg.git"
 $cmd = "git clone --branch $TAG $REPO_URL $VCPKG_DIR"
 Write-Host $cmd -ForegroundColor Cyan
 Invoke-Expression $cmd
+
+
+# build vcpkg
+Write-Host "Build vcpkg..." -ForegroundColor Green
 if ($IsWindows) {
-    $TRIPLET = "x64-windows"   # dynamic library, dynamic CRT
-    $BOOTSTRAP_VCPKG_EXE = Join-Path $VCPKG_DIR bootstrap-vcpkg
-    $cmd = "$BOOTSTRAP_VCPKG_EXE -disableMetrics"
-    Write-Host $cmd -ForegroundColor Cyan
-    Invoke-Expression $cmd
-}    
-    
+    $BOOTSTRAP_VCPKG_EXE = Join-Path $VCPKG_DIR bootstrap-vcpkg.bat
+}
+else {
+    $BOOTSTRAP_VCPKG_EXE = Join-Path $VCPKG_DIR bootstrap-vcpkg.sh
+}
+$cmd = "$BOOTSTRAP_VCPKG_EXE -disableMetrics"
+Write-Host $cmd -ForegroundColor Cyan
+Invoke-Expression $cmd
+
+
+# Build third party libraries
+Write-Host "Building third party libraries..." -ForegroundColor Green
+if ($IsWindows) {$TRIPLET = "x64-windows"}  # dynamic library, dynamic CRT, GL2
+if ($IsLinux)   {$TRIPLET = "x64-linux"}    # dynamic library, dynamic CRT, GL2
+if ($IsMacOS)   {$TRIPLET = "x64-osx"}      # dynamic library, dynamic CRT, GL2
+$VCPKG_EXE = Join-Path $VCPKG_DIR vcpkg
+$SRC_DIR = Join-Path $ROOT_DIR src
+$CMAKE_DIR = Join-Path $SRC_DIR cmake 
+$CUSTOM_TRIPLETS = Join-Path $CMAKE_DIR custom_triplets
 if ($IsWindows) {
     # ~2 hours
     $packages = 
@@ -104,50 +123,42 @@ else {
         "osg[tools,plugins,examples]",      
         "qt5"                               
 }
-$VCPKG_EXE = Join-Path $VCPKG_DIR vcpkg
-$SRC_DIR = Join-Path $ROOT_DIR src
-$CMAKE_DIR = Join-Path $SRC_DIR cmake 
-$CUSTOM_PORTS_DIR = Join-Path $CMAKE_DIR custom_ports
-
-# This overrides vcpkg's change to default opengl profile of GL3 back to GL2. 
-# Detailed here: https://github.com/microsoft/vcpkg/issues/25705
-$CUSTOM_PORTS_OSG = Join-Path $CUSTOM_PORTS_DIR osg             
-
 foreach ($pkg in $packages) {
-    $cmd = "$VCPKG_EXE --triplet=$TRIPLET --recurse install $pkg --overlay-ports=$CUSTOM_PORTS_OSG"
+    $cmd = "$VCPKG_EXE --triplet=$TRIPLET --recurse install $pkg --overlay-triplets=$CUSTOM_TRIPLETS"
     Write-Host $cmd -ForegroundColor Cyan
     Invoke-Expression $cmd
 }
 
 
 # Download OSG data (models, textures)
-Write-Host "Clone OpenSceneGraph-Data" -ForegroundColor Cyan
+Write-Host "git clone OpenSceneGraph-Data" -ForegroundColor Green
 $OPENSCENEGRAPH_DATA_DIR = Join-Path $THIRD_PARTY_DIR OpenSceneGraph-Data
-git clone https://github.com/openscenegraph/OpenSceneGraph-Data.git $OPENSCENEGRAPH_DATA_DIR
+$cmd = "git clone https://github.com/openscenegraph/OpenSceneGraph-Data.git $OPENSCENEGRAPH_DATA_DIR"
+Write-Host $cmd -ForegroundColor Cyan
+Invoke-Expression $cmd
+
 
 # Download code samples from OpenSceneGraph 3.0 Cookbook
-Write-Host "Clone osgRecipes - code samples from 'OpenSceneGraph 3.0 Cookbook'" -ForegroundColor Cyan
+Write-Host "git clone osgRecipes - code samples from 'OpenSceneGraph 3.0 Cookbook'" -ForegroundColor Green
 $OSGRECIPES_DIR = Join-Path $THIRD_PARTY_DIR osgRecipes
-git clone https://github.com/xarray/osgRecipes.git $OSGRECIPES_DIR
+$cmd = "git clone https://github.com/xarray/osgRecipes.git $OSGRECIPES_DIR"
+Write-Host $cmd -ForegroundColor Cyan
+Invoke-Expression $cmd
+
 
 # Generate environment file for running apps
 $ENV_FILE = Join-Path $ROOT_DIR .env
-
 $RESOURCE_DIR = Join-Path $ROOT_Dir resources
 $OSG_FILE_PATH = $RESOURCE_DIR, $OPENSCENEGRAPH_DATA_DIR -join [IO.Path]::PathSeparator
-
 $VCPKG_INSTALLED_DIR = Join-Path $VCPKG_DIR installed
 $VCPKG_TRIPLET_DIR = Join-Path $VCPKG_INSTALLED_DIR $TRIPLET
 $VCPKG_TOOLS_DIR = Join-Path $VCPKG_TRIPLET_DIR tools
 $VCPKG_TOOLS_OSG_DIR = Join-Path $VCPKG_TOOLS_DIR osg
-
 $VCPKG_TRIPLET_DEBUG_DIR = Join-Path $VCPKG_TRIPLET_DIR debug
 $VCPKG_TOOLS_DEBUG_DIR = Join-Path $VCPKG_TRIPLET_DEBUG_DIR tools
 $VCPKG_TOOLS_OSG_DEBUG_DIR = Join-Path $VCPKG_TOOLS_DEBUG_DIR osg
-
 $VCPKG_BIN_DIR = Join-Path $VCPKG_TRIPLET_DIR bin
 $VCPKG_BIN_DEBUG_DIR = Join-Path $VCPKG_TRIPLET_DEBUG_DIR bin
-
 # Add .dll/.so, .exe locations to PATH
 $path_array = $env:PATH -Split [IO.Path]::PathSeparator
 $new_path_array = 
@@ -156,8 +167,7 @@ $new_path_array =
     $VCPKG_TOOLS_OSG_DIR, 
     $VCPKG_TOOLS_OSG_DEBUG_DIR + $path_array | Select-Object -Unique
 $PATH = $new_path_array -join [IO.Path]::PathSeparator
-
-Write-Host "Generate environment file $ENV_FILE for running apps"  -ForegroundColor Cyan
+Write-Host "Generate environment file $ENV_FILE for running apps"  -ForegroundColor Green
 @"
 OSG_FILE_PATH=$OSG_FILE_PATH
 PATH=$PATH
