@@ -286,35 +286,35 @@ Email forum. This is where most questions are posted/answered. Still active.
 ### OSG Examples
 
 ```powershell
-./Set-Env.ps1
+./apply_environment.ps1
 gci .\third_party\vcpkg\buildtrees\osg\src\raph-3.6.5-0028e69d98.clean\examples
 ```
 
 ### OSG Terrain Example
 
 ```powershell
-./Set-Env.ps1
+./apply_environment.ps1
 osgterrain.exe lz.osgt
 ```
 
 ### OSG Tools (.exe's)
 
 ```powershell
-./Set-Env.ps1
+./apply_environment.ps1
 gci .\third_party\vcpkg\packages\osg_x64-windows\tools\osg
 ```
 
 ### Run osgviewer.exe
 
 ```powershell
-./Set-Env.ps1
+./apply_environment.ps1
 osgviewer cow.osg
 ```
 
 ### Run osgconv.exe
 
 ```powershell
-./Set-Env.ps1
+./apply_environment.ps1
 osgconv
 ```
 
@@ -322,7 +322,7 @@ osgconv
 
 ## Environment
 
-Run `./Set-Env.ps1` prior to launching Visual Studio Code so that paths are setup correctly for debugging.
+Run `./apply_environment.ps1` prior to launching Visual Studio Code so that paths are setup correctly for debugging.
 ### CMake Building, Running, Debugging
 
 From <https://code.visualstudio.com/docs/cpp/cmake-linux>

@@ -112,7 +112,7 @@ $SRC_DIR = Join-Path $ROOT_DIR src
 $CUSTOMVCPKG_DIR = Join-Path $SRC_DIR custom_vcpkg 
 $CUSTOMVCPKG_TRIPLETS_DIR = Join-Path $CUSTOMVCPKG_DIR triplets
 if ($IsWindows) {
-    # ~2 hours
+    # ~3 hours on 8 processor Surface Laptop Studio
     $packages = 
         "osg[tools,plugins,examples]",
         "qt5"                               
