@@ -109,8 +109,8 @@ if ($IsLinux)   {$TRIPLET = "x64-linux"}
 if ($IsMacOS)   {$TRIPLET = "x64-osx"}      
 $VCPKG_EXE = Join-Path $VCPKG_DIR vcpkg
 $SRC_DIR = Join-Path $ROOT_DIR src
-$CMAKE_DIR = Join-Path $SRC_DIR cmake 
-$CUSTOM_TRIPLETS = Join-Path $CMAKE_DIR custom_triplets
+$CUSTOMVCPKG_DIR = Join-Path $SRC_DIR custom_vcpkg 
+$CUSTOMVCPKG_TRIPLETS_DIR = Join-Path $CUSTOMVCPKG_DIR triplets
 if ($IsWindows) {
     # ~2 hours
     $packages = 
@@ -124,7 +124,7 @@ else {
         "qt5"                               
 }
 foreach ($pkg in $packages) {
-    $cmd = "$VCPKG_EXE --triplet=$TRIPLET --recurse install $pkg --overlay-triplets=$CUSTOM_TRIPLETS"
+    $cmd = "$VCPKG_EXE --triplet=$TRIPLET --recurse install $pkg --overlay-triplets=$CUSTOMVCPKG_TRIPLETS_DIR"
     Write-Host $cmd -ForegroundColor Cyan
     Invoke-Expression $cmd
 }
