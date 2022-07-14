@@ -10,3 +10,10 @@ set(VCPKG_CMAKE_SYSTEM_NAME Linux)
 
 # Fix for vcpkg changed osg default to GL3, which breaks examples
 set(osg_OPENGL_PROFILE GL2)          
+
+
+# NOTE 1: The name of this file is important. Originally it was custom-linux.cmake.
+#         But the ninja build used "x64-windows" as a directory name for 
+#         installed includes instead of "custom-linux" and include files could not
+#         be found during builds. Changing name to "x64-linux" fixed the problem.
+# 

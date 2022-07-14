@@ -104,9 +104,9 @@ Invoke-Expression $cmd
 
 # Build third party libraries
 Write-Host "Building third party libraries..." -ForegroundColor Green
-if ($IsWindows) {$TRIPLET = "custom-windows"}  
-if ($IsLinux)   {$TRIPLET = "custom-linux"}    
-if ($IsMacOS)   {$TRIPLET = "custom-osx"}      
+if ($IsWindows) {$TRIPLET = "x64-windows"}  
+if ($IsLinux)   {$TRIPLET = "x64-linux"}    
+if ($IsMacOS)   {$TRIPLET = "x64-osx"}      
 $VCPKG_EXE = Join-Path $VCPKG_DIR vcpkg
 $SRC_DIR = Join-Path $ROOT_DIR src
 $CMAKE_DIR = Join-Path $SRC_DIR cmake 

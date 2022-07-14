@@ -16,12 +16,6 @@
 *  THE SOFTWARE.
 */
 
-#include <QCoreApplication>
-#include <QFile>
-#include <QJsonDocument>
-#include <QJsonObject>
-#include <QJsonArray>
-
 #include <osg/Geode>
 #include <osg/Geometry>
 #include <osg/MatrixTransform>
@@ -327,10 +321,7 @@ osg::Geode* createTeapot()
     geode->addDrawable(new Teapot);
 
     // add a reflection map to the teapot.
-    assert(QCoreApplication::instance());
-    const QString app_path = QCoreApplication::instance()->applicationDirPath();
-    const QString image_path = app_path + "/reflect.png";
-    osg::ref_ptr<osg::Image> image = osgDB::readRefImageFile(qPrintable(image_path));
+    osg::ref_ptr<osg::Image> image = osgDB::readRefImageFile("Images/reflect.rgb");
     if (image)
     {
         osg::Texture2D* texture = new osg::Texture2D;
@@ -351,14 +342,10 @@ osg::Geode* createTeapot()
 
 int main(int argc, char** argv)
 {
-    // Setup QCoreApplication so we can get the app path
-    QCoreApplication app(argc, argv);
-
     osg::ref_ptr<osg::Group> root = new osg::Group;
 
     // show all messages
-    osg::setNotifyLevel(osg::INFO);
-    // osg::setNotifyLevel(osg::DEBUG_FP);
+    osg::setNotifyLevel(osg::DEBUG_FP);
 
     // construct the viewer.
     osg::ref_ptr<osgViewer::Viewer> viewer = new osgViewer::Viewer;
