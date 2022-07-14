@@ -23,8 +23,3 @@ target_link_libraries(${PROJECT_NAME} ${OSGDB_LIBRARY})
 target_link_libraries(${PROJECT_NAME} ${OPENTHREADS_LIBRARY})
 target_link_libraries(${PROJECT_NAME} ${OSGUTIL_LIBRARY})
 target_link_libraries(${PROJECT_NAME} ${OPENGL_LIBRARIES})
-
-get_cmake_property(_variableNames VARIABLES)
-foreach (_variableName ${_variableNames})
-    message(STATUS "${_variableName}=${${_variableName}}")
-endforeach()
