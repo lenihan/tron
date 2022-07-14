@@ -16,4 +16,8 @@ set(osg_OPENGL_PROFILE GL2)
 #         But the ninja build used "x64-windows" as a directory name for 
 #         installed includes instead of "custom-linux" and include files could not
 #         be found during builds. Changing name to "x64-linux" fixed the problem.
-# 
+#
+# NOTE 2: I tried building this with set(VCPKG_LIBRARY_LINKAGE dynamic) but I
+#         ran into issues with `proj` not building (SQLite error). Switching
+#         to static builds without error, but no examples.
+ 
