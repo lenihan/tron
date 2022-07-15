@@ -1,22 +1,7 @@
 # Install prerequisites, builds third party libraries
-
-# Global variables 
-if(!(Test-Path variable:IsWindows))
-{
-    # We know we're on Windows PowerShell 5.1 or earlier
-    $IsWindows = $true
-    $IsLinux = $IsMacOS = $false
-}
 $ROOT_DIR = $PSScriptRoot
 
-
-# Build environment
-Write-Host "Setup build environment..." -ForegroundColor Green
-if ($IsWindows) {
-    Push-Location .  # Next line can put us in ~/source/repos, fix that with Pop-Location
-    & "$env:ProgramFiles\Microsoft Visual Studio\2022\Community\Common7\Tools\Launch-VsDevShell.ps1" -Arch amd64
-    Pop-Location
-}
+& $ROOT_DIR/scripts/setup_build_environment.ps1
 
 
 # Prerequisites
