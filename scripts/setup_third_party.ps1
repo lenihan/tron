@@ -1,5 +1,5 @@
 # setup third_party directory
-$ROOT_DIR = (Resolve-Path $PSScriptRoot/..) -replace "\\", "/"
+$ROOT_DIR = Resolve-Path $PSScriptRoot/..
 $THIRD_PARTY_DIR = Join-Path $ROOT_DIR third_party
 Write-Host "Setup external source in $THIRD_PARTY_DIR"  -ForegroundColor Green
 function echo_command($cmd) {
@@ -10,15 +10,24 @@ function echo_command($cmd) {
 # OpenSceneGraph
 Write-Host "Build OpenSceneGraph..." -ForegroundColor Green
 $OPENSCENEGRAPH_DIR = Join-Path $THIRD_PARTY_DIR OpenSceneGraph
-if ($IsLinux) {$half_procs = $(nproc) / 2}
 echo_command "git clone --branch OpenSceneGraph-3.6.5 https://github.com/openscenegraph/OpenSceneGraph.git $OPENSCENEGRAPH_DIR"
-echo_command "cmake -S $OPENSCENEGRAPH_DIR -B $OPENSCENEGRAPH_DIR/build-release -DCMAKE_BUILD_TYPE=Release -DBUILD_OSG_EXAMPLES:BOOL=ON  # RELEASE"
-if ($IsLinux)   {echo_command "make --jobs=$half_procs -C $OPENSCENEGRAPH_DIR/build-release  # ~50 min"}
-if ($IsWindows) {echo_command "msbuild $OPENSCENEGRAPH_DIR/build-release/OpenSceneGraph.sln"}
-echo_command "cmake -S $OPENSCENEGRAPH_DIR -B $OPENSCENEGRAPH_DIR/build-debug -DCMAKE_BUILD_TYPE=Debug                                   # DEBUG"
-if ($IsLinux)   {echo_command "make --jobs=$half_procs -C $OPENSCENEGRAPH_DIR/build-debug  # ~50 min"}
-if ($IsWindows) {echo_command "msbuild $OPENSCENEGRAPH_DIR/build-debug/OpenSceneGraph.sln"}
+$configs = "Release", "Debug" 
+foreach ($config in $configs) {
+    $out_dir = Join-Path $OPENSCENEGRAPH_DIR build $config
+    echo_command "cmake -S $OPENSCENEGRAPH_DIR -B $out_dir -DCMAKE_BUILD_TYPE=$config -DBUILD_OSG_EXAMPLES:BOOL=ON  # ~1 min"
+    if ($IsLinux)   {
+        $most_procs = $(nproc) - 1
+        echo_command "make -C $out_dir --jobs=$most_procs  # ~50 min"
+    }
+    if ($IsWindows) {
+        $most_procs = (Get-CimInstance –ClassName Win32_Processor).NumberOfLogicalProcessors - 1
+        $sln = Join-Path $out_dir OpenSceneGraph.sln
+        echo_command "msbuild $sln -p:Configuration=$config -maxCpuCount:$most_procs  # ~27 min"
+    }
+}
 return
+
+
 
 # Qt5
 Write-Host "Build Qt5..." -ForegroundColor Green
