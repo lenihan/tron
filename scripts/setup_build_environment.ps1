@@ -1,3 +1,4 @@
+# setup build environment
 Write-Host "Setup build environment..." -ForegroundColor Green
 if ($IsWindows) {
     Push-Location .  # Next line can put us in ~/source/repos, fix that with Pop-Location

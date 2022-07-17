@@ -113,14 +113,14 @@ To rebuild everything, including third party libraries...
 2. Create project folder under `~/repos/tron/src`
 3. Create `CMakeLists.txt` in project folder
    1. [add_executable](https://cmake.org/cmake/help/latest/command/add_executable.html)
-      - Links source code to executable 
+      - Links source code to executable
    2. [find_package](https://cmake.org/cmake/help/latest/command/find_package.html)
       - Add third party header/library paths
    3. [target_link_libraries](https://cmake.org/cmake/help/latest/command/target_link_libraries.html)
-      - Link executable to third party libaries 
+      - Link executable to third party libaries
 4. Update `CmakeLists.txt` in root
    1. Add project folder via [add_subdirectory](https://cmake.org/cmake/help/latest/command/add_subdirectory.html)
-5. Generate build files in *./build*: Run `generate.ps1` 
+5. Generate build files in *./build*: Run `configure_cmake.ps1` 
    - What it does if you are running from repo root: `cmake -S . -B ./build`
 6. Open IDE
    - Visual Studio: `.\build\tron.sln`
@@ -279,42 +279,42 @@ endforeach()
 
 ### OSG Google Group
 
-Email forum. This is where most questions are posted/answered. Still active. 
+Email forum with 18,000+ conversations. This is where most questions are posted/answered. Still active. 
 
 <https://groups.google.com/g/osg-users>
 
 ### OSG Examples
 
 ```powershell
-./apply_environment.ps1
+./apply_environment_file.ps1
 gci .\third_party\vcpkg\buildtrees\osg\src\raph-3.6.5-0028e69d98.clean\examples
 ```
 
 ### OSG Terrain Example
 
 ```powershell
-./apply_environment.ps1
+./apply_environment_file.ps1
 osgterrain.exe lz.osgt
 ```
 
 ### OSG Tools (.exe's)
 
 ```powershell
-./apply_environment.ps1
+./apply_environment_file.ps1
 gci .\third_party\vcpkg\packages\osg_x64-windows\tools\osg
 ```
 
 ### Run osgviewer.exe
 
 ```powershell
-./apply_environment.ps1
+./apply_environment_file.ps1
 osgviewer cow.osg
 ```
 
 ### Run osgconv.exe
 
 ```powershell
-./apply_environment.ps1
+./apply_environment_file.ps1
 osgconv
 ```
 
@@ -322,7 +322,7 @@ osgconv
 
 ## Environment
 
-Run `./apply_environment.ps1` prior to launching Visual Studio Code so that paths are setup correctly for debugging.
+Run `./apply_environment_file.ps1` prior to launching Visual Studio Code so that paths are setup correctly for debugging.
 ### CMake Building, Running, Debugging
 
 From <https://code.visualstudio.com/docs/cpp/cmake-linux>
@@ -375,7 +375,7 @@ To start debugger (CMake): Ctrl+F5
       - As of 5/13/22, 3.5 months since last commit
 - Test in Qt Creator, Clion, others?
 - Document Visual Studio, Visual Studio Code building, debugging, running
-- Integration with Bazel: 
+- Integration with Bazel:
   - Bazel ingest CMake
     - <https://github.com/bazelbuild/rules_foreign_cc>
   - CMake to bazel generator

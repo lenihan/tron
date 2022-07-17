@@ -1,4 +1,4 @@
-# Prerequisites
+# setup prerequisites
 Write-Host "Prerequisites..." -ForegroundColor Green
 if ($IsWindows) {
     $null = winget list cmake
@@ -12,51 +12,60 @@ if ($IsWindows) {
     Invoke-Expression $cmd
 }
 elseif ($IsLinux) {
-    # Get latest versions of software
-    sudo apt update
-        
-    # for WSL build from Visual Studio
-    sudo apt install -y g++
-    sudo apt install -y gdb 
-    sudo apt install -y make 
-    sudo apt install -y ninja-build 
-    sudo apt install -y rsync 
-    sudo apt install -y zip
+    $installed_packages = apt list --installed 2> $null
+    $upgradeable_packages = apt list --upgradeable 2> $null
+    function is_package_installed($pkg) {($installed_packages | Select-String "^$pkg/") ? $true : $false}
+    function is_package_upgradeable($pkg) {($upgradeable_packages | Select-String "^$pkg/") ? $true : $false}
     
-    # needed by osg
-    sudo apt install -y gperf
-
-    # Needed by qt5
-    sudo apt install -y bison
-    sudo apt install -y python
-
-    # Needed for qt5 https://doc.qt.io/qt-5/linux-requirements.html
-    sudo apt install -y libfontconfig1-dev
-    sudo apt install -y libfreetype6-dev
-    sudo apt install -y libx11-dev
-    sudo apt install -y libx11-xcb-dev
-    sudo apt install -y libxext-dev
-    sudo apt install -y libxfixes-dev
-    sudo apt install -y libxi-dev
-    sudo apt install -y libxrender-dev
-    sudo apt install -y libxcb1-dev
-    sudo apt install -y libxcb-glx0-dev
-    sudo apt install -y libxcb-keysyms1-dev
-    sudo apt install -y libxcb-image0-dev
-    sudo apt install -y libxcb-shm0-dev
-    sudo apt install -y libxcb-icccm4-dev
-    sudo apt install -y libxcb-sync0-dev
-    sudo apt install -y libxcb-xfixes0-dev
-    sudo apt install -y libxcb-shape0-dev
-    sudo apt install -y libxcb-randr0-dev
-    sudo apt install -y libxcb-render-util0-dev
-    sudo apt install -y libxcd-xinerama-dev
-    sudo apt install -y libxkbcommon-dev
-    sudo apt install -y libxkbcommon-x11-dev
-
-    # Needed for qt5 https://github.com/microsoft/vcpkg/blob/master/scripts/azure-pipelines/linux/provision-image.sh
-    sudo apt install -y libxcb-util0-dev
-    sudo apt install -y libxcb-xinerama0-dev
-    sudo apt install -y libxcb-xkb-dev
-    sudo apt install -y libxcb-xinput-dev
+    $packages = "cmake",                # Needed to generate makefiles for this dev environment
+                "build-essential",      # gcc, g++, make, C standard lib, dev tools
+    
+                # From https://doc.qt.io/qt-5/linux-requirements.html
+                "libfontconfig1-dev",
+                "libfreetype6-dev",
+                "libx11-dev",
+                "libx11-xcb-dev",
+                "libxext-dev",
+                "libxfixes-dev",
+                "libxi-dev",
+                "libxrender-dev",
+                "libxcb1-dev",
+                "libxcb-glx0-dev",
+                "libxcb-keysyms1-dev",
+                "libxcb-image0-dev",
+                "libxcb-shm0-dev",
+                "libxcb-icccm4-dev",
+                "libxcb-sync-dev",      # "libxcb-sync0-dev" not found -> use "libxcb-sync-dev"
+                "libxcb-xfixes0-dev",
+                "libxcb-shape0-dev",
+                "libxcb-randr0-dev",
+                "libxcb-render-util0-dev",
+                # "libxcd-xinerama-dev", # not supported anymore? https://askubuntu.com/questions/5138/how-do-i-best-enable-xinerama
+                "libxkbcommon-dev",
+                "libxkbcommon-x11-dev"
+    $ran_apt_update = $false
+    foreach ($pkg in $packages) {
+        $installed = is_package_installed($pkg)
+        if (!$installed) {
+            if (!$ran_apt_update) {
+                Write-Host "Updating apt..." -ForegroundColor Green
+                bash -c "sudo apt update"
+                $ran_apt_update = $true
+            }
+            Write-Host "Installing $pkg..." -ForegroundColor Green
+            bash -c "sudo apt install -y $pkg"
+        }
+    }
+    foreach ($pkg in $packages) {
+        $upgradeable = is_package_upgradeable($pkg)
+        if ($upgradeable) {
+            if (!$ran_apt_update) {
+                Write-Host "Updating apt..." -ForegroundColor Green
+                bash -c "sudo apt update"
+                $ran_apt_update = $true
+            }
+            Write-Host "Upgrading $pkg..." -ForegroundColor Green
+            bash -c "sudo apt upgrade -y $pkg"
+        }
+    }
 }
