@@ -49,8 +49,19 @@ if ($IsWindows) {
     $out_dir = Join-Path $QT5_DIR build
     $null = New-Item -ItemType Directory -Force $out_dir
     echo_command "Set-Location $out_dir"
-    echo_command "$QT5_DIR/configure.bat -opensource -confirm-license -platform win32-msvc"
-    echo_command "nmake /f $QT5_DIR/Makefile # ~4 Hours, 40 min" 
+
+    # Setup Qt's Jom - nmake with support for multiple processors https://wiki.qt.io/Jom
+    echo_command "Invoke-WebRequest -Uri https://download.qt.io/official_releases/jom/jom.zip -OutFile jom.zip"
+    echo_command "Expand-Archive jom.zip"
+    $JOM_EXE = Join-Path jom jom.exe
+
+
+    $configure = Join-Path $QT5_DIR configure.bat
+    echo_command "$configure -opensource -confirm-license -platform win32-msvc"
+    $most_procs = (Get-CimInstance –ClassName Win32_Processor).NumberOfLogicalProcessors - 1
+    echo_command "$JOM_EXE /J $most_procs" 
+    # echo_command "nmake # ~4 Hours, 40 min" 
+    # echo_command "nmake install" # 'C:\Qt\Qt-5.15.0 - DO WE NEED THIS?
 }
 
 # Download OSG data (models, textures)
