@@ -1,4 +1,5 @@
 # setup third_party directory
+#Requires -Version 7
 $ROOT_DIR = Resolve-Path $PSScriptRoot/..
 $THIRD_PARTY_DIR = Join-Path $ROOT_DIR third_party
 Write-Host "Setup external source in $THIRD_PARTY_DIR"  -ForegroundColor Green
@@ -25,28 +26,32 @@ foreach ($config in $configs) {
         echo_command "msbuild $sln -p:Configuration=$config -maxCpuCount:$most_procs  # ~27 min"
     }
 }
-return
-
-
 
 # Qt5
 Write-Host "Build Qt5..." -ForegroundColor Green
-$half_procs = $(nproc) / 2
-echo_command "Set-Location $THIRD_PARTY_DIR"
-echo_command "git clone --branch v5.15.0 https://github.com/qt/qt5.git"
-echo_command "Set-Location qt5"
-echo_command "./init-repository  # ~7 min"
-echo_command "# RELEASE"
-echo_command "$null = New-Item -ItemType Directory -Force build-release"
-echo_command "Set-Location build-release"
-echo_command "../configure -opensource -confirm-license -release -developer-build  # ~2 min"
-echo_command "make --jobs=$half_procs  # ~55 min"
-echo_command "# DEBUG"
-echo_command "Set-Location .."
-echo_command "$null = New-Item -ItemType Directory -Force  build-debug"
-echo_command "Set-Location build-debug"
-echo_command "../configure -opensource -confirm-license -debug -qtlibinfix d -qtlibinfix-plugins -nomake examples -nomake tools -nomake tests # ~2 min"
-echo_command "make --jobs=$half_procs # ~27 min"
+$QT5_DIR = Join-Path $THIRD_PARTY_DIR qt5
+echo_command "git clone --branch v5.15.0 https://github.com/qt/qt5.git $QT5_DIR"
+echo_command "Set-Location $QT5_DIR"
+echo_command "perl ./init-repository  # ~57 min"
+if ($IsLinux) {
+    $configs = "Release", "Debug"   
+    foreach ($config in $configs) {
+        $out_dir = Join-Path $QT5_DIR build $config
+        $null = New-Item -ItemType Directory -Force $out_dir
+        echo_command "Set-Location $out_dir"
+        if ($config -eq "Release") {echo_command "$QT5_DIR/configure -opensource -confirm-license -$config -developer-build  # ~2 min"}
+        if ($config -eq "Debug")   {echo_command "$QT5_DIR/configure -opensource -confirm-license -$config -developer-build -qtlibinfix d -qtlibinfix-plugins -nomake examples -nomake tools -nomake tests # ~2 min"}
+        $most_procs = $(nproc) - 1
+        echo_command "make --jobs=$most_procs  # ~55 min"
+    }
+}
+if ($IsWindows) {
+    $out_dir = Join-Path $QT5_DIR build
+    $null = New-Item -ItemType Directory -Force $out_dir
+    echo_command "Set-Location $out_dir"
+    echo_command "$QT5_DIR/configure.bat -opensource -confirm-license -platform win32-msvc"
+    echo_command "nmake /f $QT5_DIR/Makefile # ~4 Hours, 40 min" 
+}
 
 # Download OSG data (models, textures)
 Write-Host "git clone OpenSceneGraph-Data" -ForegroundColor Green

@@ -1,15 +1,20 @@
 # setup prerequisites
-Write-Host "Prerequisites..." -ForegroundColor Green
-if ($IsWindows) {
-    $null = winget list cmake
-    if (!$?) {
-        $cmd = "winget install cmake"
-        Write-Host $cmd -ForegroundColor Cyan
-        Invoke-Expression $cmd
-    }
-    $cmd = "winget upgrade cmake"
+#Requires -Version 7
+function echo_command($cmd) {
     Write-Host $cmd -ForegroundColor Cyan
     Invoke-Expression $cmd
+}
+Write-Host "Prerequisites..." -ForegroundColor Green
+if ($IsWindows) {
+    # cmake
+    $null = winget list cmake
+    if (!$?) {echo_command "winget install cmake"}
+    echo_command "winget upgrade cmake"
+
+    # perl - for running Qt5's init-repository perl script
+    $null = winget list perl
+    if (!$?) {echo_command "winget install perl"}
+    echo_command "winget upgrade perl"
 }
 elseif ($IsLinux) {
     $installed_packages = apt list --installed 2> $null

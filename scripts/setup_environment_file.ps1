@@ -1,5 +1,6 @@
 # setup environment file (.env) for running apps
-$ROOT_DIR = (Resolve-Path $PSScriptRoot/..) -replace "\\", "/"
+#Requires -Version 7
+$ROOT_DIR = Resolve-Path $PSScriptRoot/..
 $ENV_FILE = Join-Path $ROOT_DIR .env
 Write-Host "Generate environment file $ENV_FILE for running apps"  -ForegroundColor Green
 $RESOURCE_DIR = Join-Path $ROOT_Dir resources
