@@ -59,9 +59,8 @@ if ($IsWindows) {
     $configure = Join-Path $QT5_DIR configure.bat
     echo_command "$configure -opensource -confirm-license -platform win32-msvc"
     $most_procs = (Get-CimInstance –ClassName Win32_Processor).NumberOfLogicalProcessors - 1
-    echo_command "$JOM_EXE /J $most_procs" 
-    # echo_command "nmake # ~4 Hours, 40 min" 
-    # echo_command "nmake install" # 'C:\Qt\Qt-5.15.0 - DO WE NEED THIS?
+    echo_command "$JOM_EXE /J $most_procs  # ~1 hour 20 min" 
+    # NOTE: nmake uses single processor and takes ~4 hours, 40 min" 
 }
 
 # Download OSG data (models, textures)
