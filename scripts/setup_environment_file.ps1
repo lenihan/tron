@@ -21,3 +21,4 @@ VSCMD_ARG_TGT_ARCH=$env:VSCMD_ARG_TGT_ARCH
 "@ | Set-Content $ENV_FILE
 # TODO: Add this for linux: LD_LIBRARY_PATH="$VCPKG_LIB_DIR"
 # TODO: Add this for linux debug: LD_LIBRARY_PATH="$VCPKG_LIB_DEBUG_DIR"
+return $true # no problems

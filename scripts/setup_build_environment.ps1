@@ -6,3 +6,4 @@ if ($IsWindows) {
     & "$env:ProgramFiles\Microsoft Visual Studio\2022\Community\Common7\Tools\Launch-VsDevShell.ps1" -Arch amd64
     Pop-Location
 }
+return $true # no problems

@@ -95,4 +95,4 @@ elseif ($IsLinux) {
         }
     }
 }
-return $true
+return $true # no problems

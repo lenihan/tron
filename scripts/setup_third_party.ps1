@@ -65,13 +65,10 @@ if ($IsWindows) {
 # Download OSG data (models, textures)
 Write-Host "git clone OpenSceneGraph-Data" -ForegroundColor Green
 $OPENSCENEGRAPH_DATA_DIR = Join-Path $THIRD_PARTY_DIR OpenSceneGraph-Data
-$cmd = "git clone https://github.com/openscenegraph/OpenSceneGraph-Data.git $OPENSCENEGRAPH_DATA_DIR"
-Write-Host $cmd -ForegroundColor Cyan
-Invoke-Expression $cmd
+echo_command "git clone https://github.com/openscenegraph/OpenSceneGraph-Data.git $OPENSCENEGRAPH_DATA_DIR"
 
 # Download code samples from OpenSceneGraph 3.0 Cookbook
 Write-Host "git clone osgRecipes - code samples from 'OpenSceneGraph 3.0 Cookbook'" -ForegroundColor Green
 $OSGRECIPES_DIR = Join-Path $THIRD_PARTY_DIR osgRecipes
-$cmd = "git clone https://github.com/xarray/osgRecipes.git $OSGRECIPES_DIR"
-Write-Host $cmd -ForegroundColor Cyan
-Invoke-Expression $cmd
+$cho_command "git clone https://github.com/xarray/osgRecipes.git $OSGRECIPES_DIR"
+return $true # no problems
