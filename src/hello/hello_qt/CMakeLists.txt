@@ -1,5 +1,4 @@
 ﻿project(hello_qt)
 add_executable(${PROJECT_NAME} "hello_qt.cpp")
 set_target_postfix()
-find_package(Qt5 COMPONENTS Widgets REQUIRED)  
-target_link_libraries(${PROJECT_NAME} Qt5::Widgets)
+target_link_libraries(${PROJECT_NAME} ${QT_CORE_LIB} ${QT_WIDGETS_LIB})

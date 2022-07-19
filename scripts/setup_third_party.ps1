@@ -55,7 +55,6 @@ if ($IsWindows) {
     echo_command "Expand-Archive jom.zip"
     $JOM_EXE = Join-Path jom jom.exe
 
-
     $configure = Join-Path $QT5_DIR configure.bat
     echo_command "$configure -opensource -confirm-license -platform win32-msvc"
     $most_procs = (Get-CimInstance –ClassName Win32_Processor).NumberOfLogicalProcessors - 1

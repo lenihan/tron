@@ -18,13 +18,13 @@
     - [CMake Comment](#cmake-comment)
     - [Print Message/Variable](#print-messagevariable)
     - [Show All CMake Variables](#show-all-cmake-variables)
+  - [Qt Tips](#qt-tips)
+    - [Qt Examples](#qt-examples)
   - [OSG Tips](#osg-tips)
     - [OSG Google Group](#osg-google-group)
     - [OSG Examples](#osg-examples)
-    - [OSG Terrain Example](#osg-terrain-example)
-    - [OSG Tools (.exe's)](#osg-tools-exes)
-    - [Run osgviewer.exe](#run-osgviewerexe)
-    - [Run osgconv.exe](#run-osgconvexe)
+    - [Run osgviewer](#run-osgviewer)
+    - [Run osgconv](#run-osgconv)
   - [Visual Studio Code](#visual-studio-code)
   - [Environment](#environment)
     - [CMake Building, Running, Debugging](#cmake-building-running-debugging)
@@ -68,7 +68,7 @@
 
 1. Open Terminal
 2. `pwsh`
-3. `~/repos/tron/generate.ps1`
+3. `~/repos/tron/configure_cmake.ps1`
 
 ## Run
 
@@ -79,6 +79,9 @@
     3. `~/repos/tron/build/tron.sln`
     4. Right click project you want to run in *Solution Explorer* and select *Debug > Start New Instance*
   - Visual Studio Code
+    1. Open Terminal
+    2. `pwsh`
+    3. `code ~/repos/tron` 
   - WSL - Ubuntu 20.04
 - Linux - Ubuntu 20.04
 - Mac
@@ -90,20 +93,21 @@ All output (CMake, compiler, linker, etc.) go to *./build* directory. To clean u
 To rebuild everything, including third party libraries...
 1. Open Terminal
 2. `pwsh`
-3. `ri $HOME/repos/tron/build -Recurse -Force`
-4. `ri $HOME/repos/tron/third_party -Recurse -Force`
-5. `ri $HOME/AppData/Local/vcpkg -Recurse -Force`
+3. `ri ~/repos/tron/build -Recurse -Force`
+4. `ri ~/repos/scripts/reset_thrid_party.ps1`
 
 ## Hierarchy
 
 - src
+  - hello
   - sandbox
 - build
-- third_party
-  - vcpkg
+- third_party  
+- .env
 - .gitignore
+- apply_environment_file.ps1
 - CMakeLists.txt
-- generate.ps1
+- configure_cmake.ps1
 - README.md
 - setup.ps1
 
@@ -123,7 +127,7 @@ To rebuild everything, including third party libraries...
 5. Generate build files in *./build*: Run `configure_cmake.ps1` 
    - What it does if you are running from repo root: `cmake -S . -B ./build`
 6. Open IDE
-   - Visual Studio: `.\build\tron.sln`
+   - Visual Studio: `./build/tron.sln`
 
 ## CMake Tips
 
@@ -148,7 +152,7 @@ ZERO_CHECK looks at the timestamp on `generate.stamp` files to determine if CMak
 
 ### Copy files
 
-Use `configure_file` to copy files. The copy happens during CMake build file generation. See `src\sandbox\QTreeView` for an example.
+Use `configure_file` to copy files. The copy happens during CMake build file generation. See `src/sandbox/QTreeView` for an example.
 
 ### Qt CMake
 
@@ -213,7 +217,7 @@ Widgets
 WindowsUIAutomationSupport
 Xml
 
-Qt components are defined in *third_party\vcpkg\installed\x64-windows\share\cmake\Qt5\Qt5Config.cmake* which is parsed via `find_package`. In this file, you can see that *modules* are directories with a `qt5` prefix in *third_party\vcpkg\installed\x64-windows\share\cmake*. Learned from [here](https://stackoverflow.com/a/62676473).
+Qt components are defined in *third_party/vcpkg/installed/x64-windows/share/cmake/Qt5/Qt5Config.cmake* which is parsed via `find_package`. In this file, you can see that *modules* are directories with a `qt5` prefix in *third_party/vcpkg/installed/x64-windows/share/cmake*. Learned from [here](https://stackoverflow.com/a/62676473).
 
 ### OpenSceneGraph (OSG) CMake
 
@@ -244,7 +248,7 @@ osgPresentation | OSGPRESENTATION_LIBRARY
 osgSim          | OSGSIM_LIBRARY
 OpenThreads     | OPENTHREADS_LIBRARY
 
-This informationcomes from *third_party\vcpkg\buildtrees\osg\src\raph-3.6.5-0028e69d98.clean\CMakeModules\FindOSG.cmake* which is parsed via `find_package`.
+This informationcomes from *third_party/vcpkg/buildtrees/osg/src/raph-3.6.5-0028e69d98.clean/CMakeModules/FindOSG.cmake* which is parsed via `find_package`.
 
 ### CMake Comment
 
@@ -275,6 +279,24 @@ foreach (_variableName ${_variableNames})
 endforeach()
 ```
 
+## Qt Tips
+
+### Qt Examples
+
+There are 235 examples.
+
+Source:
+* `~/repos/tron/third_party/qt5/qtbase/examples`
+
+Binaries:
+* `~/repos/tron/third_party/qt5/build/qtbase/examples`
+
+Example
+```powershell
+./apply_environment_file.ps1
+~/tron/third_party/qt5/build/qtbase/examples/widgets/widgets/tetrix/debug/tetrix
+```
+
 ## OSG Tips
 
 ### OSG Google Group
@@ -285,33 +307,28 @@ Email forum with 18,000+ conversations. This is where most questions are posted/
 
 ### OSG Examples
 
+There are 178 examples.
+
+Source:
+* `~/repos/tron/third_party/OpenSceneGraph/examples`
+Binaries:
+* `~/repos/tron/third_party/OpenSceneGraph/build/Release/bin`
+* `~/repos/tron/third_party/OpenSceneGraph/build/Debug/bin`
+
+Example
 ```powershell
 ./apply_environment_file.ps1
-gci .\third_party\vcpkg\buildtrees\osg\src\raph-3.6.5-0028e69d98.clean\examples
+osgteapot
 ```
 
-### OSG Terrain Example
-
-```powershell
-./apply_environment_file.ps1
-osgterrain.exe lz.osgt
-```
-
-### OSG Tools (.exe's)
-
-```powershell
-./apply_environment_file.ps1
-gci .\third_party\vcpkg\packages\osg_x64-windows\tools\osg
-```
-
-### Run osgviewer.exe
+### Run osgviewer
 
 ```powershell
 ./apply_environment_file.ps1
 osgviewer cow.osg
 ```
 
-### Run osgconv.exe
+### Run osgconv
 
 ```powershell
 ./apply_environment_file.ps1
@@ -391,3 +408,5 @@ To start debugger (CMake): Ctrl+F5
 - You can save ~25GB if you remove .obj files from *third_party/vcpkg/buildtrees*
   - Should allow you to debug third_party source
   - Downside: If you re-run setup.ps1, vcpkg will need to build all of these .obj again which could take several hours vs a few seconds if everything is already built
+- List OSG books
+- List links to Qt/OSG API's
