@@ -20,6 +20,7 @@
     - [Show All CMake Variables](#show-all-cmake-variables)
   - [Qt Tips](#qt-tips)
     - [Qt Examples](#qt-examples)
+    - [Qt tools for Visual Studio](#qt-tools-for-visual-studio)
   - [OSG Tips](#osg-tips)
     - [OSG Google Group](#osg-google-group)
     - [OSG Examples](#osg-examples)
@@ -45,13 +46,11 @@
 ## Prerequisites
 
 - Windows
-  1. Install [PowerShell 7+ from Microsoft Store](https://www.microsoft.com/en-us/p/powershell/9mz1snwt0n5d)
+  1. Install PowerShell 7+: Open command prompt, `winget install --id 9MZ1SNWT0N5D --accept-package-agreements`
   2. Install *Visual Studio 2022 Community*
      1. Download and open [vs_Community.exe](https://aka.ms/vs/17/release/vs_community.exe)
      2. Select *"Desktop development with C++"* Workload
      3. Click *"Install"* button
-  3. Install [Qt Visual Studio Tools](https://marketplace.visualstudio.com/items?itemName=TheQtCompany.QtVisualStudioTools2022)
-     - Adds debugging extensions for Qt data types
 - Linux
   1. [Install PowerShell on Ubuntu](https://docs.microsoft.com/en-us/powershell/scripting/install/install-ubuntu)
 - Mac
@@ -296,6 +295,10 @@ Example
 ./apply_environment_file.ps1
 ~/tron/third_party/qt5/build/qtbase/examples/widgets/widgets/tetrix/debug/tetrix
 ```
+### Qt tools for Visual Studio
+
+* Install [Qt Visual Studio Tools](https://marketplace.visualstudio.com/items?itemName=TheQtCompany.QtVisualStudioTools2022)
+  * Adds debugging extensions for Qt data types
 
 ## OSG Tips
 

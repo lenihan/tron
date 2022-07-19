@@ -6,6 +6,16 @@ function echo_command($cmd) {
 }
 Write-Host "Prerequisites..." -ForegroundColor Green
 if ($IsWindows) {
+    # git
+    $null = winget list --id git.git
+    if (!$?) {echo_command "winget install --id git.git --accept-package-agreements"}
+    echo_command "winget upgrade --id git.git"
+
+    # vs code
+    $null = winget list --id XP9KHM4BK9FZ7Q
+    if (!$?) {echo_command "winget install --id XP9KHM4BK9FZ7Q --accept-package-agreements"}
+    echo_command "winget upgrade --id XP9KHM4BK9FZ7Q"
+
     # cmake
     $null = winget list cmake
     if (!$?) {echo_command "winget install cmake"}
