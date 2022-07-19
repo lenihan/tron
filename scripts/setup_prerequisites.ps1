@@ -7,19 +7,19 @@ function echo_command($cmd) {
 Write-Host "Prerequisites..." -ForegroundColor Green
 if ($IsWindows) {
     # vs code
-    $null = winget list --id XP9KHM4BK9FZ7Q
-    if (!$?) {echo_command "winget install --id XP9KHM4BK9FZ7Q --accept-package-agreements"}
-    echo_command "winget upgrade --id XP9KHM4BK9FZ7Q"
+    $found_code = Get-Command "code" -ErrorAction SilentlyContinue
+    if (!$found_code) {
+        $null = winget list --id XP9KHM4BK9FZ7Q
+        if (!$?) {echo_command "winget install --id XP9KHM4BK9FZ7Q --accept-package-agreements"}
+    }
 
     # cmake
     $null = winget list cmake
     if (!$?) {echo_command "winget install cmake --accept-package-agreements"}
-    echo_command "winget upgrade cmake"
 
     # perl - for running Qt5's init-repository perl script
     $null = winget list perl
     if (!$?) {echo_command "winget install perl --accept-package-agreements"}
-    echo_command "winget upgrade perl"
 
     $required_apps = "git", "pwsh", "cmake", "perl", 
         "code", "$env:ProgramFiles\Microsoft Visual Studio\2022\Community\Common7\Tools\Launch-VsDevShell.ps1"

@@ -4,9 +4,17 @@ function echo_command($cmd) {
     $results = Invoke-Expression $cmd
     return $results[-1]  # last result is return value
 }
-$ROOT_DIR = (Resolve-Path $PSScriptRoot) -replace "\\", "/"
-$success = echo_command "& $ROOT_DIR/scripts/setup_prerequisites.ps1"
-if (!$success) {return}
-echo_command "& $ROOT_DIR/scripts/setup_build_environment.ps1"
-echo_command "& $ROOT_DIR/scripts/setup_third_party.ps1"
-echo_command "& $ROOT_DIR/scripts/setup_environment_file.ps1"
+$ROOT_DIR = $PSScriptRoot
+$SCRIPTS_DIR = Join-Path $ROOT_DIR scripts
+$scripts = "setup_prerequisites.ps1", 
+           "setup_build_environment.ps1", 
+           "setup_third_party.ps1", 
+           "setup_environment_file.ps1"
+foreach($s in $scripts) {
+    $script_path = Join-Path $SCRIPTS_DIR $s
+    $success = echo_command "& $script_path"
+    if (!$success) {
+        Write-Host "Last script did not finish. Exiting" -ForegroundColor Red
+        return
+    }
+}
