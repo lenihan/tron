@@ -61,6 +61,7 @@ if ($IsWindows) {
     echo_command "$JOM_EXE /J $most_procs  # ~1 hour 20 min" 
     # NOTE: nmake uses single processor and takes ~4 hours, 40 min" 
 }
+echo_command "Set-Location $ROOT_DIR"
 
 # Download OSG data (models, textures)
 Write-Host "git clone OpenSceneGraph-Data" -ForegroundColor Green
