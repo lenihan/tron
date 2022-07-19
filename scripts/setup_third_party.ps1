@@ -70,5 +70,5 @@ echo_command "git clone https://github.com/openscenegraph/OpenSceneGraph-Data.gi
 # Download code samples from OpenSceneGraph 3.0 Cookbook
 Write-Host "git clone osgRecipes - code samples from 'OpenSceneGraph 3.0 Cookbook'" -ForegroundColor Green
 $OSGRECIPES_DIR = Join-Path $THIRD_PARTY_DIR osgRecipes
-$cho_command "git clone https://github.com/xarray/osgRecipes.git $OSGRECIPES_DIR"
+echo_command "git clone https://github.com/xarray/osgRecipes.git $OSGRECIPES_DIR"
 return $true # no problems
