@@ -46,15 +46,16 @@
 ## Prerequisites
 
 - Windows
-  1. Install PowerShell 7+: Open command prompt, `winget install --id 9MZ1SNWT0N5D --accept-package-agreements`
-  2. Install git: Open command prompt, `winget install --id git.git --accept-package-agreements`
-     * If `git` not accessible from command prompt, reboot
+  1. If `winget` not available from command prompt, [Install App Installer](https://apps.microsoft.com/store/detail/app-installer/9NBLGGH4NNS1?hl=en-us&gl=US)
+  2. Install PowerShell 7+: Open command prompt, `winget install --id 9MZ1SNWT0N5D --accept-package-agreements`
   3. Install *Visual Studio 2022 Community*
      1. Download and open [vs_Community.exe](https://aka.ms/vs/17/release/vs_community.exe)
      2. Select *"Desktop development with C++"* Workload
      3. Click *"Install"* button
+  4. Install git: Open command prompt, `winget install --id git.git --accept-package-agreements`
+     * If `git` not accessible from command prompt, reboot
 - Linux
-  1. [Install PowerShell on Ubuntu](https://docs.microsoft.com/en-us/powershell/scripting/install/install-ubuntu)
+  3. [Install PowerShell on Ubuntu](https://docs.microsoft.com/en-us/powershell/scripting/install/install-ubuntu)
 - Mac
   1. [Install PowerShell on MacOS](https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell-on-macos)
 

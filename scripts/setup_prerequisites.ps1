@@ -1,4 +1,4 @@
-# setup prerequisites
+# setup prerequisites, returns $true on success, $false otherwise
 #Requires -Version 7
 function echo_command($cmd) {
     Write-Host $cmd -ForegroundColor Cyan
@@ -28,13 +28,13 @@ if ($IsWindows) {
         $found_command = Get-Command $ra -ErrorAction SilentlyContinue
         if (!$found_command) {
             $all_commands_found = $false
-            Write-Host "Could not find command: $ra" -ForegroundColor Green
+            Write-Host "Could not find command: $ra" -ForegroundColor Red
         }
     }
     if (!$all_commands_found) {
-        Write-Host "Cannot continue without access to required commands." -ForegroundColor Green
-        Write-Host "A reboot may be required." -ForegroundColor Green
-        exit
+        Write-Host "Cannot continue without access to required commands." -ForegroundColor Red
+        Write-Host "A reboot may be required." -ForegroundColor Red
+        return $false
     }
 }
 elseif ($IsLinux) {
@@ -95,3 +95,4 @@ elseif ($IsLinux) {
         }
     }
 }
+return $true
