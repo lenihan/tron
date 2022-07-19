@@ -20,6 +20,22 @@ if ($IsWindows) {
     $null = winget list perl
     if (!$?) {echo_command "winget install perl --accept-package-agreements"}
     echo_command "winget upgrade perl"
+
+    $required_apps = "git", "pwsh", "cmake", "perl", 
+        "code", "$env:ProgramFiles\Microsoft Visual Studio\2022\Community\Common7\Tools\Launch-VsDevShell.ps1"
+    $all_commands_found = $true
+    foreach ($ra in $required_apps) {
+        $found_command = Get-Command $ra -ErrorAction SilentlyContinue
+        if (!$found_command) {
+            $all_commands_found = $false
+            Write-Host "Could not find command: $ra" -ForegroundColor Green
+        }
+    }
+    if (!$all_commands_found) {
+        Write-Host "Cannot continue without access to required commands." -ForegroundColor Green
+        Write-Host "A reboot may be required." -ForegroundColor Green
+        exit
+    }
 }
 elseif ($IsLinux) {
     $installed_packages = apt list --installed 2> $null
