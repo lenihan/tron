@@ -1,7 +1,8 @@
 # Setup prerequisites, build environment, third_party directory, .env file for running apps.
 function echo_command($cmd) {
     Write-Host $cmd -ForegroundColor Cyan
-    return Invoke-Expression $cmd
+    $results = Invoke-Expression $cmd
+    return $results[-1]  # last result is return value
 }
 $ROOT_DIR = (Resolve-Path $PSScriptRoot) -replace "\\", "/"
 $success = echo_command "& $ROOT_DIR/scripts/setup_prerequisites.ps1"
