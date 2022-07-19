@@ -47,7 +47,9 @@
 
 - Windows
   1. Install PowerShell 7+: Open command prompt, `winget install --id 9MZ1SNWT0N5D --accept-package-agreements`
-  2. Install *Visual Studio 2022 Community*
+  2. Install git: Open command prompt, `winget install --id git.git --accept-package-agreements`
+     * Must reboot to access git from command prompt
+  3. Install *Visual Studio 2022 Community*
      1. Download and open [vs_Community.exe](https://aka.ms/vs/17/release/vs_community.exe)
      2. Select *"Desktop development with C++"* Workload
      3. Click *"Install"* button
