@@ -18,8 +18,8 @@ if ($IsWindows) {
     if (!$?) {echo_command "winget install cmake --accept-package-agreements"}
 
     # perl - for running Qt5's init-repository perl script
-    $null = winget list perl
-    if (!$?) {echo_command "winget install perl --accept-package-agreements"}
+    $null = winget list StrawberryPerl.StrawberryPerl
+    if (!$?) {echo_command "winget install StrawberryPerl.StrawberryPerl --accept-package-agreements"}
 
     $required_apps = "git", "pwsh", "cmake", "perl", 
         "code", "$env:ProgramFiles\Microsoft Visual Studio\2022\Community\Common7\Tools\Launch-VsDevShell.ps1"
