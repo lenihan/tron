@@ -62,7 +62,7 @@ foreach(NAME ${QT_LIB_BASE_NAMES})
   require_path_exists(${DEBUG_LIB_PATH})
   string(TOUPPER QT5${NAME}_LIB VAR_NAME)
   set(${VAR_NAME} optimized ${RELEASE_LIB_PATH} debug ${DEBUG_LIB_PATH})
-  message("Created library variable: ${VAR_NAME}")
+  message(STATUS "Created library variable: \$\{${VAR_NAME}\}")
 endforeach()
 include_directories(${QT_DIR}/include)
 
@@ -86,7 +86,7 @@ foreach(NAME ${OSG_LIB_BASE_NAMES})
   require_path_exists(${DEBUG_LIB_PATH})
   string(TOUPPER ${NAME}_LIB VAR_NAME)
   set(${VAR_NAME} optimized ${RELEASE_LIB_PATH} debug ${DEBUG_LIB_PATH})
-  message("Created library variable: ${VAR_NAME}")
+  message(STATUS "Created library variable: \$\{${VAR_NAME}\}")
 endforeach()
 
 # Include sub-projects
