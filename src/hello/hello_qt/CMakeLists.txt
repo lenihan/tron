@@ -1,4 +1,5 @@
 ﻿project(hello_qt)
 add_executable(${PROJECT_NAME} "hello_qt.cpp")
 set_target_postfix()
-target_link_libraries(${PROJECT_NAME} ${QT_CORE_LIB} ${QT_WIDGETS_LIB})
+target_link_libraries(${PROJECT_NAME} ${QT5CORE_LIB} ${QT5WIDGETS_LIB})
+# target_link_libraries(${PROJECT_NAME} ${QT_CORE_LIB} ${QT_WIDGETS_LIB})
