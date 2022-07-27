@@ -1,3 +1,5 @@
+#include <osg/AlphaFunc>
+#include <osg/BlendFunc>
 #include <osg/Geometry>
 #include <osg/Notify>
 #include <osg/Texture2D>
@@ -56,17 +58,39 @@ osg::ref_ptr<osg::Geode> createTexturedQuad()
     quad->addPrimitiveSet(new osg::DrawArrays(GL_QUADS, 0, 4));
 
     osg::ref_ptr<osg::Texture2D> texture = new osg::Texture2D;
-    //texture->setInternalFormat(GL_RGBA);
+    // texture->setInternalFormat(GL_COMPRESSED_RGBA_S3TC_DXT1_EXT); NO
+    // texture->setInternalFormat(GL_COMPRESSED_RGB_S3TC_DXT1_EXT);  // yes
     texture->setUnRefImageDataAfterApply(true);
-    //osg::ref_ptr<osg::Image> image = osgDB::readImageFile("test/mipmap/mipmap_level_test-11_levels-bc1.dds");
-    osg::ref_ptr<osg::Image> image = osgDB::readImageFile("test/mipmap/mipmap_alpha_test-11_levels-bc1.dds");
-    //osg::ref_ptr<osg::Image> image = osgDB::readImageFile("test/mipmap/mipmap_alpha_test-11_levels-bc1.png");
+    // osg::ref_ptr<osg::Image> image = osgDB::readImageFile("test/mipmap/mipmap_level_test-11_levels-bc1.dds");
+    osg::ref_ptr<osg::Image> image = osgDB::readImageFile("test/mipmap/mipmap_alpha_test-11_levels-bc1.dds"); // alpha not showing
+    // osg::ref_ptr<osg::Image> image = osgDB::readImageFile("test/mipmap/mipmap_alpha_test-11_levels-bc2.png"); // alpha not showing
+    // osg::ref_ptr<osg::Image> image = osgDB::readImageFile("test/mipmap/mipmap_alpha_test-11_levels-bc1.png"); // all black
     texture->setImage(image.get());
+
+
+    osg::StateSet *dstate = new osg::StateSet;
+    {
+        dstate->setTextureAttributeAndModes(0, texture, osg::StateAttribute::ON );
+
+        dstate->setTextureAttribute(0, new osg::TexEnv );
+
+        dstate->setAttributeAndModes( new osg::BlendFunc, osg::StateAttribute::ON );
+
+        osg::AlphaFunc* alphaFunc = new osg::AlphaFunc;
+        alphaFunc->setFunction(osg::AlphaFunc::GEQUAL,0.05f);
+        dstate->setAttributeAndModes( alphaFunc, osg::StateAttribute::ON );
+
+        dstate->setMode( GL_LIGHTING, osg::StateAttribute::OFF );
+
+        dstate->setRenderingHint( osg::StateSet::TRANSPARENT_BIN );
+    }
+
 
 
     osg::ref_ptr <osg::Geode> geode = new osg::Geode;
     geode->addDrawable(quad.get());
-    geode->getOrCreateStateSet()->setTextureAttributeAndModes(0, texture.get());
+    // geode->getOrCreateStateSet()->setTextureAttributeAndModes(0, texture.get());
+    geode->setStateSet(dstate);
     return geode;
 }
 
@@ -76,14 +100,14 @@ int main(int argc, char** argv)
     // Get current flag
     int tmpFlag = _CrtSetDbgFlag(_CRTDBG_REPORT_FLAG);
 
-    // Turn on leak-checking bit.
-    tmpFlag |= _CRTDBG_LEAK_CHECK_DF;
+    // // Turn on leak-checking bit.
+    // tmpFlag |= _CRTDBG_LEAK_CHECK_DF;
 
-    // Turn off CRT block checking bit.
-    tmpFlag &= ~_CRTDBG_CHECK_CRT_DF;
+    // // // Turn off CRT block checking bit.
+    // // tmpFlag &= ~_CRTDBG_CHECK_CRT_DF;
 
-    // Set flag to the new value.
-    _CrtSetDbgFlag(tmpFlag);
+    // // Set flag to the new value.
+    // _CrtSetDbgFlag(tmpFlag);
 
     osg::setNotifyLevel(osg::DEBUG_FP);  // everything
     
