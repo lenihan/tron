@@ -152,7 +152,7 @@ function setup_third_party {
                 "fontconfig", 
                 "freetype", 
                 "gdal",
-                "gtk",
+                # "gtk",  # does not build on windows
                 "giflib", 
                 "glib", 
                 "gstreamer", 
@@ -185,11 +185,13 @@ function setup_third_party {
     ################
     Write-Host "Build OpenSceneGraph..." -ForegroundColor Green
     echo_command "git clone --branch OpenSceneGraph-3.6.5 https://github.com/openscenegraph/OpenSceneGraph.git $OSG_DIR -c advice.detachedHead=false"
-    $VCPKG_INSTALLED_TRIPLET_DIR = Join-Path $VCPKG_DIR installed $TRIPLET
     $configs = "Release", "Debug" 
     foreach ($config in $configs) {
         $out_dir = Join-Path $OSG_DIR build $config
-        echo_command "cmake -S $OSG_DIR -B $out_dir -DCMAKE_BUILD_TYPE=$config -DBUILD_OSG_EXAMPLES:BOOL=ON -D CMAKE_PREFIX_PATH=$VCPKG_INSTALLED_TRIPLET_DIR  # ~1 min"
+        $SDL_LIB_RELEASE = Join-Path $VCPKG_INSTALLED_TRIPLET_DIR lib manual-link SDLmain.lib
+        $SDL_LIB_DEBUG = Join-Path $VCPKG_INSTALLED_TRIPLET_DIR debug lib manual-link SDLmaind.lib
+        $SDL_LIB = $config -eq "Release" ? $SDL_LIB_RELEASE : $SDL_LIB_DEBUG
+        echo_command "cmake -S $OSG_DIR -B $out_dir -DCMAKE_BUILD_TYPE=$config -DBUILD_OSG_EXAMPLES:BOOL=ON -DCMAKE_PREFIX_PATH=$VCPKG_INSTALLED_TRIPLET_DIR -DSDLMAIN_LIBRARY:FILEPATH=$SDL_LIB  # ~1 min"
         if ($IsLinux)   {
             $most_procs = $(nproc) - 1
             echo_command "make -C $out_dir --jobs=$most_procs  # ~50 min"
