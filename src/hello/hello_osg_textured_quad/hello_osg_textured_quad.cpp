@@ -57,40 +57,54 @@ osg::ref_ptr<osg::Geode> createTexturedQuad()
     quad->setTexCoordArray(0, texcoords.get());
     quad->addPrimitiveSet(new osg::DrawArrays(GL_QUADS, 0, 4));
 
+
+
+
+// alpha test - RESULTS: png always works, srgb dds always black, bc1 dds alpha black
+// osg::ref_ptr<osg::Image> image = osgDB::readImageFile("test/mipmap/mipmap_alpha_test-11_levels-bc1_srgb.dds");   // all black
+// osg::ref_ptr<osg::Image> image = osgDB::readImageFile("test/mipmap/mipmap_alpha_test-11_levels-bc1_srgb.png");   // works
+// osg::ref_ptr<osg::Image> image = osgDB::readImageFile("test/mipmap/mipmap_alpha_test-11_levels-bc1.dds");        // alpha black
+osg::ref_ptr<osg::Image> image = osgDB::readImageFile("test/mipmap/mipmap_alpha_test-11_levels-bc1.png");        // works
+// osg::ref_ptr<osg::Image> image = osgDB::readImageFile("test/mipmap/mipmap_alpha_test-11_levels-bc2_srgb.dds");   // all black
+// osg::ref_ptr<osg::Image> image = osgDB::readImageFile("test/mipmap/mipmap_alpha_test-11_levels-bc2_srgb.png");   // works
+// osg::ref_ptr<osg::Image> image = osgDB::readImageFile("test/mipmap/mipmap_alpha_test-11_levels-bc2.dds");        // works
+// osg::ref_ptr<osg::Image> image = osgDB::readImageFile("test/mipmap/mipmap_alpha_test-11_levels-bc2.png");        // works
+// osg::ref_ptr<osg::Image> image = osgDB::readImageFile("test/mipmap/mipmap_alpha_test-11_levels-bc3_srgb.dds");   // all black
+// osg::ref_ptr<osg::Image> image = osgDB::readImageFile("test/mipmap/mipmap_alpha_test-11_levels-bc3_srgb.png");   // works
+// osg::ref_ptr<osg::Image> image = osgDB::readImageFile("test/mipmap/mipmap_alpha_test-11_levels-bc3.dds");        // works
+// osg::ref_ptr<osg::Image> image = osgDB::readImageFile("test/mipmap/mipmap_alpha_test-11_levels-bc3.png");        // works
+
+// level test - RESULTS: png do not contain custom mips and are flipped, srgb dds all black, rest of dds works
+// osg::ref_ptr<osg::Image> image = osgDB::readImageFile("test/mipmap/mipmap_level_test-11_levels-bc1_srgb.dds"); // all black
+// osg::ref_ptr<osg::Image> image = osgDB::readImageFile("test/mipmap/mipmap_level_test-11_levels-bc1_srgb.png");  // mips do not change, image reversed
+// osg::ref_ptr<osg::Image> image = osgDB::readImageFile("test/mipmap/mipmap_level_test-11_levels-bc1.dds");   // works
+// osg::ref_ptr<osg::Image> image = osgDB::readImageFile("test/mipmap/mipmap_level_test-11_levels-bc1.png");  // mips do not change, image reversed
+// osg::ref_ptr<osg::Image> image = osgDB::readImageFile("test/mipmap/mipmap_level_test-11_levels-bc2_srgb.dds"); // all black
+// osg::ref_ptr<osg::Image> image = osgDB::readImageFile("test/mipmap/mipmap_level_test-11_levels-bc2_srgb.png"); // mips do not change, image reversed
+// osg::ref_ptr<osg::Image> image = osgDB::readImageFile("test/mipmap/mipmap_level_test-11_levels-bc2.dds"); // works
+// osg::ref_ptr<osg::Image> image = osgDB::readImageFile("test/mipmap/mipmap_level_test-11_levels-bc2.png"); // mips do not change, image reversed
+// osg::ref_ptr<osg::Image> image = osgDB::readImageFile("test/mipmap/mipmap_level_test-11_levels-bc3_srgb.dds"); // all black
+// osg::ref_ptr<osg::Image> image = osgDB::readImageFile("test/mipmap/mipmap_level_test-11_levels-bc3_srgb.png"); // mips do not change, image reversed
+// osg::ref_ptr<osg::Image> image = osgDB::readImageFile("test/mipmap/mipmap_level_test-11_levels-bc3.dds"); // works
+// osg::ref_ptr<osg::Image> image = osgDB::readImageFile("test/mipmap/mipmap_level_test-11_levels-bc3.png"); // mips do not change, image reversed
+
+// Texture format recommendations
+// png is easier to manipulate/view than dds
+// png compresses better on disk
+// dds MAY offer speedup for mip creation and conversion from png to format gpu can use
+// dds srgb does not work
+// skip srgb for now, use if we have color issues (doubtful)
+// png's all using same format: 32bpp BGRA
+// => USE PNG's unless you find a performance reason to use DDS
+
     osg::ref_ptr<osg::Texture2D> texture = new osg::Texture2D;
-    // texture->setInternalFormat(GL_COMPRESSED_RGBA_S3TC_DXT1_EXT); NO
-    // texture->setInternalFormat(GL_COMPRESSED_RGB_S3TC_DXT1_EXT);  // yes
     texture->setUnRefImageDataAfterApply(true);
-    // osg::ref_ptr<osg::Image> image = osgDB::readImageFile("test/mipmap/mipmap_level_test-11_levels-bc1.dds");
-    osg::ref_ptr<osg::Image> image = osgDB::readImageFile("test/mipmap/mipmap_alpha_test-11_levels-bc1.dds"); // alpha not showing
-    // osg::ref_ptr<osg::Image> image = osgDB::readImageFile("test/mipmap/mipmap_alpha_test-11_levels-bc2.png"); // alpha not showing
-    // osg::ref_ptr<osg::Image> image = osgDB::readImageFile("test/mipmap/mipmap_alpha_test-11_levels-bc1.png"); // all black
     texture->setImage(image.get());
-
-
-    osg::StateSet *dstate = new osg::StateSet;
-    {
-        dstate->setTextureAttributeAndModes(0, texture, osg::StateAttribute::ON );
-
-        dstate->setTextureAttribute(0, new osg::TexEnv );
-
-        dstate->setAttributeAndModes( new osg::BlendFunc, osg::StateAttribute::ON );
-
-        osg::AlphaFunc* alphaFunc = new osg::AlphaFunc;
-        alphaFunc->setFunction(osg::AlphaFunc::GEQUAL,0.05f);
-        dstate->setAttributeAndModes( alphaFunc, osg::StateAttribute::ON );
-
-        dstate->setMode( GL_LIGHTING, osg::StateAttribute::OFF );
-
-        dstate->setRenderingHint( osg::StateSet::TRANSPARENT_BIN );
-    }
-
-
 
     osg::ref_ptr <osg::Geode> geode = new osg::Geode;
     geode->addDrawable(quad.get());
-    // geode->getOrCreateStateSet()->setTextureAttributeAndModes(0, texture.get());
-    geode->setStateSet(dstate);
+    geode->getOrCreateStateSet()->setTextureAttributeAndModes(0, texture, osg::StateAttribute::ON);
+    geode->getOrCreateStateSet()->setAttributeAndModes(new osg::BlendFunc, osg::StateAttribute::ON);
     return geode;
 }
 
