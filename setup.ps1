@@ -211,17 +211,14 @@ function setup_third_party {
     echo_command "git clone --branch v5.15.0 https://github.com/qt/qt5.git $QT_DIR -c advice.detachedHead=false"
     echo_command "Set-Location $QT_DIR"
     echo_command "perl ./init-repository  # ~57 min"
-    $VCPKG_INCLUDE = Join-Path $VCPKG_INSTALLED_TRIPLET_DIR include
-    $VCPKG_LIB = Join-Path $VCPKG_INSTALLED_TRIPLET_DIR lib
-    $VCPKG_LIB_DEBUG = Join-Path $VCPKG_INSTALLED_TRIPLET_DIR debug lib
     if ($IsLinux) {
         $configs = "Release", "Debug"   
         foreach ($config in $configs) {
             $out_dir = Join-Path $QT_DIR build $config
             $null = New-Item -ItemType Directory -Force $out_dir
             echo_command "Set-Location $out_dir"
-            if ($config -eq "Release") {echo_command "$QT_DIR/configure -opensource -confirm-license -$config -developer-build -I $VCPKG_INCLUDE -L $VCPKG_LIB -L $VCPKG_LIB_DEBUG  # ~2 min"}
-            if ($config -eq "Debug")   {echo_command "$QT_DIR/configure -opensource -confirm-license -$config -developer-build -I $VCPKG_INCLUDE -L $VCPKG_LIB -L $VCPKG_LIB_DEBUG -qtlibinfix d -qtlibinfix-plugins -nomake examples -nomake tools -nomake tests  # ~2 min"}
+            if ($config -eq "Release") {echo_command "$QT_DIR/configure -opensource -confirm-license -$config -developer-build # ~2 min"}
+            if ($config -eq "Debug")   {echo_command "$QT_DIR/configure -opensource -confirm-license -$config -developer-build -qtlibinfix d -qtlibinfix-plugins -nomake examples -nomake tools -nomake tests  # ~2 min"}
             $most_procs = $(nproc) - 1
             echo_command "make --jobs=$most_procs  # ~55 min"
         }
@@ -237,7 +234,7 @@ function setup_third_party {
         $JOM_EXE = Join-Path jom jom.exe
 
         $configure = Join-Path $QT_DIR configure.bat
-        echo_command "$configure -opensource -confirm-license -platform win32-msvc -I $VCPKG_INCLUDE -L $VCPKG_LIB -L $VCPKG_LIB_DEBUG"
+        echo_command "$configure -opensource -confirm-license -platform win32-msvc "
         $most_procs = (Get-CimInstance –ClassName Win32_Processor).NumberOfLogicalProcessors - 1
         echo_command "$JOM_EXE /J $most_procs  # ~1 hour 20 min" 
         # NOTE: nmake uses single processor and takes ~4 hours, 40 min" 
