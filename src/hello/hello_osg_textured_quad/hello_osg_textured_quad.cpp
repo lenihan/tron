@@ -127,8 +127,8 @@ int main(int argc, char** argv)
     
     // build scene graph
     osg::ref_ptr<osg::Group> root = new osg::Group;
-    osg::ref_ptr<osg::Geode> textured_quad = createTexturedQuad();
-    root->addChild(textured_quad.get());
+    // osg::ref_ptr<osg::Geode> textured_quad = createTexturedQuad();
+    // root->addChild(textured_quad.get());
 
     // construct the viewer
     osg::ref_ptr<osgViewer::Viewer> viewer = new osgViewer::Viewer;
@@ -205,5 +205,9 @@ int main(int argc, char** argv)
     // 'spacebar' - reset viewing position to home
     viewer->addEventHandler(new osgGA::StateSetManipulator(viewer->getCamera()->getOrCreateStateSet()));
 
-    return viewer->run();
+    const int ret = viewer->run();
+    // return viewer->run();
+
+    return ret;
+
 }

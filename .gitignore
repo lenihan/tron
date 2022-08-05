@@ -38,3 +38,6 @@ _deps
 *.sln
 *.vcxproj*
 *.env
+
+# VS Code settings
+.vscode/

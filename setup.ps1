@@ -313,6 +313,36 @@ LD_LIBRARY_PATH=$LD_LIBRARY_PATH
 OSG_FILE_PATH=$OSG_FILE_PATH
 "@ | Set-Content $ENV_FILE
     }
+    
+    # Add environment variables to vs code workspace
+    $VS_CODE_WORKSPACE_SETTINGS_PATH = Join-Path $ROOT_DIR .vscode settings.json
+    $settings = Get-Content $VS_CODE_WORKSPACE_SETTINGS_PATH | ConvertFrom-Json
+    if ($IsWindows) {
+        $os = "windows"
+        $env = @{
+            'OSG_FILE_PATH' = $OSG_FILE_PATH;
+            'PATH' = $PATH;
+            'VSCMD_ARG_TGT_ARCH' = $env:VSCMD_ARG_TGT_ARCH
+        }
+    }
+    if ($IsLinux) {
+        $os = "linux"
+        $env = @{
+            'LD_LIBRARY_PATH' = $LD_LIBRARY_PATH;
+            'OSG_FILE_PATH' = $OSG_FILE_PATH
+        }
+    }
+    if ($IsMacOS) {
+        $os = "osx"
+        $env = @{
+            'LD_LIBRARY_PATH' = $LD_LIBRARY_PATH;
+            'OSG_FILE_PATH' = $OSG_FILE_PATH
+        }
+    }
+    Add-Member -InputObject $settings -MemberType NoteProperty -Name "terminal.integrated.env.$os" -Value $env -Force
+    Add-Member -InputObject $settings -MemberType NoteProperty -Name "cmake.environment"           -Value $env -Force
+    Add-Member -InputObject $settings -MemberType NoteProperty -Name "files.associations"          -Value @{"**/include/**" = "cpp"} -Force
+    $settings | ConvertTo-Json | Set-Content $VS_CODE_WORKSPACE_SETTINGS_PATH
 }
 
 setup_prerequisites
