@@ -319,6 +319,8 @@ OSG_FILE_PATH=$OSG_FILE_PATH
     $settings = New-Object -TypeName PSObject
     if (Test-Path $VS_CODE_WORKSPACE_SETTINGS_PATH) {
         $settings = Get-Content $VS_CODE_WORKSPACE_SETTINGS_PATH | ConvertFrom-Json
+    } else {
+        New-Item -ItemType File $VS_CODE_WORKSPACE_SETTINGS_PATH -Force | Out-Null
     }
     if ($IsWindows) {
         $os = "windows"
