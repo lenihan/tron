@@ -661,7 +661,7 @@ osgconv
 
 ## Environment
 
-Run `~/repos/tron/apply_environment_file.ps1` prior to launching Visual Studio Code so that paths are setup correctly for debugging.
+Required environment variables are embedded in vs code workspace. You do not need to modify your environment to run/debug apps within vs code.
 ### CMake Building, Running, Debugging
 
 From <https://code.visualstudio.com/docs/cpp/cmake-linux>
