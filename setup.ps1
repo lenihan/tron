@@ -316,34 +316,20 @@ OSG_FILE_PATH=$OSG_FILE_PATH
     
     # Add environment variables to vs code workspace
     $VS_CODE_WORKSPACE_SETTINGS_PATH = Join-Path $ROOT_DIR .vscode settings.json
-    $settings = New-Object -TypeName PSObject
     if (Test-Path $VS_CODE_WORKSPACE_SETTINGS_PATH) {
         $settings = Get-Content $VS_CODE_WORKSPACE_SETTINGS_PATH | ConvertFrom-Json
     } else {
         New-Item -ItemType File $VS_CODE_WORKSPACE_SETTINGS_PATH -Force | Out-Null
+        $settings = New-Object -TypeName PSObject
     }
-    if ($IsWindows) {
-        $os = "windows"
-        $env = @{
-            'OSG_FILE_PATH' = $OSG_FILE_PATH;
-            'PATH' = $PATH;
-            'VSCMD_ARG_TGT_ARCH' = $env:VSCMD_ARG_TGT_ARCH
-        }
-    }
-    if ($IsLinux) {
-        $os = "linux"
-        $env = @{
-            'LD_LIBRARY_PATH' = $LD_LIBRARY_PATH;
-            'OSG_FILE_PATH' = $OSG_FILE_PATH
-        }
-    }
-    if ($IsMacOS) {
-        $os = "osx"
-        $env = @{
-            'LD_LIBRARY_PATH' = $LD_LIBRARY_PATH;
-            'OSG_FILE_PATH' = $OSG_FILE_PATH
-        }
-    }
+    if ($IsWindows) {$os = "windows"}
+    if ($IsLinux)   {$os = "linux"}
+    if ($IsMacOS)   {$os = "osx"}
+    $env = @{}
+    Get-Content $ENV_FILE | ForEach-Object {
+        $name, $value = $_ -split '='
+        $env += @{$name = $value}
+    }   
     $settings | Add-Member -MemberType NoteProperty -Name "terminal.integrated.env.$os" -Value $env -Force
     $settings | Add-Member -MemberType NoteProperty -Name "cmake.environment"           -Value $env -Force
     $settings | Add-Member -MemberType NoteProperty -Name "files.associations"          -Value @{"**/include/**" = "cpp"} -Force
