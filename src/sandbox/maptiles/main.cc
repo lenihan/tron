@@ -34,13 +34,45 @@
 #include <osgViewer/Viewer>
 #include <osgViewer/ViewerEventHandlers>
 
+osg::Geode* create_tile(float tile_index_x, float tile_index_y)
+{
+    const unsigned int num_cols = 200;
+    const unsigned int num_rows = 200;
+    const osg::Vec2 size_meters{30.0f, 30.0f};
+    const osg::Vec3 origin{tile_index_x * size_meters.x(), tile_index_y * size_meters.y(), 0.0f};
+
+    osg::HeightField* height_field = new osg::HeightField;
+    height_field->allocate(num_cols, num_rows);
+    height_field->setOrigin(origin);
+    const float interval_x_meters = size_meters.x() / (float)(num_cols - 1);
+    const float interval_y_meters = size_meters.y() / (float)(num_rows - 1);
+    height_field->setXInterval(interval_x_meters);
+    height_field->setYInterval(interval_y_meters);
+
+    for (int r=0; r<num_rows; ++r)
+    {
+        for (int c=0; c<num_cols; ++c)
+        {
+            const float scale_height_meters = 2.0f;
+            const float unit_r = (float)r / (float)(num_rows-1); 
+            const float unit_c = (float)c / (float)(num_cols-1); 
+            const float height = scale_height_meters * (sinf(2.0f * osg::PIf * unit_r) * cosf(2.0f * osg::PIf * unit_c));
+            height_field->setHeight(c, r, height);
+        }
+    }    
+    osg::Geode* geode = new osg::Geode;
+    geode->addDrawable(new osg::ShapeDrawable(height_field));    
+    return geode;
+}
 
 int main(int argc, char** argv)
 {
     osg::ref_ptr<osg::Group> root = new osg::Group;
 
     // show all messages
-    osg::setNotifyLevel(osg::DEBUG_FP);
+    // osg::setNotifyLevel(osg::DEBUG_FP); // everything
+    // osg::setNotifyLevel(osg::DEBUG_INFO);
+    osg::setNotifyLevel(osg::INFO);
 
     // construct the viewer.
     osg::ref_ptr<osgViewer::Viewer> viewer = new osgViewer::Viewer;
@@ -56,31 +88,14 @@ int main(int argc, char** argv)
     // turn off swap buffer sync
     // osg::DisplaySettings::instance()->setSyncSwapBuffers(0);
 
-    // root->addChild(teapot);
-    osg::HeightField* height_field = new osg::HeightField;
-    const unsigned int num_cols = 200;
-    const unsigned int num_rows = 200;
-    height_field->allocate(num_cols, num_rows);
-    const osg::Vec3 origin{0.0, 0.0, 0.0};
-    height_field->setOrigin(origin);
-    osg::Vec2 size_meters{30.0f, 30.0f};
-    height_field->setXInterval(size_meters.x()/(float)(num_cols-1));
-    height_field->setYInterval(size_meters.y()/(float)(num_rows-1));
-
-    for (int r=0; r<num_rows; ++r)
+    const int max_tile_index = 5;
+    for (int i = 0; i < max_tile_index; ++i)
     {
-        for (int c=0; c<num_cols; ++c)
+        for (int j = 0; j < max_tile_index; ++j)
         {
-            const float scale_height_meters = 2.0f;
-            const float unit_r = (float)r / (float)(num_rows-1); 
-            const float unit_c = (float)c / (float)(num_cols-1); 
-            const float height = scale_height_meters * (sinf(2.0f * osg::PIf * unit_r) * cosf(2.0f * osg::PIf * unit_c));
-            height_field->setHeight(c, r, height);
+            root->addChild(create_tile(i, j));
         }
     }
-    osg::Geode* geode = new osg::Geode;
-    geode->addDrawable(new osg::ShapeDrawable(height_field));
-    root->addChild(geode);
 
     // add model to viewer.
     viewer->setSceneData(root.get());
