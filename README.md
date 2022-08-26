@@ -64,13 +64,13 @@
 1. Open Terminal
 2. `pwsh`
 3. `git clone https://github.com/lenihan/tron.git $HOME/repos/tron`
-4. `~/repos/tron/setup.ps1`
+4. `~/repos/tron/scripts/setup.ps1`
 
 ## Generate Build Files
 
 1. Open Terminal
 2. `pwsh`
-3. `~/repos/tron/configure_cmake.ps1`
+3. `~/repos/tron/scripts/configure_cmake.ps1`
 
 ## Run
 
@@ -107,11 +107,8 @@ To rebuild everything, including third party libraries...
 - third_party  
 - .env
 - .gitignore
-- apply_environment_file.ps1
 - CMakeLists.txt
-- configure_cmake.ps1
 - README.md
-- setup.ps1
 
 ## Create A CMake Project 
 
@@ -124,7 +121,7 @@ To rebuild everything, including third party libraries...
       - Link executable to third party libaries
 4. Update `CmakeLists.txt` in root
    1. Add project folder via [add_subdirectory](https://cmake.org/cmake/help/latest/command/add_subdirectory.html)
-5. Generate build files in *./build*: Run `configure_cmake.ps1` 
+5. Generate build files in *./build*: Run `./scripts/configure_cmake.ps1` 
    - What it does if you are running from repo root: `cmake -S . -B ./build`
 6. Open IDE
    - VS Code `code .`
@@ -200,7 +197,7 @@ Binaries:
 #### Run Examples
 
 ```powershell
-~/repos/tron/apply_environment_file.ps1
+~/repos/tron/scripts/apply_environment_file.ps1
 $LINUX_CONFIG = $IsLinux ? "Debug" : ""
 $WINDOWS_CONFIG = $IsLinux ? "" : "debug"
 iex "$HOME/repos/tron/third_party/qt5/build/$LINUX_CONFIG/qtbase/examples/xml/htmlinfo/$WINDOWS_CONFIG/htmlinfo"
@@ -463,7 +460,7 @@ Binaries:
 #### Run Examples
 
 ```powershell
-~/repos/tron/apply_environment_file.ps1
+~/repos/tron/scripts/apply_environment_file.ps1
 osg2cpp
 osganalysis
 osganimate
@@ -646,14 +643,14 @@ osgwindows
 ### Run osgviewer
 
 ```powershell
-~/repos/tron/apply_environment_file.ps1
+~/repos/tron/scripts/apply_environment_file.ps1
 osgviewer cow.osg
 ```
 
 ### Run osgconv
 
 ```powershell
-~/repos/tron/apply_environment_file.ps1
+~/repos/tron/scripts/apply_environment_file.ps1
 osgconv
 ```
 
