@@ -57,6 +57,30 @@ int main(int argc, char** argv)
     // osg::DisplaySettings::instance()->setSyncSwapBuffers(0);
 
     // root->addChild(teapot);
+    osg::HeightField* height_field = new osg::HeightField;
+    const unsigned int num_cols = 200;
+    const unsigned int num_rows = 200;
+    height_field->allocate(num_cols, num_rows);
+    const osg::Vec3 origin{0.0, 0.0, 0.0};
+    height_field->setOrigin(origin);
+    osg::Vec2 size_meters{30.0f, 30.0f};
+    height_field->setXInterval(size_meters.x()/(float)(num_cols-1));
+    height_field->setYInterval(size_meters.y()/(float)(num_rows-1));
+
+    for (int r=0; r<num_rows; ++r)
+    {
+        for (int c=0; c<num_cols; ++c)
+        {
+            const float scale_height_meters = 2.0f;
+            const float unit_r = (float)r / (float)(num_rows-1); 
+            const float unit_c = (float)c / (float)(num_cols-1); 
+            const float height = scale_height_meters * (sinf(2.0f * osg::PIf * unit_r) * cosf(2.0f * osg::PIf * unit_c));
+            height_field->setHeight(c, r, height);
+        }
+    }
+    osg::Geode* geode = new osg::Geode;
+    geode->addDrawable(new osg::ShapeDrawable(height_field));
+    root->addChild(geode);
 
     // add model to viewer.
     viewer->setSceneData(root.get());
