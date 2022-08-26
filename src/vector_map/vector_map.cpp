@@ -104,7 +104,7 @@ int main(int argc, char** argv)
 
     // add the state manipulator.
     // 'w' - wireframe, points, fill
-    // 't' - texturie toggle
+    // 't' - texture toggle
     // 'l' - lighting toggle
     // 'b' - backface culling toggle
     viewer->addEventHandler(new osgGA::StateSetManipulator(viewer->getCamera()->getOrCreateStateSet()));
