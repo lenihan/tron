@@ -21,10 +21,8 @@
 #include <osg/MatrixTransform>
 #include <osg/Notify>
 #include <osg/State>
-#include <osg/TexGen>
 #include <osg/Texture2D>
 #include <osg/ShapeDrawable>
-#include <osgUtil/DelaunayTriangulator>
 
 #include <osgDB/ReadFile>
 #include <osgGA/StateSetManipulator>
@@ -33,6 +31,13 @@
 #include <osgViewer/View>
 #include <osgViewer/Viewer>
 #include <osgViewer/ViewerEventHandlers>
+// TODO: Select tile highlight
+// TODO: Track tile under mouse with picking
+// TODO: Show tile row, col on screen
+// TODO: PagedLOD of tiles, quadtree of texture/elevations
+// TODO: allow toggle between level zero (full res) and LOD version to show performance
+
+
 
 osg::Geode* create_tile(float tile_index_x, float tile_index_y)
 {
@@ -54,14 +59,30 @@ osg::Geode* create_tile(float tile_index_x, float tile_index_y)
         for (int c=0; c<num_cols; ++c)
         {
             const float scale_height_meters = 2.0f;
-            const float unit_r = (float)r / (float)(num_rows-1); 
-            const float unit_c = (float)c / (float)(num_cols-1); 
-            const float height = scale_height_meters * (sinf(2.0f * osg::PIf * unit_r) * cosf(2.0f * osg::PIf * unit_c));
+            const float unit_r = (float)r / (float)(num_rows - 1); 
+            const float unit_c = (float)c / (float)(num_cols - 1); 
+            const float height = scale_height_meters * 
+                                 sinf(2.0f * osg::PIf * unit_r) * 
+                                 cosf(2.0f * osg::PIf * unit_c);
             height_field->setHeight(c, r, height);
         }
-    }    
+    }
+    osg::ShapeDrawable* shapeDrawable = new osg::ShapeDrawable(height_field); 
+    shapeDrawable->setUseDisplayList(false);
+    shapeDrawable->setUseVertexArrayObject(false); // crashes
+    shapeDrawable->setUseVertexBufferObjects(false);
+
+    
+    osg::Texture2D* texture = new osg::Texture2D;
+    // texture->setUnRefImageDataAfterApply(true);
+    osg::Image* image = osgDB::readImageFile("maptile/maptile-30m.png");  
+    texture->setImage(image);
+    texture->setFilter(osg::Texture::MIN_FILTER, osg::Texture::NEAREST);
+    texture->setFilter(osg::Texture::MAG_FILTER, osg::Texture::NEAREST);
+
     osg::Geode* geode = new osg::Geode;
-    geode->addDrawable(new osg::ShapeDrawable(height_field));    
+    geode->addDrawable(shapeDrawable);    
+    geode->getOrCreateStateSet()->setTextureAttributeAndModes(0, texture, osg::StateAttribute::ON);
     return geode;
 }
 
