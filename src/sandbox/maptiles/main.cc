@@ -16,6 +16,7 @@
 *  THE SOFTWARE.
 */
 
+#include <osg/FrontFace>
 #include <osg/Geode>
 #include <osg/Geometry>
 #include <osg/MatrixTransform>
@@ -26,6 +27,7 @@
 
 #include <osgDB/ReadFile>
 #include <osgGA/StateSetManipulator>
+#include <osgFX/Outline>
 
 #include <osgViewer/config/SingleWindow>
 #include <osgViewer/View>
@@ -36,7 +38,6 @@
 // TODO: Show tile row, col on screen
 // TODO: PagedLOD of tiles, quadtree of texture/elevations
 // TODO: allow toggle between level zero (full res) and LOD version to show performance
-
 
 
 osg::Geode* create_tile(float tile_index_x, float tile_index_y)
@@ -68,10 +69,23 @@ osg::Geode* create_tile(float tile_index_x, float tile_index_y)
         }
     }
     osg::ShapeDrawable* shapeDrawable = new osg::ShapeDrawable(height_field); 
+   
     shapeDrawable->setUseDisplayList(false);
     shapeDrawable->setUseVertexArrayObject(false); // crashes
     shapeDrawable->setUseVertexBufferObjects(false);
 
+    // Set winding order to clockwise so that outline shows on proper side
+    {
+        osg::StateSet* ss = shapeDrawable->getOrCreateStateSet();
+        osg::StateAttribute* sa = ss->getAttribute(osg::StateAttribute::FRONTFACE);
+        osg::FrontFace* ff = dynamic_cast<osg::FrontFace*>(sa);
+        if (!ff)
+        {
+            ff = new osg::FrontFace;
+            ss->setAttribute(ff);
+        }
+        ff->setMode(osg::FrontFace::CLOCKWISE); 
+    }
     
     osg::Texture2D* texture = new osg::Texture2D;
     // texture->setUnRefImageDataAfterApply(true);
@@ -88,7 +102,7 @@ osg::Geode* create_tile(float tile_index_x, float tile_index_y)
 
 int main(int argc, char** argv)
 {
-    osg::ref_ptr<osg::Group> root = new osg::Group;
+    osg::Group* root = new osg::Group;
 
     // show all messages
     // osg::setNotifyLevel(osg::DEBUG_FP); // everything
@@ -109,17 +123,24 @@ int main(int argc, char** argv)
     // turn off swap buffer sync
     // osg::DisplaySettings::instance()->setSyncSwapBuffers(0);
 
-    const int max_tile_index = 5;
+    osgFX::Outline* outline = new osgFX::Outline;
+    outline->setWidth(8);
+    outline->setColor(osg::Vec4(1,1,0,1));
+    root->addChild(outline);
+
+    const int max_tile_index = 1;
     for (int i = 0; i < max_tile_index; ++i)
     {
         for (int j = 0; j < max_tile_index; ++j)
         {
-            root->addChild(create_tile(i, j));
+            osg::Geode* geode = create_tile(i, j);
+            outline->addChild(geode);            
         }
     }
 
+
     // add model to viewer.
-    viewer->setSceneData(root.get());
+    viewer->setSceneData(root);
 
     // add the help handler
     viewer->addEventHandler(new osgViewer::HelpHandler());
@@ -141,6 +162,12 @@ int main(int argc, char** argv)
     // 'l' - lighting toggle
     // 'b' - backface culling toggle
     viewer->addEventHandler(new osgGA::StateSetManipulator(viewer->getCamera()->getOrCreateStateSet()));
+
+    // For outline, must clear stencil buffer...
+    osg::DisplaySettings::instance()->setMinimumNumStencilBits(1);
+    const unsigned int clearMask = viewer->getCamera()->getClearMask();
+    viewer->getCamera()->setClearMask(clearMask | GL_STENCIL_BUFFER_BIT);
+    viewer->getCamera()->setClearStencil(0);
 
     return viewer->run();
 }

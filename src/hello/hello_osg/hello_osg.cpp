@@ -28,6 +28,7 @@
 
 #include <osgDB/ReadFile>
 #include <osgGA/StateSetManipulator>
+#include <osgFX/Outline>
 
 #include <osgSim/Impostor>
 
@@ -361,8 +362,14 @@ int main(int argc, char** argv)
     // turn off swap buffer sync
     // osg::DisplaySettings::instance()->setSyncSwapBuffers(0);
 
+    osgFX::Outline* outline = new osgFX::Outline;
+    outline->setWidth(8);
+    outline->setColor(osg::Vec4(1,1,0,1));
+    root->addChild(outline);
+
     osg::Geode* teapot = createTeapot();
-    root->addChild(teapot);
+    outline->addChild(teapot);
+    // root->addChild(teapot);
 
     // add model to viewer.
     viewer->setSceneData(root.get());
@@ -387,6 +394,13 @@ int main(int argc, char** argv)
     // 'l' - lighting toggle
     // 'b' - backface culling toggle
     viewer->addEventHandler(new osgGA::StateSetManipulator(viewer->getCamera()->getOrCreateStateSet()));
+
+
+    // For outline, must clear stencil buffer...
+    osg::DisplaySettings::instance()->setMinimumNumStencilBits(1);
+    const unsigned int clearMask = viewer->getCamera()->getClearMask();
+    viewer->getCamera()->setClearMask(clearMask | GL_STENCIL_BUFFER_BIT);
+    viewer->getCamera()->setClearStencil(0);
 
     return viewer->run();
 }
