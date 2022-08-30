@@ -33,7 +33,6 @@
 #include <osgViewer/View>
 #include <osgViewer/Viewer>
 #include <osgViewer/ViewerEventHandlers>
-// TODO: Select tile highlight
 // TODO: Track tile under mouse with picking
 // TODO: Show tile row, col on screen
 // TODO: PagedLOD of tiles, quadtree of texture/elevations
@@ -128,16 +127,22 @@ int main(int argc, char** argv)
     outline->setColor(osg::Vec4(1,1,0,1));
     root->addChild(outline);
 
-    const int max_tile_index = 1;
+    const int max_tile_index = 5;
     for (int i = 0; i < max_tile_index; ++i)
     {
         for (int j = 0; j < max_tile_index; ++j)
         {
             osg::Geode* geode = create_tile(i, j);
-            outline->addChild(geode);            
+            root->addChild(geode); 
+            if (i == 1 && j == 1)           
+            {
+                outline->addChild(geode);
+                
+                // Make ouline draw last so it is visible
+                geode->getOrCreateStateSet()->setMode(GL_DEPTH_TEST,osg::StateAttribute::OFF);
+            }
         }
     }
-
 
     // add model to viewer.
     viewer->setSceneData(root);
