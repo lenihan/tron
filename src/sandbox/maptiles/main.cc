@@ -46,7 +46,7 @@
 class PickHandler : public osgGA::GUIEventHandler
 {
 public:
-    PickHandler() {}
+    PickHandler(osgFX::Scribe* scribe) : _scribe(scribe) {}
     ~PickHandler() {}
     bool handle(const osgGA::GUIEventAdapter& ea, osgGA::GUIActionAdapter& aa)
     {
@@ -93,11 +93,13 @@ public:
     void removeHover()
     {
         if (!_hover) return;
-        for (osg::Group *g : _scribe->getParents())
-        {
-            g->replaceChild(_scribe, _hover);
-        }
-        _scribe = nullptr;
+        assert(_scribe);
+        _scribe->removeChild(_hover);
+        // for (osg::Group *g : _scribe->getParents())
+        // {
+        //     g->replaceChild(_scribe, _hover);
+        // }
+        // _scribe = nullptr;
         std::cout << "  REMOVING hover for " << _hover << "\n";
         _hover = nullptr;
     }
@@ -113,19 +115,20 @@ public:
         {
             removeHover();            
         }
-        assert(!_scribe);
-        _scribe = new osgFX::Scribe();
-        _scribe->setWireframeColor(orange_red_);
+        assert(_scribe);
+        // assert(!_scribe);
+        // _scribe = new osgFX::Scribe();
+        // _scribe->setWireframeColor(orange_red_);
         std::cout << "  setting hover for " << node << "\n";
         _scribe->addChild(node);
-        parent->replaceChild(node, _scribe);
+        // parent->replaceChild(node, _scribe);
         _hover = node;
     }
 
 protected:
     osg::Node* _hover{nullptr};
     osgFX::Scribe* _scribe{nullptr};
-    const osg::Vec4 orange_red_{1.00, 0.25, 0.10, 1.00};    // https://rgbcolorcode.com/color/FF4019
+    // const osg::Vec4 orange_red_{1.00, 0.25, 0.10, 1.00};    // https://rgbcolorcode.com/color/FF4019
 };
 
 // void toggleScribe(osg::Group* parent, osg::Node* node) 
@@ -243,10 +246,6 @@ int main(int argc, char** argv)
         {
             osg::Geode* geode = create_tile(i, j);
             root->addChild(geode); 
-            // if (i == 1 && j == 1)           
-            // {
-            //     toggleScribe(root, geode);
-            // }
         }
     }
 
@@ -275,8 +274,14 @@ int main(int argc, char** argv)
     viewer->addEventHandler(new osgGA::StateSetManipulator(viewer->getCamera()->getOrCreateStateSet()));
 
 
+    // Setup scribe (draw wireframe on top of object)
+    osgFX::Scribe* scribe = new osgFX::Scribe();
+    const osg::Vec4 orange_red{1.00, 0.25, 0.10, 1.00};    // https://rgbcolorcode.com/color/FF4019
+    scribe->setWireframeColor(orange_red);
+    root->addChild(scribe);
+
     // add the pick handler
-    PickHandler* pickhandler = new PickHandler;
+    PickHandler* pickhandler = new PickHandler(scribe);
     viewer->addEventHandler(pickhandler);
 
     return viewer->run();
