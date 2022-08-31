@@ -1,21 +1,3 @@
-/* OpenSceneGraph example, osgteapot.
-*
-*  Permission is hereby granted, free of charge, to any person obtaining a copy
-*  of this software and associated documentation files (the "Software"), to deal
-*  in the Software without restriction, including without limitation the rights
-*  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-*  copies of the Software, and to permit persons to whom the Software is
-*  furnished to do so, subject to the following conditions:
-*
-*  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-*  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-*  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-*  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-*  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-*  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-*  THE SOFTWARE.
-*/
-
 #include <osg/FrontFace>
 #include <osg/Geode>
 #include <osg/Geometry>
@@ -32,17 +14,12 @@
 #include <osgViewer/View>
 #include <osgViewer/Viewer>
 #include <osgViewer/ViewerEventHandlers>
-
 #include <assert.h>
-// TODO: Track tile under mouse with picking
+
 // TODO: Show tile row, col on screen
 // TODO: PagedLOD of tiles, quadtree of texture/elevations
 // TODO: allow toggle between level zero (full res) and LOD version to show performance
 
-
-
-
-// class to handle events with a pick
 class PickHandler : public osgGA::GUIEventHandler
 {
 public:
@@ -70,8 +47,6 @@ public:
         osgUtil::LineSegmentIntersector::Intersections intersections;
         if (viewer->computeIntersections(ea, intersections))
         {
-            OSG_NOTICE<<"found intersections : "<<std::endl;
-            
             if (!intersections.empty())
             {
                 const osgUtil::LineSegmentIntersector::Intersection& intersection = *(intersections.begin());
@@ -81,7 +56,6 @@ public:
         }
         else
         {
-            OSG_NOTICE<<"failed to get intersection "<<std::endl;
             removeHover();
         }
     }
@@ -90,7 +64,6 @@ public:
         if (!_hover) return;
         assert(_scribe);
         _scribe->removeChild(_hover);
-        std::cout << "  REMOVING hover for " << _hover << "\n";
         _hover = nullptr;
     }
     void setHover(osg::Node* node) 
@@ -102,7 +75,6 @@ public:
             removeHover();            
         }
         assert(_scribe);
-        std::cout << "  setting hover for " << node << "\n";
         _scribe->addChild(node);
         _hover = node;
     }
