@@ -55,8 +55,8 @@ public:
 
         switch(ea.getEventType())
         {
-            // case osgGA::GUIEventAdapter::FRAME:
-            case osgGA::GUIEventAdapter::MOVE:
+            case osgGA::GUIEventAdapter::FRAME: // update hover every frame (catches objects that move under mouse)
+            // case osgGA::GUIEventAdapter::MOVE: // only update hover when mouse moves
                 pick(ea, viewer);
                 return false;
             default:
@@ -67,9 +67,6 @@ public:
     {
         osg::Node* scene = viewer->getSceneData();
         if (!scene) return;
-        osg::Node* node = 0;
-        osg::Group* parent = 0;
-
         osgUtil::LineSegmentIntersector::Intersections intersections;
         if (viewer->computeIntersections(ea, intersections))
         {
@@ -78,10 +75,8 @@ public:
             if (!intersections.empty())
             {
                 const osgUtil::LineSegmentIntersector::Intersection& intersection = *(intersections.begin());
-                const osg::NodePath& nodePath = intersection.nodePath;
-                node = (nodePath.size()>=1)?nodePath[nodePath.size()-1]:0;
-                parent = (nodePath.size()>=2)?dynamic_cast<osg::Group*>(nodePath[nodePath.size()-2]):0;
-                setHover(parent, node);
+                osg::Node* node = intersection.nodePath.back();
+                setHover(node);
             }
         }
         else
@@ -95,66 +90,27 @@ public:
         if (!_hover) return;
         assert(_scribe);
         _scribe->removeChild(_hover);
-        // for (osg::Group *g : _scribe->getParents())
-        // {
-        //     g->replaceChild(_scribe, _hover);
-        // }
-        // _scribe = nullptr;
         std::cout << "  REMOVING hover for " << _hover << "\n";
         _hover = nullptr;
     }
-    void setHover(osg::Group* parent, osg::Node* node) 
+    void setHover(osg::Node* node) 
     {
-        // TODO: THink I am getting flicker because I'm changing scene graph when adding scribe.
-        //       Try having scribe attached at root with copies instead
-
-        if (!parent || !node) return;
-        assert(parent != node);
+        if (!node) return;
         if (_hover == node) return;
         if (_hover)
         {
             removeHover();            
         }
         assert(_scribe);
-        // assert(!_scribe);
-        // _scribe = new osgFX::Scribe();
-        // _scribe->setWireframeColor(orange_red_);
         std::cout << "  setting hover for " << node << "\n";
         _scribe->addChild(node);
-        // parent->replaceChild(node, _scribe);
         _hover = node;
     }
 
 protected:
     osg::Node* _hover{nullptr};
     osgFX::Scribe* _scribe{nullptr};
-    // const osg::Vec4 orange_red_{1.00, 0.25, 0.10, 1.00};    // https://rgbcolorcode.com/color/FF4019
 };
-
-// void toggleScribe(osg::Group* parent, osg::Node* node) 
-// {
-//     if (!parent || !node) return;
-
-//     osgFX::Scribe* parentAsScribe = dynamic_cast<osgFX::Scribe*>(parent);
-//     if (!parentAsScribe)
-//     {
-//         // node not already picked, so highlight it with an osgFX::Scribe
-//         osgFX::Scribe* scribe = new osgFX::Scribe();
-//         scribe->addChild(node);
-//         parent->replaceChild(node,scribe);
-//     }
-//     else
-//     {
-//         // node already picked so we want to remove scribe to unpick it.
-//         osg::Node::ParentList parentList = parentAsScribe->getParents();
-//         for(osg::Node::ParentList::iterator itr=parentList.begin();
-//             itr!=parentList.end();
-//             ++itr)
-//         {
-//             (*itr)->replaceChild(parentAsScribe,node);
-//         }
-//     }
-// }
 
 osg::Geode* create_tile(float tile_index_x, float tile_index_y)
 {
@@ -278,6 +234,7 @@ int main(int argc, char** argv)
     osgFX::Scribe* scribe = new osgFX::Scribe();
     const osg::Vec4 orange_red{1.00, 0.25, 0.10, 1.00};    // https://rgbcolorcode.com/color/FF4019
     scribe->setWireframeColor(orange_red);
+    scribe->getOrCreateStateSet()->setMode(GL_DEPTH_TEST, osg::StateAttribute::OFF); // fix z fighting with original object
     root->addChild(scribe);
 
     // add the pick handler
