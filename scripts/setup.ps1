@@ -332,11 +332,13 @@ OSG_FILE_PATH=$OSG_FILE_PATH
     }   
     $exclude += @{"**/build" = $true}
     $exclude += @{"third_party/vcpkg" = $true}
-    $settings | Add-Member -MemberType NoteProperty -Name "terminal.integrated.env.$os" -Value $env -Force
-    $settings | Add-Member -MemberType NoteProperty -Name "cmake.environment"           -Value $env -Force
-    $settings | Add-Member -MemberType NoteProperty -Name "files.associations"          -Value @{"**/include/**" = "cpp"} -Force
-    $settings | Add-Member -MemberType NoteProperty -Name "search.useIgnoreFiles"       -Value $false -Force
-    $settings | Add-Member -MemberType NoteProperty -Name "search.exclude"              -Value $exclude -Force
+
+    # save settings
+    $settings | Add-Member -MemberType NoteProperty -Name "terminal.integrated.env.$os" -Value $terminal_integrated_env_os -Force
+    $settings | Add-Member -MemberType NoteProperty -Name "cmake.environment"           -Value $cmake_environment          -Force
+    $settings | Add-Member -MemberType NoteProperty -Name "files.associations"          -Value $files_associations         -Force
+    $settings | Add-Member -MemberType NoteProperty -Name "search.useIgnoreFiles"       -Value $search_useIgnoreFiles      -Force
+    $settings | Add-Member -MemberType NoteProperty -Name "search.exclude"              -Value $search_exclude             -Force
     $settings | ConvertTo-Json | Set-Content $VS_CODE_WORKSPACE_SETTINGS_PATH
 }
 
