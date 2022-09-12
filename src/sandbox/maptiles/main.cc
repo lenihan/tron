@@ -3,6 +3,7 @@
 #include <osg/Geometry>
 #include <osg/MatrixTransform>
 #include <osg/Notify>
+#include <osg/PolygonOffset>
 #include <osg/State>
 #include <osg/Texture2D>
 #include <osg/ShapeDrawable>
@@ -86,8 +87,10 @@ protected:
 
 osg::Geode* create_tile(float tile_index_x, float tile_index_y)
 {
-    const unsigned int num_cols = 200;
-    const unsigned int num_rows = 200;
+    // const unsigned int num_cols = 200;
+    // const unsigned int num_rows = 200;
+    const unsigned int num_cols = 2;
+    const unsigned int num_rows = 2;
     const osg::Vec2 size_meters{30.0f, 30.0f};
     const osg::Vec3 origin{tile_index_x * size_meters.x(), tile_index_y * size_meters.y(), 0.0f};
 
@@ -99,9 +102,9 @@ osg::Geode* create_tile(float tile_index_x, float tile_index_y)
     height_field->setXInterval(interval_x_meters);
     height_field->setYInterval(interval_y_meters);
 
-    for (int r=0; r<num_rows; ++r)
+    for (int r = 0; r < num_rows; ++r)
     {
-        for (int c=0; c<num_cols; ++c)
+        for (int c = 0; c < num_cols; ++c)
         {
             const float scale_height_meters = 2.0f;
             const float unit_r = (float)r / (float)(num_rows - 1); 
@@ -167,7 +170,8 @@ int main(int argc, char** argv)
     // turn off swap buffer sync
     // osg::DisplaySettings::instance()->setSyncSwapBuffers(0);
 
-    const int max_tile_index = 5;
+    const int max_tile_index = 1;
+    // const int max_tile_index = 5;
     for (int i = 0; i < max_tile_index; ++i)
     {
         for (int j = 0; j < max_tile_index; ++j)
@@ -206,12 +210,35 @@ int main(int argc, char** argv)
     osgFX::Scribe* scribe = new osgFX::Scribe();
     const osg::Vec4 orange_red{1.00, 0.25, 0.10, 1.00};    // https://rgbcolorcode.com/color/FF4019
     scribe->setWireframeColor(orange_red);
-    scribe->getOrCreateStateSet()->setMode(GL_DEPTH_TEST, osg::StateAttribute::OFF); // fix z fighting with original object
+    // scribe->getOrCreateStateSet()->setMode(GL_DEPTH_TEST, osg::StateAttribute::OFF); // fix z fighting with original object
+    osg::ref_ptr<osg::PolygonOffset> polyoffset = new osg::PolygonOffset;
+    polyoffset->setFactor(1000.0f);
+    polyoffset->setUnits(1000.0f);
+    // scribe->getOrCreateStateSet()->setAttributeAndModes(polyoffset.get(), osg::StateAttribute::OVERRIDE|osg::StateAttribute::ON);
+    
+
+
     root->addChild(scribe);
 
     // add the pick handler
     PickHandler* pickhandler = new PickHandler(scribe);
     viewer->addEventHandler(pickhandler);
 
+    // double left = 0.0;
+    // double right = 0.0;
+    // double bottom = 0.0;
+    // double top = 0.0;
+    // double zNear = 0.0;
+    // double zFar = 0.0;
+    // double fovy = 0.0;
+    // double aspectRatio = 0.0;
+
+    // bool result1 = viewer->getCamera()->getProjectionMatrixAsOrtho(left, right, bottom, top, zNear, zFar);
+    // bool result2 = viewer->getCamera()->getProjectionMatrixAsFrustum(left, right, bottom, top, zNear, zFar);
+    // bool result3 = viewer->getCamera()->getProjectionMatrixAsPerspective(fovy, aspectRatio, zNear, zFar);
+    // zNear = 1.0;
+    // zFar = 2.0;
+    // viewer->getCamera()->setProjectionMatrixAsFrustum(left, right, bottom, top, zNear, zFar);
+    // bool result4 = viewer->getCamera()->getProjectionMatrixAsFrustum(left, right, bottom, top, zNear, zFar);
     return viewer->run();
 }

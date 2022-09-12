@@ -330,8 +330,13 @@ OSG_FILE_PATH=$OSG_FILE_PATH
         $name, $value = $_ -split '='
         $env += @{$name = $value}
     }   
-    $exclude += @{"**/build" = $true}
-    $exclude += @{"third_party/vcpkg" = $true}
+
+    # store settings
+    $terminal_integrated_env_os = $env
+    $cmake_environment          = $env
+    $files_associations         = @{"**/include/**" = "cpp"}
+    $search_useIgnoreFiles      = $false
+    $search_exclude             = @{"**/build" = $true; "third_party/vcpkg" = $true}
 
     # save settings
     $settings | Add-Member -MemberType NoteProperty -Name "terminal.integrated.env.$os" -Value $terminal_integrated_env_os -Force
