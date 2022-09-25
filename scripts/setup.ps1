@@ -1,6 +1,6 @@
 # Setup prerequisites, build environment, third_party directory, .env file for running apps.
 #Requires -Version 7
-$ROOT_DIR = $PSScriptRoot
+$ROOT_DIR = Resolve-Path $PSScriptRoot/..
 $THIRD_PARTY_DIR = Join-Path $ROOT_DIR third_party
 if ($IsWindows) {$TRIPLET = "x64-windows"}  
 if ($IsLinux)   {$TRIPLET = "x64-linux"}    

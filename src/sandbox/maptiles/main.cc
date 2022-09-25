@@ -216,6 +216,7 @@ int main(int argc, char** argv)
     polyoffset->setUnits(1000.0f);
     // scribe->getOrCreateStateSet()->setAttributeAndModes(polyoffset.get(), osg::StateAttribute::OVERRIDE|osg::StateAttribute::ON);
     
+     // #ffff00;
 
 
     root->addChild(scribe);
