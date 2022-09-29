@@ -46,18 +46,25 @@
 ## Prerequisites
 
 - Windows
-  1. If `winget` not available from command prompt, [Install App Installer](https://apps.microsoft.com/store/detail/app-installer/9NBLGGH4NNS1?hl=en-us&gl=US)
-  2. Install PowerShell 7+: Open command prompt, `winget install --id 9MZ1SNWT0N5D --accept-package-agreements`
-  3. Install *Visual Studio 2022 Community*
+  1. Install PowerShell 7+: `winget install --id 9MZ1SNWT0N5D --accept-package-agreements`
+     1. If `winget` not available from command prompt, [Install App Installer](https://apps.microsoft.com/store/detail/app-installer/9NBLGGH4NNS1?hl=en-us&gl=US)
+  2. Install git: `winget install --id git.git --accept-package-agreements`
+  3. Install Visual Studio Code: `winget install --exact --accept-package-agreements --source msstore --name "Visual Studio Code" --id XP9KHM4BK9FZ7Q`
+  4. Install *Visual Studio 2022 Community*
      1. Download and open [vs_Community.exe](https://aka.ms/vs/17/release/vs_community.exe)
      2. Select *"Desktop development with C++"* Workload
      3. Click *"Install"* button
-  4. Install git: Open command prompt, `winget install --id git.git --accept-package-agreements`
      * If `git` not accessible from command prompt, reboot
 - Linux
   3. [Install PowerShell on Ubuntu](https://docs.microsoft.com/en-us/powershell/scripting/install/install-ubuntu)
 - Mac
-  1. [Install PowerShell on MacOS](https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell-on-macos)
+  1. Install brew: `/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"`
+  2. Install PowerShell: `brew install –cask powershell`
+  3. Install Visual Studio Code: `brew install --cask visual-studio-code`
+  4. Install autoconf: `brew install autoconf`
+  5. Install automake: `brew install automake`
+  6. Install libtool: `brew install libtool`
+
 
 ## Setup
 
@@ -96,7 +103,7 @@ To rebuild everything, including third party libraries...
 1. Open Terminal
 2. `pwsh`
 3. `ri ~/repos/tron/build -Recurse -Force`
-4. `ri ~/repos/scripts/reset_thrid_party.ps1`
+4. `ri ~/repos/scripts/reset_third_party.ps1`
 
 ## Hierarchy
 
