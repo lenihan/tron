@@ -60,10 +60,6 @@
 - Mac
   1. Install brew: `/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"`
   2. Install PowerShell: `brew install –cask powershell`
-  3. Install Visual Studio Code: `brew install --cask visual-studio-code`
-  4. Install autoconf: `brew install autoconf`
-  5. Install automake: `brew install automake`
-  6. Install libtool: `brew install libtool`
 
 
 ## Setup

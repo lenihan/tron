@@ -110,6 +110,12 @@ function setup_prerequisites {
             }
         }
     }
+    elseif ($IsMacOS) {
+        echo_command "brew install --cask visual-studio-code"
+        echo_command "brew install autoconf"
+        echo_command "brew install automake"
+        echo_command "brew install libtool"
+    }
 }
 
 function setup_build_environment {
@@ -192,7 +198,7 @@ function setup_third_party {
         $SDL_LIB_DEBUG = Join-Path $VCPKG_INSTALLED_TRIPLET_DIR debug lib manual-link SDLmaind.lib
         $SDL_LIB = $config -eq "Release" ? $SDL_LIB_RELEASE : $SDL_LIB_DEBUG
         echo_command "cmake -S $OSG_DIR -B $out_dir -DCMAKE_BUILD_TYPE=$config -DBUILD_OSG_EXAMPLES:BOOL=ON -DCMAKE_PREFIX_PATH=$VCPKG_INSTALLED_TRIPLET_DIR -DSDLMAIN_LIBRARY:FILEPATH=$SDL_LIB  # ~1 min"
-        if ($IsLinux)   {
+        if ($IsLinux -or $IsMacOS) {
             $most_procs = $(nproc) - 1
             echo_command "make -C $out_dir --jobs=$most_procs  # ~50 min"
         }
@@ -211,7 +217,7 @@ function setup_third_party {
     echo_command "git clone --branch v5.15.0 https://github.com/qt/qt5.git $QT_DIR -c advice.detachedHead=false"
     echo_command "Set-Location $QT_DIR"
     echo_command "perl ./init-repository  # ~57 min"
-    if ($IsLinux) {
+    if ($IsLinux -or $IsMacOS) {
         $configs = "Release", "Debug"   
         foreach ($config in $configs) {
             $out_dir = Join-Path $QT_DIR build $config
@@ -267,7 +273,7 @@ function setup_environment_file {
         $QT_BIN_DIR = Join-Path $QT_DIR build qtbase bin
         $QT_BIN_DIR_DEBUG = Join-Path $QT_DIR build qtbase bin
     }
-    if ($IsLinux) {
+    if ($IsLinux -or $IsMacOS) {
         $QT_BIN_DIR = Join-Path $QT_DIR build Release qtbase bin
         $QT_BIN_DIR_DEBUG = Join-Path $THIRD_PARTY_DIR qt5 build Debug qtbase bin
     }
@@ -307,7 +313,7 @@ PATH=$PATH
 VSCMD_ARG_TGT_ARCH=$env:VSCMD_ARG_TGT_ARCH
 "@ | Set-Content $ENV_FILE
     }
-    if ($IsLinux) {
+    if ($IsLinux -or $IsMacOS) {
 @"
 LD_LIBRARY_PATH=$LD_LIBRARY_PATH
 OSG_FILE_PATH=$OSG_FILE_PATH
