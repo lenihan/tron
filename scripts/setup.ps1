@@ -115,6 +115,8 @@ function setup_prerequisites {
         echo_command "brew install autoconf"
         echo_command "brew install automake"
         echo_command "brew install libtool"
+        echo_command "brew install nasm"
+        echo_command "brew install cmake"
     }
 }
 
@@ -190,6 +192,9 @@ function setup_third_party {
     # OpenSceneGraph
     ################
     Write-Host "Build OpenSceneGraph..." -ForegroundColor Green
+    if ($IsLinux) {$most_procs = $(nproc) - 1}
+    if ($IsMacOS) {$most_procs = $(sysctl -n hw.ncpu) - 1}
+    if ($IsWindows) {$most_procs = (Get-CimInstance –ClassName Win32_Processor).NumberOfLogicalProcessors - 1}
     echo_command "git clone --branch OpenSceneGraph-3.6.5 https://github.com/openscenegraph/OpenSceneGraph.git $OSG_DIR -c advice.detachedHead=false"
     $configs = "Release", "Debug" 
     foreach ($config in $configs) {
@@ -197,13 +202,11 @@ function setup_third_party {
         $SDL_LIB_RELEASE = Join-Path $VCPKG_INSTALLED_TRIPLET_DIR lib manual-link SDLmain.lib
         $SDL_LIB_DEBUG = Join-Path $VCPKG_INSTALLED_TRIPLET_DIR debug lib manual-link SDLmaind.lib
         $SDL_LIB = $config -eq "Release" ? $SDL_LIB_RELEASE : $SDL_LIB_DEBUG
-        echo_command "cmake -S $OSG_DIR -B $out_dir -DCMAKE_BUILD_TYPE=$config -DBUILD_OSG_EXAMPLES:BOOL=ON -DCMAKE_PREFIX_PATH=$VCPKG_INSTALLED_TRIPLET_DIR -DSDLMAIN_LIBRARY:FILEPATH=$SDL_LIB  # ~1 min"
+        echo_command "cmake -S $OSG_DIR -B $out_dir -DCMAKE_BUILD_TYPE=$config -DBUILD_OSG_EXAMPLES:BOOL=ON -DCMAKE_PREFIX_PATH=$VCPKG_INSTALLED_TRIPLET_DIR -DSDLMAIN_LIBRARY:FILEPATH=$SDL_LIB -DMACOSX_RPATH=TRUE # ~1 min"
         if ($IsLinux -or $IsMacOS) {
-            $most_procs = $(nproc) - 1
             echo_command "make -C $out_dir --jobs=$most_procs  # ~50 min"
         }
-        if ($IsWindows) {
-            $most_procs = (Get-CimInstance –ClassName Win32_Processor).NumberOfLogicalProcessors - 1
+        elseif ($IsWindows) {
             $sln = Join-Path $out_dir OpenSceneGraph.sln
             echo_command "msbuild $sln -p:Configuration=$config -maxCpuCount:$most_procs  # ~27 min"
         }
@@ -214,6 +217,9 @@ function setup_third_party {
     ####
     Write-Host "Build Qt5..." -ForegroundColor Green
     $QT_DIR = Join-Path $THIRD_PARTY_DIR qt5
+    if ($IsLinux) {$most_procs = $(nproc) - 1}
+    if ($IsMacOS) {$most_procs = $(sysctl -n hw.ncpu) - 1}
+    if ($IsWindows) {$most_procs = (Get-CimInstance –ClassName Win32_Processor).NumberOfLogicalProcessors - 1}
     echo_command "git clone --branch v5.15.0 https://github.com/qt/qt5.git $QT_DIR -c advice.detachedHead=false"
     echo_command "Set-Location $QT_DIR"
     echo_command "perl ./init-repository  # ~57 min"
@@ -225,7 +231,6 @@ function setup_third_party {
             echo_command "Set-Location $out_dir"
             if ($config -eq "Release") {echo_command "$QT_DIR/configure -opensource -confirm-license -$config -developer-build # ~2 min"}
             if ($config -eq "Debug")   {echo_command "$QT_DIR/configure -opensource -confirm-license -$config -developer-build -qtlibinfix d -qtlibinfix-plugins -nomake examples -nomake tools -nomake tests  # ~2 min"}
-            $most_procs = $(nproc) - 1
             echo_command "make --jobs=$most_procs  # ~55 min"
         }
     }
@@ -241,7 +246,6 @@ function setup_third_party {
 
         $configure = Join-Path $QT_DIR configure.bat
         echo_command "$configure -opensource -confirm-license -platform win32-msvc "
-        $most_procs = (Get-CimInstance –ClassName Win32_Processor).NumberOfLogicalProcessors - 1
         echo_command "$JOM_EXE /J $most_procs  # ~1 hour 20 min" 
         # NOTE: nmake uses single processor and takes ~4 hours, 40 min" 
     }
