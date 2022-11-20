@@ -15,7 +15,7 @@ $QT_DIR = Join-Path $THIRD_PARTY_DIR qt5
 function echo_command($cmd) {
     Write-Host $cmd -ForegroundColor Cyan
     $results = Invoke-Expression $cmd
-    $results.Count ? $results[-1] : $null
+    if ($results.Count) {$results[-1]} else {$null}
 }
 
 function setup_prerequisites {
@@ -55,8 +55,8 @@ function setup_prerequisites {
     elseif ($IsLinux) {
         $installed_packages = apt list --installed 2> $null
         $upgradeable_packages = apt list --upgradeable 2> $null
-        function is_package_installed($pkg) {($installed_packages | Select-String "^$pkg/") ? $true : $false}
-        function is_package_upgradeable($pkg) {($upgradeable_packages | Select-String "^$pkg/") ? $true : $false}
+        function is_package_installed($pkg) {if ($installed_packages | Select-String "^$pkg/") {$true} else {$false}}
+        function is_package_upgradeable($pkg) {if ($upgradeable_packages | Select-String "^$pkg/") {$true} else {$false}}
         
         $packages = "cmake",                # Needed to generate makefiles for this dev environment
                     "build-essential",      # gcc, g++, make, C standard lib, dev tools
@@ -201,7 +201,7 @@ function setup_third_party {
         $out_dir = Join-Path $OSG_DIR build $config
         $SDL_LIB_RELEASE = Join-Path $VCPKG_INSTALLED_TRIPLET_DIR lib manual-link SDLmain.lib
         $SDL_LIB_DEBUG = Join-Path $VCPKG_INSTALLED_TRIPLET_DIR debug lib manual-link SDLmaind.lib
-        $SDL_LIB = $config -eq "Release" ? $SDL_LIB_RELEASE : $SDL_LIB_DEBUG
+        $SDL_LIB = if ($config -eq "Release") {$SDL_LIB_RELEASE} else {$SDL_LIB_DEBUG}
         echo_command "cmake -S $OSG_DIR -B $out_dir -DCMAKE_BUILD_TYPE=$config -DBUILD_OSG_EXAMPLES:BOOL=ON -DCMAKE_PREFIX_PATH=$VCPKG_INSTALLED_TRIPLET_DIR -DSDLMAIN_LIBRARY:FILEPATH=$SDL_LIB -DMACOSX_RPATH=TRUE # ~1 min"
         if ($IsLinux -or $IsMacOS) {
             echo_command "make -C $out_dir --jobs=$most_procs  # ~50 min"
