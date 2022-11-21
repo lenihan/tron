@@ -21,7 +21,6 @@ function echo_command($cmd) {
 function setup_prerequisites {
     Write-Host "Setup prerequisites..." -ForegroundColor Green
     if ($IsWindows) {
-        # Visual Studio compiler
         $required_apps = "git", "pwsh", "cmake", "perl", "code", "$env:ProgramFiles\Microsoft Visual Studio\2022\Community\Common7\Tools\Launch-VsDevShell.ps1" 
         $all_commands_found = $true
         foreach ($ra in $required_apps) {
