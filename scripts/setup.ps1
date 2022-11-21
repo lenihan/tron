@@ -21,40 +21,8 @@ function echo_command($cmd) {
 function setup_prerequisites {
     Write-Host "Setup prerequisites..." -ForegroundColor Green
     if ($IsWindows) {
-        # git
-        $found = Get-Command "git" -ErrorAction SilentlyContinue
-        if (!$found) {echo_command "winget install --id git.git --accept-package-agreements --accept-source-agreements"}
-
-        # pwsh
-        $found = Get-Command "pwsh" -ErrorAction SilentlyContinue
-        if (!$found) {echo_command "winget install --id 9MZ1SNWT0N5D --accept-package-agreements --accept-source-agreements"}
-
-        # cmake
-        $found = Get-Command "cmake" -ErrorAction SilentlyContinue
-        if (!$found) {echo_command "winget install cmake --accept-package-agreements"}
-
-        # perl - for running Qt5's init-repository perl script
-        $found = Get-Command "perl" -ErrorAction SilentlyContinue
-        if (!$found) {echo_command "winget install StrawberryPerl.StrawberryPerl --accept-package-agreements"}
-
-        # code
-        $found = Get-Command "code" -ErrorAction SilentlyContinue
-        if (!$found) {echo_command "winget install --id XP9KHM4BK9FZ7Q --accept-package-agreements"}
-
         # Visual Studio compiler
-        $found = Get-Command "$env:ProgramFiles\Microsoft Visual Studio\2022\Community\Common7\Tools\Launch-VsDevShell.ps1" -ErrorAction SilentlyContinue
-        if (!$found) {
-            Write-Host "Visual Studio 2022 compiler missing. Install and try again." -ForegroundColor Red
-            Write-Host "To install..." -ForegroundColor Red
-            Write-Host "  1. Download and open 'vs_Community.exe' from https://aka.ms/vs/17/release/vs_community.exe" -ForegroundColor Red
-            Write-Host "  2.  Select 'Desktop development with C++' Workload" -ForegroundColor Red
-            Write-Host "  3. Click 'Install' button" -ForegroundColor Red
-            Write-Host ""
-            exit
-        }
-
-        $required_apps = "git", "pwsh", "cmake", "perl", 
-            "code", "$env:ProgramFiles\Microsoft Visual Studio\2022\Community\Common7\Tools\Launch-VsDevShell.ps1"
+        $required_apps = "git", "pwsh", "cmake", "perl", "code", "$env:ProgramFiles\Microsoft Visual Studio\2022\Community\Common7\Tools\Launch-VsDevShell.ps1" 
         $all_commands_found = $true
         foreach ($ra in $required_apps) {
             $found_command = Get-Command $ra -ErrorAction SilentlyContinue
@@ -65,7 +33,6 @@ function setup_prerequisites {
         }
         if (!$all_commands_found) {
             Write-Host "Cannot continue without access to required commands." -ForegroundColor Red
-            Write-Host "Restart terminal and try again." -ForegroundColor Red
             exit
         }
     }

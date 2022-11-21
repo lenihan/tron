@@ -46,18 +46,21 @@
 ## Prerequisites
 
 - Windows
-  1. Open Terminal
-  2. Install git: `winget install --id git.git --accept-package-agreements --accept-source-agreements`
-  3. Install PowerShell 7+: `winget install --id 9MZ1SNWT0N5D --accept-package-agreements --accept-source-agreements`
-  4. Install CMake: `winget install cmake --accept-package-agreements`
-  5. Install Perl (needed for Qt5 installer): `winget install StrawberryPerl.StrawberryPerl --accept-package-agreements`
-  6. Install VS Code: `winget install --id XP9KHM4BK9FZ7Q --accept-package-agreements`
-  7. Install *Visual Studio 2022 Community*
+  1. Install *Visual Studio 2022 Community*
      1. Download and open [vs_Community.exe](https://aka.ms/vs/17/release/vs_community.exe)
      2. Select *"Desktop development with C++"* Workload
      3. Click *"Install"* button
      * NOTE: To verify proper install, you should be able to run `cl` from the "Developer Command Prompt for VS 2022" without error.
-   8. Close Terminal (this terminal must be restarted to access newly installed commands)
+  2. Open Terminal
+  3. Install via winget
+    ```pwsh
+    winget install Git.Git --accept-source-agreements # git
+    winget install 9MZ1SNWT0N5D --accept-package-agreements # pwsh
+    winget install cmake # cmake
+    winget install StrawberryPerl.StrawberryPerl # perl (required by Qt installer)
+    winget install XP9KHM4BK9FZ7Q --accept-package-agreements # code    
+    ```
+  4. Close Terminal (this terminal must be restarted to access newly installed commands)
      
 - Linux
   1. [Install PowerShell on Ubuntu](https://docs.microsoft.com/en-us/powershell/scripting/install/install-ubuntu)
