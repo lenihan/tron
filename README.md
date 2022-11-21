@@ -11,7 +11,7 @@
   - [Create A CMake Project](#create-a-cmake-project)
   - [CMake Tips](#cmake-tips)
     - [Helpful Documentation](#helpful-documentation)
-    - [ALL_BUILD and ZERO_CHECK](#all_build-and-zero_check)
+    - [ALL\_BUILD and ZERO\_CHECK](#all_build-and-zero_check)
     - [Copy files](#copy-files)
     - [CMake Comment](#cmake-comment)
     - [Print Message/Variable](#print-messagevariable)
@@ -46,15 +46,16 @@
 ## Prerequisites
 
 - Windows
-  1. Install PowerShell 7+: `winget install --id 9MZ1SNWT0N5D --accept-package-agreements`
-     1. If `winget` not available from command prompt, [Install App Installer](https://apps.microsoft.com/store/detail/app-installer/9NBLGGH4NNS1?hl=en-us&gl=US)
-  2. Install git: `winget install --id git.git --accept-package-agreements`
-  3. Install Visual Studio Code: `winget install --exact --accept-package-agreements --source msstore --name "Visual Studio Code" --id XP9KHM4BK9FZ7Q`
+  1. Open Terminal: Start -> Terminal
+  2. Install PowerShell 7+: `winget install --id 9MZ1SNWT0N5D --accept-package-agreements --accept-source-agreements`
+  3. Install git: `winget install --id git.git --accept-package-agreements --accept-source-agreements`
   4. Install *Visual Studio 2022 Community*
      1. Download and open [vs_Community.exe](https://aka.ms/vs/17/release/vs_community.exe)
      2. Select *"Desktop development with C++"* Workload
      3. Click *"Install"* button
-     * If `git` not accessible from command prompt, reboot
+     * NOTE: To verify proper install, you should be able to run `cl` from the "Developer Command Prompt for VS 2022" without error.
+  5. Close Terminal (this terminal must be restarted to access newly installed commands)
+     
 - Linux
   3. [Install PowerShell on Ubuntu](https://docs.microsoft.com/en-us/powershell/scripting/install/install-ubuntu)
 - Mac
