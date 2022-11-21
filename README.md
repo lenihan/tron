@@ -46,18 +46,21 @@
 ## Prerequisites
 
 - Windows
-  1. Open Terminal: Start -> Terminal
-  2. Install PowerShell 7+: `winget install --id 9MZ1SNWT0N5D --accept-package-agreements --accept-source-agreements`
-  3. Install git: `winget install --id git.git --accept-package-agreements --accept-source-agreements`
-  4. Install *Visual Studio 2022 Community*
+  1. Open Terminal
+  2. Install git: `winget install --id git.git --accept-package-agreements --accept-source-agreements`
+  3. Install PowerShell 7+: `winget install --id 9MZ1SNWT0N5D --accept-package-agreements --accept-source-agreements`
+  4. Install CMake: `winget install cmake --accept-package-agreements`
+  5. Install Perl (needed for Qt5 installer): `winget install StrawberryPerl.StrawberryPerl --accept-package-agreements`
+  6. Install VS Code: `winget install --id XP9KHM4BK9FZ7Q --accept-package-agreements`
+  7. Install *Visual Studio 2022 Community*
      1. Download and open [vs_Community.exe](https://aka.ms/vs/17/release/vs_community.exe)
      2. Select *"Desktop development with C++"* Workload
      3. Click *"Install"* button
      * NOTE: To verify proper install, you should be able to run `cl` from the "Developer Command Prompt for VS 2022" without error.
-  5. Close Terminal (this terminal must be restarted to access newly installed commands)
+   8. Close Terminal (this terminal must be restarted to access newly installed commands)
      
 - Linux
-  3. [Install PowerShell on Ubuntu](https://docs.microsoft.com/en-us/powershell/scripting/install/install-ubuntu)
+  1. [Install PowerShell on Ubuntu](https://docs.microsoft.com/en-us/powershell/scripting/install/install-ubuntu)
 - Mac
   1. Install brew: `/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"`
   2. Install PowerShell: `brew install –cask powershell`
