@@ -54,7 +54,7 @@
   2. Open Terminal
   3. Install apps via winget...
     ```pwsh
-    "Git.Git", "9MZ1SNWT0N5D", "cmake", "StrawberryPerl.StrawberryPerl", "XP9KHM4BK9FZ7Q" | ForEach-Object {winget install $_ --accept-source-agreements --accept-package-agreements}
+    pwsh -Command {"Git.Git", "9MZ1SNWT0N5D", "cmake", "StrawberryPerl.StrawberryPerl", "XP9KHM4BK9FZ7Q" | ForEach-Object {winget install $_ --accept-source-agreements --accept-package-agreements}}
     ```
   4. Close Terminal (this terminal must be restarted to access newly installed commands)
      
