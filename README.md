@@ -54,11 +54,7 @@
   2. Open Terminal
   3. Install apps via winget...
     ```pwsh
-    winget install Git.Git --accept-source-agreements # git
-    winget install 9MZ1SNWT0N5D --accept-package-agreements # pwsh
-    winget install cmake # cmake
-    winget install StrawberryPerl.StrawberryPerl # perl (required by Qt installer)
-    winget install XP9KHM4BK9FZ7Q --accept-package-agreements # code    
+    "Git.Git", "9MZ1SNWT0N5D", "cmake", "StrawberryPerl.StrawberryPerl", "XP9KHM4BK9FZ7Q" | ForEach-Object {winget install $_ --accept-source-agreements --accept-package-agreements}
     ```
   4. Close Terminal (this terminal must be restarted to access newly installed commands)
      
