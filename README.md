@@ -52,7 +52,7 @@
      3. Click *"Install"* button
      * NOTE: To verify proper install, you should be able to run `cl` from the "Developer Command Prompt for VS 2022" without error.
   2. Open Terminal
-  3. Install via winget
+  3. Install apps via winget...
     ```pwsh
     winget install Git.Git --accept-source-agreements # git
     winget install 9MZ1SNWT0N5D --accept-package-agreements # pwsh
