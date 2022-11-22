@@ -3,6 +3,8 @@
 - [tron - Qt/OpenSceneGraph based libraries and apps](#tron---qtopenscenegraph-based-libraries-and-apps)
   - [Goals](#goals)
   - [Prerequisites](#prerequisites)
+    - [Disk Space](#disk-space)
+    - [Apps](#apps)
   - [Setup](#setup)
   - [Generate Build Files](#generate-build-files)
   - [Run](#run)
@@ -44,6 +46,12 @@
 - Run locally
 
 ## Prerequisites
+
+### Disk Space
+
+A full build uses about 150 GB of disk space.
+
+### Apps
 
 - Windows
   1. Install *Visual Studio 2022 Community*
