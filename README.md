@@ -72,9 +72,10 @@
 ## Setup
 
 1. Open Terminal
-2. `pwsh`
-3. `git clone https://github.com/lenihan/tron.git $HOME/repos/tron`
-4. `~/repos/tron/scripts/setup.ps1`
+2. Run this command
+  ```pwsh
+  pwsh -Command {git clone https://github.com/lenihan/tron.git $HOME/repos/tron; ~/repos/tron/scripts/setup.ps1}
+  ```
 
 ## Generate Build Files
 
