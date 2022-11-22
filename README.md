@@ -68,7 +68,7 @@
 ## Setup
 
 1. Open Terminal
-2. Run this command
+2. Clone repo and run setup script...
   ```pwsh
   pwsh -Command {git clone https://github.com/lenihan/tron.git $HOME/repos/tron; ~/repos/tron/scripts/setup.ps1}
   ```
