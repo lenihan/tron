@@ -52,7 +52,7 @@
      3. Click *"Install"* button
      * NOTE: To verify proper install, you should be able to run `cl` from the "Developer Command Prompt for VS 2022" without error.
   2. Open Terminal
-  3. Install apps via winget...
+  3. Install apps: git, pwsh, cmake, perl, code...
     ```pwsh
     powershell -Command {"Git.Git", "9MZ1SNWT0N5D", "cmake", "StrawberryPerl.StrawberryPerl", "XP9KHM4BK9FZ7Q" | ForEach-Object {winget install $_ --accept-source-agreements --accept-package-agreements}}
     ```
