@@ -4,7 +4,7 @@ add_executable (
     osgbillboard.cpp
 )
 
-set_target_postfix()
+project_common()
 
 find_package(Qt5 COMPONENTS Core REQUIRED)
 target_link_libraries(${PROJECT_NAME} Qt5::Core)

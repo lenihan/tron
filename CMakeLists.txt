@@ -1,7 +1,7 @@
 ﻿# CMakeList.txt : Top-level CMake project file, do global configuration
 # and include sub-projects here.
 #
-cmake_minimum_required(VERSION 3.8)
+cmake_minimum_required(VERSION 3.13)
 project("tron")
 
 # Directory for output files
@@ -15,14 +15,18 @@ foreach(OUTPUTCONFIG ${CMAKE_CONFIGURATION_TYPES})
   set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${CMAKE_BINARY_DIR}/bin CACHE PATH "Output directory for ${OUTPUTCONFIG} executables and DLL's." FORCE)
 endforeach()
 
-# Add postfix to non-Release artifacts
+# Do things for every project
+#   Add postfix to non-Release artifacts
+#   Setup debug environment for Visual Studio
 set(CMAKE_DEBUG_POSTFIX _Debug)
 set(CMAKE_MINSIZEREL_POSTFIX _MinSizeRel)
 set(CMAKE_RELWITHDEBINFO_POSTFIX _RelWithDebInfo)
-function(set_target_postfix)   # Call this after `project()` in each CMakeLists.txt file
+file(STRINGS .env env_file NEWLINE_CONSUME)
+function(project_common)   # Call this after `project()` in each CMakeLists.txt file
   set_target_properties(${PROJECT_NAME} PROPERTIES DEBUG_POSTFIX ${CMAKE_DEBUG_POSTFIX})
   set_target_properties(${PROJECT_NAME} PROPERTIES MINSIZEREL_POSTFIX ${CMAKE_MINSIZEREL_POSTFIX})
   set_target_properties(${PROJECT_NAME} PROPERTIES RELWITHDEBINFO_POSTFIX ${CMAKE_RELWITHDEBINFO_POSTFIX})
+  set_target_properties(${PROJECT_NAME} PROPERTIES VS_DEBUGGER_ENVIRONMENT ${env_file})
 endfunction()
 
 # Group ALL_BUILD.vcxproj and ZERO_CHECK.vcxproj under "CMakePredifinedTargets"

@@ -6,8 +6,7 @@
     - [Disk Space](#disk-space)
     - [Apps](#apps)
   - [Setup](#setup)
-  - [Generate Build Files](#generate-build-files)
-  - [Run](#run)
+  - [Debug](#debug)
   - [Clean](#clean)
   - [Hierarchy](#hierarchy)
   - [Create A CMake Project](#create-a-cmake-project)
@@ -81,37 +80,39 @@ A full build uses about 150 GB of disk space.
   pwsh -Command {git clone https://github.com/lenihan/tron.git $HOME/repos/tron; ~/repos/tron/scripts/setup.ps1}
   ```
 
-## Generate Build Files
+## Debug
 
-1. Open Terminal
-2. `pwsh`
-3. `~/repos/tron/scripts/configure_cmake.ps1`
-
-## Run
-
-- Windows
-  - Visual Studio 2022
-    1. Open Terminal
-    2. `pwsh`
-    3. `~/repos/tron/build/tron.sln`
-    4. Right click project you want to run in *Solution Explorer* and select *Debug > Start New Instance*
-  - Visual Studio Code
-    1. Open Terminal
-    2. `pwsh`
-    3. `code ~/repos/tron` 
-  - WSL - Ubuntu 20.04
-- Linux - Ubuntu 20.04
-- Mac
+- Visual Studio Code
+  1. Open Terminal
+  2. Launch Visual Studio Code with repo folder
+    ```pwsh
+    pwsh -Command {code $HOME/repos/tron}
+    ```
+  3. Install Workspace Recommended extensions
+     - View > Extensions > Filter Extensions... > Recommended
+     - Click "Install" on each extension
+  4. To launch a target, click the "play" icon the status bar (bottom)
+  5. Select a Kit
+     - Mac: TODO
+     - Linux: TODO
+     - Windows: `Visual Studio Community 2022 Release - amd64`
+  6. Select a launch target
+     - `hello_qt` to test Qt  
+     - `hello_osg` to test OpenSceneGraph
+  7. To launch debugger, click the "debug" icon in the status bar (bottom) 
+- Windows: Visual Studio 2022
+  1. Generate .sln file, launch in Visual Studio
+    ```pwsh
+    pwsh -Command {cmake -S ~/repos/tron -B ~/repos/tron/build; ~/repos/tron/build/tron.sln}
+    ``` 
+  2. Solution Explorer > Right click on project > Set as Startup Project
+     - `hello_qt` to test Qt  
+     - `hello_osg` to test OpenSceneGraph
+  3. Debug > Start Debugging 
 
 ## Clean
 
 All output (CMake, compiler, linker, etc.) go to *./build* directory. To clean up, delete *./build*.
-
-To rebuild everything, including third party libraries...
-1. Open Terminal
-2. `pwsh`
-3. `ri ~/repos/tron/build -Recurse -Force`
-4. `ri ~/repos/scripts/reset_third_party.ps1`
 
 ## Hierarchy
 
