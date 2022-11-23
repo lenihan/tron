@@ -171,7 +171,8 @@ function setup_third_party {
                 "tiff", 
                 "wxwidgets",
                 "zlib"
-    if (!$IsWindows) { $packages += "mesa[egl]", "gtk" }
+    if ($IsWindows) {$packages += "opencascade"}
+    if (!$IsWindows) {$packages += "mesa[egl]", "gtk"}
     foreach ($pkg in $packages) {
         $cmd = "$VCPKG_EXE --triplet=$TRIPLET --recurse --overlay-triplets=$CUSTOMVCPKG_TRIPLETS_DIR install $pkg"
         Write-Host $cmd -ForegroundColor Cyan
