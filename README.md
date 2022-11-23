@@ -118,7 +118,7 @@ All output (CMake, compiler, linker, etc.) go to *./build* directory. To clean u
 See `~/repos/tron/src/hello/hello_cmake/CMakeLists.txt` for a simple example.
 
 1. Create `CMakeLists.txt` in project directory under `~/repos/tron/src`
-2. First line name project: `project(<PROJECT_NAME>)`
+2. First line sets project name: `project(<PROJECT_NAME>)`
 3. Add `project_common()` to get settings that apply to all projects.
 4. Add source code to compile via [add_executable](https://cmake.org/cmake/help/latest/command/add_executable.html)
 5. Link libraries with [target_link_libraries](https://cmake.org/cmake/help/latest/command/target_link_libraries.html)
