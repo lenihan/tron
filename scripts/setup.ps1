@@ -163,7 +163,7 @@ function setup_third_party {
                 "tiff", 
                 "wxwidgets",
                 "zlib"
-    if (!$IsWindows) { $packages += "mesa[egl]", "gtk" }
+    if (!$IsWindows) { $packages += "libgl1-mesa-dev", "", "gtk" }
     foreach ($pkg in $packages) {
         $cmd = "$VCPKG_EXE --triplet=$TRIPLET --recurse --overlay-triplets=$CUSTOMVCPKG_TRIPLETS_DIR install $pkg"
         Write-Host $cmd -ForegroundColor Cyan
