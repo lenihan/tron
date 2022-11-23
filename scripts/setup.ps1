@@ -45,6 +45,7 @@ function setup_prerequisites {
                     "build-essential",      # gcc, g++, make, C standard lib, dev tools
                     "libgl1-mesa-dev",      # Fix for "Could not find OpenGL"
                     "freeglut3-dev",        # Fix for "OpenGL::GLU not found
+                    "bison",                # Needed for building gettext
         
                     # From https://doc.qt.io/qt-5/linux-requirements.html
                     "libfontconfig1-dev",
