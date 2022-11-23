@@ -43,6 +43,7 @@ function setup_prerequisites {
         
         $packages = "cmake",                # Needed to generate makefiles for this dev environment
                     "build-essential",      # gcc, g++, make, C standard lib, dev tools
+                    "libgl1-mesa-dev",      # Fix for "Could not find OpenGL"
         
                     # From https://doc.qt.io/qt-5/linux-requirements.html
                     "libfontconfig1-dev",
@@ -163,7 +164,7 @@ function setup_third_party {
                 "tiff", 
                 "wxwidgets",
                 "zlib"
-    if (!$IsWindows) { $packages += "libgl1-mesa-dev", "", "gtk" }
+    if (!$IsWindows) { $packages += "mesa[egl]", "gtk" }
     foreach ($pkg in $packages) {
         $cmd = "$VCPKG_EXE --triplet=$TRIPLET --recurse --overlay-triplets=$CUSTOMVCPKG_TRIPLETS_DIR install $pkg"
         Write-Host $cmd -ForegroundColor Cyan
