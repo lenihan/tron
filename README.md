@@ -8,7 +8,6 @@
   - [Setup](#setup)
   - [Debug](#debug)
   - [Clean](#clean)
-  - [Hierarchy](#hierarchy)
   - [Create A CMake Project](#create-a-cmake-project)
   - [CMake Tips](#cmake-tips)
     - [Helpful Documentation](#helpful-documentation)
@@ -114,34 +113,21 @@ A full build uses about 150 GB of disk space.
 
 All output (CMake, compiler, linker, etc.) go to *./build* directory. To clean up, delete *./build*.
 
-## Hierarchy
-
-- src
-  - hello
-  - sandbox
-- build
-- third_party  
-- .env
-- .gitignore
-- CMakeLists.txt
-- README.md
-
 ## Create A CMake Project 
 
-1. Name your project with `project(<PROJECT_NAME>)`
-2. Create project folder under `~/repos/tron/src`
-3. Create `CMakeLists.txt` in project folder
-   1. [add_executable](https://cmake.org/cmake/help/latest/command/add_executable.html)
-      - Links source code to executable
-   2. [target_link_libraries](https://cmake.org/cmake/help/latest/command/target_link_libraries.html)
-      - Link executable to third party libaries
-4. Update `CmakeLists.txt` in root
-   1. Add project folder via [add_subdirectory](https://cmake.org/cmake/help/latest/command/add_subdirectory.html)
-5. Generate build files in *./build*: Run `./scripts/configure_cmake.ps1` 
-   - What it does if you are running from repo root: `cmake -S . -B ./build`
-6. Open IDE
-   - VS Code `code .`
-   - Visual Studio: `./build/tron.sln`
+See `~/repos/tron/src/hello/hello_cmake/CMakeLists.txt` for a simple example.
+
+1. Create `CMakeLists.txt` in project directory under `~/repos/tron/src`
+2. First line name project: `project(<PROJECT_NAME>)`
+3. Add `project_common()` to get settings that apply to all projects.
+4. Add source code to compile via [add_executable](https://cmake.org/cmake/help/latest/command/add_executable.html)
+5. Link libraries with [target_link_libraries](https://cmake.org/cmake/help/latest/command/target_link_libraries.html)
+6. Add project directory to  `~/repos/tron/CmakeLists.txt` with [add_subdirectory](https://cmake.org/cmake/help/latest/command/add_subdirectory.html)
+7. Generate build files in *./build*
+  ```pwsh
+  pwsh -Command {cmake -S ~/repos/tron -B ~/repos/tron/build}
+  ```
+
 
 ## CMake Tips
 
