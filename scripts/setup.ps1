@@ -46,6 +46,9 @@ function setup_prerequisites {
                     "libgl1-mesa-dev",      # Fix for "Could not find OpenGL"
                     "freeglut3-dev",        # Fix for "OpenGL::GLU not found
                     "bison",                # Needed for building gettext
+                    "nasm",                 # Needed for building ffmpeg
+                    "python3",              # Needed for building fontconfig
+                    "autoconf",             # Needed for building libpq
         
                     # From https://doc.qt.io/qt-5/linux-requirements.html
                     "libfontconfig1-dev",
