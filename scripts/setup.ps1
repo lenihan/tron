@@ -49,6 +49,8 @@ function setup_prerequisites {
                     "nasm",                 # Needed for building ffmpeg
                     "python3",              # Needed for building fontconfig
                     "autoconf",             # Needed for building libpq
+                    "python3-distutils",    # Needed for building fontconfig
+                    "libtool",              # Needed for building gdal
         
                     # From https://doc.qt.io/qt-5/linux-requirements.html
                     "libfontconfig1-dev",
