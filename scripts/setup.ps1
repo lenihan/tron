@@ -143,7 +143,6 @@ function setup_third_party {
                 "fontconfig", 
                 "freetype", 
                 "gdal",
-                # "gtk",  # does not build on windows
                 "giflib", 
                 "glib", 
                 "gstreamer", 
@@ -154,7 +153,6 @@ function setup_third_party {
                 "libpng", 
                 "librsvg",
                 "libxml2",
-                # "mesa[egl]",  # does not build on windows
                 "nvtt",
                 "opencascade",
                 "openjpeg", 
@@ -164,7 +162,8 @@ function setup_third_party {
                 "sdl2",
                 "tiff", 
                 "wxwidgets",
-                "zlib" 
+                "zlib"
+    if (!$IsWindows) { $packages += "mesa[egl]", "gtk" }
     foreach ($pkg in $packages) {
         $cmd = "$VCPKG_EXE --triplet=$TRIPLET --recurse --overlay-triplets=$CUSTOMVCPKG_TRIPLETS_DIR install $pkg"
         Write-Host $cmd -ForegroundColor Cyan

@@ -60,12 +60,19 @@ A full build uses about 150 GB of disk space.
   2. Open Terminal
   3. Install apps: git, pwsh, cmake, perl, code...
     ```pwsh
-    powershell -Command {"Git.Git", "9MZ1SNWT0N5D", "cmake", "StrawberryPerl.StrawberryPerl", "XP9KHM4BK9FZ7Q" | ForEach-Object {winget install $_ --accept-source-agreements --accept-package-agreements}}
+    powershell -Command '"Git.Git", "9MZ1SNWT0N5D", "cmake", "StrawberryPerl.StrawberryPerl", "XP9KHM4BK9FZ7Q" | ForEach-Object {winget install $_ --accept-source-agreements --accept-package-agreements}'
     ```
-  4. Close Terminal (this terminal must be restarted to access newly installed commands)
+  4. Close Terminal (this terminal must be restarted to access newly installed apps)
      
 - Linux
-  1. [Install PowerShell on Ubuntu](https://docs.microsoft.com/en-us/powershell/scripting/install/install-ubuntu)
+  1. Open Terminal
+  2. Install apps: pwsh, git, curl, zip, unzip, tar
+    ```pwsh
+    sudo snap install powershell --channel=lts/stable --classic
+    sudo apt-get install git --yes
+    sudo apt-get install curl zip unzip tar --yes
+    ```
+
 - Mac
   1. Install brew: `/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"`
   2. Install PowerShell: `brew install –cask powershell`
@@ -76,7 +83,7 @@ A full build uses about 150 GB of disk space.
 1. Open Terminal
 2. Clone repo and run setup script...
   ```pwsh
-  pwsh -Command {git clone https://github.com/lenihan/tron.git $HOME/repos/tron; ~/repos/tron/scripts/setup.ps1}
+  pwsh -Command 'git clone https://github.com/lenihan/tron.git $HOME/repos/tron; ~/repos/tron/scripts/setup.ps1'
   ```
 
 ## Debug
