@@ -66,7 +66,7 @@ A full build uses about 150 GB of disk space.
      
 - Linux
   1. Open Terminal
-  2. Install apps: pwsh, git, curl, zip, unzip, tar
+  2. Install apps: pwsh, git
     ```pwsh
     sudo snap install powershell --channel=lts/stable --classic
     sudo apt-get install git --yes
