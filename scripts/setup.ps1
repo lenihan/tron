@@ -52,6 +52,7 @@ function setup_prerequisites {
                     "python3-distutils",    # For fontconfig
                     "libtool",              # For gdal
                     "curl",
+                    "python3.8-venv",       # For mesa
 
                     # For wxwidgets
                     "pkg-config",
