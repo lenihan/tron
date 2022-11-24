@@ -53,6 +53,7 @@ function setup_prerequisites {
                     "libtool",              # For gdal
                     "curl",
                     "python3.8-venv",       # For mesa
+                    "flex",
 
                     # For wxwidgets
                     "pkg-config",
