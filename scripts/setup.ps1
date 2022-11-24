@@ -175,9 +175,8 @@ function setup_third_party {
                 "sdl1",
                 "sdl2",
                 "tiff", 
-                "wxwidgets",
                 "zlib"
-    if ($IsWindows) {$packages += "opencascade", "gstreamer"}
+    if ($IsWindows) {$packages += "opencascade", "gstreamer", "wxwidgets"}
     if (!$IsWindows) {$packages += "mesa[egl]", "gtk"}
     foreach ($pkg in $packages) {
         $cmd = "$VCPKG_EXE --triplet=$TRIPLET --recurse --overlay-triplets=$CUSTOMVCPKG_TRIPLETS_DIR install $pkg"
