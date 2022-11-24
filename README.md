@@ -70,7 +70,6 @@ A full build uses about 150 GB of disk space.
     ```pwsh
     sudo snap install powershell --channel=lts/stable --classic
     sudo apt-get install git --yes
-    sudo apt-get install curl zip unzip tar --yes
     ```
 
 - Mac

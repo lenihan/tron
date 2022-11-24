@@ -51,6 +51,7 @@ function setup_prerequisites {
                     "autoconf",             # For libpq
                     "python3-distutils",    # For fontconfig
                     "libtool",              # For gdal
+                    "curl",
 
                     # For wxwidgets
                     "pkg-config",
@@ -160,7 +161,6 @@ function setup_third_party {
                 "gdal",
                 "giflib", 
                 "glib", 
-                "gstreamer", 
                 "ilmbase", 
                 "jasper",
                 "libgta", 
@@ -169,7 +169,6 @@ function setup_third_party {
                 "librsvg",
                 "libxml2",
                 "nvtt",
-                "opencascade",
                 "openjpeg", 
                 "openexr",
                 "poppler",
@@ -178,7 +177,7 @@ function setup_third_party {
                 "tiff", 
                 "wxwidgets",
                 "zlib"
-    if ($IsWindows) {$packages += "opencascade"}
+    if ($IsWindows) {$packages += "opencascade", "gstreamer"}
     if (!$IsWindows) {$packages += "mesa[egl]", "gtk"}
     foreach ($pkg in $packages) {
         $cmd = "$VCPKG_EXE --triplet=$TRIPLET --recurse --overlay-triplets=$CUSTOMVCPKG_TRIPLETS_DIR install $pkg"
