@@ -45,12 +45,19 @@ function setup_prerequisites {
                     "build-essential",      # gcc, g++, make, C standard lib, dev tools
                     "libgl1-mesa-dev",      # Fix for "Could not find OpenGL"
                     "freeglut3-dev",        # Fix for "OpenGL::GLU not found
-                    "bison",                # Needed for building gettext
-                    "nasm",                 # Needed for building ffmpeg
-                    "python3",              # Needed for building fontconfig
-                    "autoconf",             # Needed for building libpq
-                    "python3-distutils",    # Needed for building fontconfig
-                    "libtool",              # Needed for building gdal
+                    "bison",                # For gettext
+                    "nasm",                 # For ffmpeg
+                    "python3",              # For fontconfig
+                    "autoconf",             # For libpq
+                    "python3-distutils",    # For fontconfig
+                    "libtool",              # For gdal
+
+                    # For wxwidgets
+                    "pkg-config",
+                    "libgtk-3-dev",
+                    "libsecret-1-dev",
+                    "libgcrypt20-dev",
+                    "libsystemd-dev",
         
                     # From https://doc.qt.io/qt-5/linux-requirements.html
                     "libfontconfig1-dev",
