@@ -49,6 +49,7 @@ function setup_prerequisites {
                     "bison",                # For gettext
                     "nasm",                 # For ffmpeg
                     "python3",              # For fontconfig
+                    "python",               # For QtQML
                     "autoconf",             # For libpq
                     "python3-distutils",    # For fontconfig
                     "libtool",              # For gdal
