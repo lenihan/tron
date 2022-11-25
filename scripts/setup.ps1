@@ -41,8 +41,7 @@ function setup_prerequisites {
         function is_package_installed($pkg) {if ($installed_packages | Select-String "^$pkg/") {$true} else {$false}}
         function is_package_upgradeable($pkg) {if ($upgradeable_packages | Select-String "^$pkg/") {$true} else {$false}}
         
-        $packages = "code",                 # default ide
-                    "cmake",                # Needed to generate makefiles for this dev environment
+        $packages = "cmake",                # Needed to generate makefiles for this dev environment
                     "build-essential",      # gcc, g++, make, C standard lib, dev tools
                     "libgl1-mesa-dev",      # Fix for "Could not find OpenGL"
                     "freeglut3-dev",        # Fix for "OpenGL::GLU not found
