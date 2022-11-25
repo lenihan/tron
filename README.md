@@ -97,9 +97,9 @@ A full build uses about 150 GB of disk space.
      - Click "Install" on each extension
   4. To launch a target, click the "play" icon the status bar (bottom)
   5. Select a Kit
-     - Mac: TODO
-     - Linux: TODO
      - Windows: `Visual Studio Community 2022 Release - amd64`
+     - Linux: `GCC 9.4.0 x86_64-linux-gnu`
+     - Mac: TODO
   6. Select a launch target
      - `hello_qt` to test Qt  
      - `hello_osg` to test OpenSceneGraph
