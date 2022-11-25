@@ -200,7 +200,7 @@ function setup_third_party {
         $SDL_LIB_RELEASE = Join-Path $VCPKG_INSTALLED_TRIPLET_DIR lib manual-link SDLmain.lib
         $SDL_LIB_DEBUG = Join-Path $VCPKG_INSTALLED_TRIPLET_DIR debug lib manual-link SDLmaind.lib
         $SDL_LIB = if ($config -eq "Release") {$SDL_LIB_RELEASE} else {$SDL_LIB_DEBUG}
-        echo_command "cmake -S $OSG_DIR -B $out_dir -DCMAKE_BUILD_TYPE=$config -DBUILD_OSG_EXAMPLES:BOOL=ON -DCMAKE_PREFIX_PATH=$VCPKG_INSTALLED_TRIPLET_DIR -DSDLMAIN_LIBRARY:FILEPATH=$SDL_LIB -DMACOSX_RPATH=TRUE # ~1 min"
+        echo_command "cmake -S $OSG_DIR -B $out_dir -DCMAKE_BUILD_TYPE=$config -DBUILD_OSG_EXAMPLES:BOOL=ON -DCMAKE_PREFIX_PATH=$VCPKG_INSTALLED_TRIPLET_DIR -DSDLMAIN_LIBRARY:FILEPATH=$SDL_LIB -DMACOSX_RPATH=TRUE -DOpenGL_GL_PREFERENCE=GLVND # ~1 min"
         if ($IsLinux -or $IsMacOS) {
             echo_command "make -C $out_dir --jobs=$most_procs  # ~50 min"
         }
