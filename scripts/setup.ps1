@@ -140,8 +140,7 @@ function setup_third_party {
     # git clone vcpkg
     Write-Host "git clone vcpkg..." -ForegroundColor Green
     New-Item -ItemType Directory $THIRD_PARTY_DIR -Force | Out-Null
-    $TAG = "2022.11.14"
-    # $TAG = "2022.06.16.1" Works on windows, jpeg errors on Linux
+    $TAG = "2022.06.16.1" Works on windows, jpeg errors on Linux
     $REPO_URL = "https://github.com/Microsoft/vcpkg.git"
     echo_command "git clone --branch $TAG $REPO_URL $VCPKG_DIR -c advice.detachedHead=false"
     # build vcpkg
@@ -163,6 +162,7 @@ function setup_third_party {
                 "fltk", 
                 "fontconfig", 
                 "freetype", 
+                "openjpeg", # needed before gdal
                 "gdal",
                 "giflib", 
                 "glib", 
@@ -174,7 +174,6 @@ function setup_third_party {
                 "librsvg",
                 "libxml2",
                 "nvtt",
-                "openjpeg", 
                 "openexr",
                 "poppler",
                 "sdl1",
