@@ -140,7 +140,7 @@ function setup_third_party {
     # git clone vcpkg
     Write-Host "git clone vcpkg..." -ForegroundColor Green
     New-Item -ItemType Directory $THIRD_PARTY_DIR -Force | Out-Null
-    $TAG = "2022.06.16.1" Works on windows, jpeg errors on Linux
+    $TAG = "2022.06.16.1"
     $REPO_URL = "https://github.com/Microsoft/vcpkg.git"
     echo_command "git clone --branch $TAG $REPO_URL $VCPKG_DIR -c advice.detachedHead=false"
     # build vcpkg
