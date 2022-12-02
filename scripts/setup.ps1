@@ -15,7 +15,7 @@ $QT_DIR = Join-Path $THIRD_PARTY_DIR qt5
 function echo_command($cmd) {
     Write-Host $cmd -ForegroundColor Cyan
     $results = Invoke-Expression $cmd
-    if ($results.Count) {$results[-1]} else {$null}
+    if ($results.Count) {$results} else {$null}
 }
 
 function setup_prerequisites {
@@ -51,13 +51,55 @@ function setup_prerequisites {
                     "libxext-dev",          # for angle (used by qt5)
                     "autoconf",             # for icu (used by qt5)
                     "autoconf-archive",     # for icu (used by qt5)
-                    "libx11-xcb-dev",       # for qt5
-                    "libxcb-xinerama0-dev"  # for qt5
+                    # "libx11-xcb-dev",       # for qt5
+                    # "libxcb-xinerama0-dev"  # for qt5
+
+                    # "libx11-dev",
+                    # "libx11-xcb-dev",
+                    # "libxext-dev",
+                    # "libxfixes-dev",
+                    # "libxi-dev",
+                    # "libxrender-dev",
+                    # "libxcb1-dev",
+                    # "libxcb-glx0-dev",
+                    # "libxcb-keysyms1-dev",
+                    # "libxcb-image0-dev",
+                    # "libxcb-shm0-dev",
+                    # "libxcb-icccm4-dev",
+                    # "libxcb-sync-dev",
+                    # "libxcb-xfixes0-dev",
+                    # "libxcb-shape0-dev",
+                    # "libxcb-randr0-dev",
+                    # "libxcb-render-util0-dev",
+                    # "libxcb-xinerama0-dev",
+                    # "libxkbcommon-dev",
+                    # "libxkbcommon-x11-dev",
+                    
+                    # for qt5: qt5-base from https://github.com/microsoft/vcpkg/blob/master/scripts/azure-pipelines/linux/provision-image.sh
+                    "libxext-dev",
+                    "libxfixes-dev",
+                    "libxrender-dev",
+                    "libxcb1-dev",
+                    "libx11-xcb-dev",
+                    "libxcb-glx0-dev",
+                    "libxcb-util0-dev",
+                    "libxkbcommon-dev",
+                    "libxcb-keysyms1-dev",
+                    "libxcb-image0-dev",
+                    "libxcb-shm0-dev",
+                    "libxcb-icccm4-dev",
+                    "libxcb-sync-dev",
+                    "libxcb-xfixes0-dev",
+                    "libxcb-shape0-dev",
+                    "libxcb-randr0-dev",
+                    "libxcb-render-util0-dev",
+                    "libxcb-xinerama0-dev",
+                    "libxcb-xkb-dev",
+                    "libxcb-xinput-dev"
 
 
 
-
-                    # libglx-dev ???
+                   # libglx-dev ???
 
 
                     # "libx11-dev",           # for angle (used by qt5)
@@ -119,11 +161,11 @@ function setup_prerequisites {
             if (!$installed) {
                 if (!$ran_apt_update) {
                     Write-Host "Updating apt..." -ForegroundColor Green
-                    bash -c "sudo apt update"
+                    echo_command "sudo apt update"
                     $ran_apt_update = $true
                 }
                 Write-Host "Installing $pkg..." -ForegroundColor Green
-                bash -c "sudo apt install -y $pkg"
+                echo_command "sudo apt install -y $pkg"
             }
         }
         foreach ($pkg in $packages) {
@@ -131,11 +173,11 @@ function setup_prerequisites {
             if ($upgradeable) {
                 if (!$ran_apt_update) {
                     Write-Host "Updating apt..." -ForegroundColor Green
-                    bash -c "sudo apt update"
+                    echo_command "sudo apt update"
                     $ran_apt_update = $true
                 }
                 Write-Host "Upgrading $pkg..." -ForegroundColor Green
-                bash -c "sudo apt upgrade -y $pkg"
+                echo_command "sudo apt upgrade -y $pkg"
             }
         }
     }
