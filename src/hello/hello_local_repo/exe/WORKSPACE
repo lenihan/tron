@@ -1,0 +1,5 @@
+
+local_repository(
+    name = "helper_dll",
+    path = "../dll/",
+)
