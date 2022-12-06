@@ -25,3 +25,21 @@ cc_binary(
     ],
     linkstatic=False,
 )
+
+cc_library(
+    name = "other",
+    srcs = ["other.cc"],
+    hdrs = ["other.hh"],
+    linkstatic=True,
+)
+
+# The main2 links helper lib dynamically but other staticly
+cc_binary(
+    name = "main2",
+    srcs = ["main2.cc"],
+    deps = [
+        ":helper",
+        ":other",
+    ],
+    linkstatic=False,
+)

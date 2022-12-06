@@ -1,5 +1,5 @@
 #pragma once
 
-void say_hello();
+void hello_helper();
 
 

@@ -1,7 +1,7 @@
 #include "helper.hh"
 #include <iostream>
 
-void say_hello()
+void hello_helper()
 {
-  std::cout << "Hello world" << std::endl;
+  std::cout << "I am a helper lib" << std::endl;
 }
