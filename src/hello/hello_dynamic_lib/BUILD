@@ -33,7 +33,7 @@ cc_library(
     linkstatic=True,
 )
 
-# The main2 links helper lib dynamically but other staticly
+# The main2 links helper lib dynamically and other lib statically
 cc_binary(
     name = "main2",
     srcs = ["main2.cc"],
