@@ -72,7 +72,11 @@ function setup_prerequisites {
                     # "libxcb-xinerama0-dev",
                     # "libxkbcommon-dev",
                     # "libxkbcommon-x11-dev",
-                    
+        
+                    # TO FIX ERROR: Feature 'xcb' was enabled, but the pre-condition 'features.thread && libs.xcb && tests.xcb_syslibs && features.xkbcommon-x11' failed.
+                    "libx11-dev",
+                    "libxkbcommon-x11-dev",                    
+
                     # for qt5: qt5-base from https://github.com/microsoft/vcpkg/blob/master/scripts/azure-pipelines/linux/provision-image.sh
                     "libxext-dev",
                     "libxfixes-dev",
