@@ -6,8 +6,6 @@ if ($IsWindows) {$TRIPLET = "x64-windows"}
 if ($IsLinux)   {$TRIPLET = "x64-linux"}    
 if ($IsMacOS)   {$TRIPLET = "x64-osx"}     
 $VCPKG_DIR = Join-Path $THIRD_PARTY_DIR vcpkg
-$VCPKG_INSTALLED_DIR = Join-Path $VCPKG_DIR installed
-$VCPKG_INSTALLED_TRIPLET_DIR = Join-Path $VCPKG_INSTALLED_DIR $TRIPLET
 
 $OSG_DIR = Join-Path $THIRD_PARTY_DIR OpenSceneGraph
 $QT_DIR = Join-Path $THIRD_PARTY_DIR qt5
@@ -251,6 +249,18 @@ function setup_third_party {
     #             "tiff", 
     #             "zlib"
     # if ($IsWindows) {$packages += "opencascade", "gstreamer", "wxwidgets"}
+    if ($IsLinux -or $IsMacOS) {
+        # vcpkg tools 
+        # (e.g. installed/x64-linux/tools/pkgconf/pkgconf) 
+        # need access to vcpkg build .so's 
+        # (e.g. installed/x64-linux/debug/lib/libpkgconf.so)
+        $VCPKG_LIB_DIR = Join-Path $VCPKG_DIR install $TRIPLET lib
+        $VCPKG_LIB_DIR_DEBUG = Join-Path $VCPKG_DIR install $TRIPLET debug lib
+        $sep = [IO.Path]::PathSeparator # : on linux/macos, ; on windows
+        $paths = $env:LD_LIBRARY_PATH -split $sep
+        if ($paths -notcontains $VCPKG_LIB_DIR) {$env:LD_LIBRARY_PATH += $VCPKG_LIB_DIR}
+        if ($paths -notcontains $VCPKG_LIB_DIR_DEBUG) {$env:LD_LIBRARY_PATH += $VCPKG_LIB_DIR_DEBUG}
+    }
     foreach ($pkg in $packages) {
         $cmd = "$VCPKG_EXE --recurse --overlay-triplets=$CUSTOMVCPKG_TRIPLETS_DIR install $pkg"
         Write-Host $cmd -ForegroundColor Cyan
@@ -352,10 +362,8 @@ function setup_environment_file {
     }
 
     # VCPKG
-    $VCPKG_INSTALLED_DIR = Join-Path $VCPKG_DIR installed
- 
-    $VCPKG_BIN_DIR = Join-PATH $VCPKG_INSTALLED_DIR $TRIPLET bin
-    $VCPKG_BIN_DIR_DEBUG = Join-PATH $VCPKG_INSTALLED_DIR $TRIPLET debug bin
+    $VCPKG_BIN_DIR = Join-PATH  $VCPKG_DIR installed $TRIPLET bin
+    $VCPKG_BIN_DIR_DEBUG = Join-PATH  $VCPKG_DIR installed $TRIPLET debug bin
 
     # OSG
     $OSG_BIN_DIR = Join-Path $OSG_DIR build Release bin
