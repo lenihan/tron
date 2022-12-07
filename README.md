@@ -81,7 +81,7 @@ A full build uses about 150 GB of disk space.
 1. Open Terminal
 2. Clone repo and run setup script...
   ```pwsh
-  pwsh -Command 'git clone https://github.com/lenihan/tron.git $HOME/repos/tron; ~/repos/tron/scripts/setup.ps1'
+  pwsh -Command 'git clone https://github.com/lenihan/tron.git ~/repos/tron; ~/repos/tron/scripts/setup.ps1'
   ```
 
 ## Debug
@@ -90,7 +90,7 @@ A full build uses about 150 GB of disk space.
   1. Open Terminal
   2. Launch Visual Studio Code with repo folder
     ```pwsh
-    pwsh -Command {code $HOME/repos/tron}
+    pwsh -Command 'code ~/repos/tron'
     ```
   3. Install Workspace Recommended extensions
      - View > Extensions > Filter Extensions... > Recommended
@@ -107,7 +107,7 @@ A full build uses about 150 GB of disk space.
 - Windows: Visual Studio 2022
   1. Generate .sln file, launch in Visual Studio
     ```pwsh
-    pwsh -Command {cmake -S ~/repos/tron -B ~/repos/tron/build; ~/repos/tron/build/tron.sln}
+    pwsh -Command 'cmake -S ~/repos/tron -B ~/repos/tron/build; ~/repos/tron/build/tron.sln'
     ``` 
   2. Solution Explorer > Right click on project > Set as Startup Project
      - `hello_qt` to test Qt  
@@ -130,7 +130,7 @@ See `~/repos/tron/src/hello/hello_cmake/CMakeLists.txt` for a simple example.
 6. Add project directory to  `~/repos/tron/CmakeLists.txt` with [add_subdirectory](https://cmake.org/cmake/help/latest/command/add_subdirectory.html)
 7. Generate build files in *./build*
   ```pwsh
-  pwsh -Command {cmake -S ~/repos/tron -B ~/repos/tron/build}
+  pwsh -Command 'cmake -S ~/repos/tron -B ~/repos/tron/build'
   ```
 
 

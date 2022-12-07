@@ -44,40 +44,15 @@ function setup_prerequisites {
                     "bison",                # for gettext  (used by osg)
                     "python3-distutils",    # for fontconfig (used by osg)
                     "libgl1-mesa-dev",      # for osg "Could not find OpenGL"
+
+                    # for qt5: Some learned from https://github.com/microsoft/vcpkg/blob/master/scripts/azure-pipelines/linux/provision-image.sh
                     "libglu1-mesa-dev",     # for freeglut (used by qt5)
                     "libxi-dev",            # for angle (used by qt5)
                     "libxext-dev",          # for angle (used by qt5)
                     "autoconf",             # for icu (used by qt5)
                     "autoconf-archive",     # for icu (used by qt5)
-                    # "libx11-xcb-dev",       # for qt5
-                    # "libxcb-xinerama0-dev"  # for qt5
-
-                    # "libx11-dev",
-                    # "libx11-xcb-dev",
-                    # "libxext-dev",
-                    # "libxfixes-dev",
-                    # "libxi-dev",
-                    # "libxrender-dev",
-                    # "libxcb1-dev",
-                    # "libxcb-glx0-dev",
-                    # "libxcb-keysyms1-dev",
-                    # "libxcb-image0-dev",
-                    # "libxcb-shm0-dev",
-                    # "libxcb-icccm4-dev",
-                    # "libxcb-sync-dev",
-                    # "libxcb-xfixes0-dev",
-                    # "libxcb-shape0-dev",
-                    # "libxcb-randr0-dev",
-                    # "libxcb-render-util0-dev",
-                    # "libxcb-xinerama0-dev",
-                    # "libxkbcommon-dev",
-                    # "libxkbcommon-x11-dev",
-        
-                    # TO FIX ERROR: Feature 'xcb' was enabled, but the pre-condition 'features.thread && libs.xcb && tests.xcb_syslibs && features.xkbcommon-x11' failed.
                     "libx11-dev",
                     "libxkbcommon-x11-dev",                    
-
-                    # for qt5: qt5-base from https://github.com/microsoft/vcpkg/blob/master/scripts/azure-pipelines/linux/provision-image.sh
                     "libxext-dev",
                     "libxfixes-dev",
                     "libxrender-dev",
@@ -99,74 +74,14 @@ function setup_prerequisites {
                     "libxcb-xkb-dev",
                     "libxcb-xinput-dev"
 
-
-
-                   # libglx-dev ???
-
-
-                    # "libx11-dev",           # for angle (used by qt5)
-                    # "libmesa-dev",          # for angle (used by qt5)
-                    # "libxi-dev",            # for angle (used by qt5)
-                    # "libxext-dev"           # for angle (used by qt5)
-
-
-
-        # $packages = "cmake",                # Needed to generate makefiles for this dev environment
-        #             "build-essential",      # gcc, g++, make, C standard lib, dev tools
-        #             "libgl1-mesa-dev",      # Fix for "Could not find OpenGL"
-        #             "freeglut3-dev",        # Fix for "OpenGL::GLU not found
-        #             "bison",                # For gettext
-        #             "nasm",                 # For ffmpeg
-        #             "python3",              # For fontconfig
-        #             "python",               # For QtQML
-        #             "autoconf",             # For libpq
-        #             "python3-distutils",    # For fontconfig
-        #             "libtool",              # For gdal
-        #             "curl",
-        #             "python3.8-venv",       # For mesa
-        #             "flex",                 # For mesa
-        #             "libdrm-intel1",        # For mesa
-
-        #             # For wxwidgets
-        #             "pkg-config",
-        #             "libgtk-3-dev",
-        #             "libsecret-1-dev",
-        #             "libgcrypt20-dev",
-        #             "libsystemd-dev",
-        
-        #             # From https://doc.qt.io/qt-5/linux-requirements.html
-        #             "libfontconfig1-dev",
-        #             "libfreetype6-dev",
-        #             "libx11-dev",
-        #             "libx11-xcb-dev",
-        #             "libxext-dev",
-        #             "libxfixes-dev",
-        #             "libxi-dev",
-        #             "libxrender-dev",
-        #             "libxcb1-dev",
-        #             "libxcb-glx0-dev",
-        #             "libxcb-keysyms1-dev",
-        #             "libxcb-image0-dev",
-        #             "libxcb-shm0-dev",
-        #             "libxcb-icccm4-dev",
-        #             "libxcb-sync-dev",      # "libxcb-sync0-dev" not found -> use "libxcb-sync-dev"
-        #             "libxcb-xfixes0-dev",
-        #             "libxcb-shape0-dev",
-        #             "libxcb-randr0-dev",
-        #             "libxcb-render-util0-dev",
-        #             # "libxcd-xinerama-dev", # not supported anymore? https://askubuntu.com/questions/5138/how-do-i-best-enable-xinerama
-        #             "libxkbcommon-dev",
-        #             "libxkbcommon-x11-dev"
         $ran_apt_update = $false
         foreach ($pkg in $packages) {
             $installed = is_package_installed($pkg)
             if (!$installed) {
                 if (!$ran_apt_update) {
-                    Write-Host "Updating apt..." -ForegroundColor Green
                     echo_command "sudo apt update"
                     $ran_apt_update = $true
                 }
-                Write-Host "Installing $pkg..." -ForegroundColor Green
                 echo_command "sudo apt install -y $pkg"
             }
         }
@@ -174,11 +89,9 @@ function setup_prerequisites {
             $upgradeable = is_package_upgradeable($pkg)
             if ($upgradeable) {
                 if (!$ran_apt_update) {
-                    Write-Host "Updating apt..." -ForegroundColor Green
                     echo_command "sudo apt update"
                     $ran_apt_update = $true
                 }
-                Write-Host "Upgrading $pkg..." -ForegroundColor Green
                 echo_command "sudo apt upgrade -y $pkg"
             }
         }
@@ -226,33 +139,8 @@ function setup_third_party {
     $CUSTOMVCPKG_TRIPLETS_DIR = Join-Path $CUSTOMVCPKG_DIR triplets
     $packages = "osg", 
                 "qt5"
-    # $packages = "coin",
-    #             "collada-dom", 
-    #             "curl", 
-    #             "dcmtk", 
-    #             "ffmpeg", 
-    #             "fltk", 
-    #             "fontconfig", 
-    #             "freetype", 
-    #             "openjpeg", # needed before gdal
-    #             "gdal",
-    #             "giflib", 
-    #             "glib", 
-    #             "ilmbase", 
-    #             "jasper",
-    #             "libgta", 
-    #             "liblas",
-    #             "libpng", 
-    #             "librsvg",
-    #             "libxml2",
-    #             "nvtt",
-    #             "openexr",
-    #             "poppler",
-    #             "sdl1",
-    #             "sdl2",
-    #             "tiff", 
-    #             "zlib"
-    # if ($IsWindows) {$packages += "opencascade", "gstreamer", "wxwidgets"}
+
+    # Setup LD_LIBRARY_PATH to access libraries in vcpkg
     if ($IsLinux -or $IsMacOS) {
         # vcpkg tools 
         # (e.g. installed/x64-linux/tools/pkgconf/pkgconf) 
@@ -271,69 +159,6 @@ function setup_third_party {
         Write-Host $cmd -ForegroundColor Cyan
         Invoke-Expression $cmd
     }
-
-    # ################
-    # # OpenSceneGraph
-    # ################
-    # Write-Host "Build OpenSceneGraph..." -ForegroundColor Green
-    # if ($IsLinux) {$most_procs = $(nproc) - 1}
-    # if ($IsMacOS) {$most_procs = $(sysctl -n hw.ncpu) - 1}
-    # if ($IsWindows) {$most_procs = (Get-CimInstance –ClassName Win32_Processor).NumberOfLogicalProcessors - 1}
-    # echo_command "git clone --branch OpenSceneGraph-3.6.5 https://github.com/openscenegraph/OpenSceneGraph.git $OSG_DIR -c advice.detachedHead=false"
-    # $configs = "Release", "Debug" 
-    # foreach ($config in $configs) {
-    #     $out_dir = Join-Path $OSG_DIR build $config
-    #     $SDL_LIB_RELEASE = Join-Path $VCPKG_INSTALLED_TRIPLET_DIR lib manual-link SDLmain.lib
-    #     $SDL_LIB_DEBUG = Join-Path $VCPKG_INSTALLED_TRIPLET_DIR debug lib manual-link SDLmaind.lib
-    #     $SDL_LIB = if ($config -eq "Release") {$SDL_LIB_RELEASE} else {$SDL_LIB_DEBUG}
-    #     echo_command "cmake -S $OSG_DIR -B $out_dir -DCMAKE_BUILD_TYPE=$config -DBUILD_OSG_EXAMPLES:BOOL=ON -DCMAKE_PREFIX_PATH=$VCPKG_INSTALLED_TRIPLET_DIR -DSDLMAIN_LIBRARY:FILEPATH=$SDL_LIB -DMACOSX_RPATH=TRUE -DOpenGL_GL_PREFERENCE=GLVND # ~1 min"
-    #     if ($IsLinux -or $IsMacOS) {
-    #         echo_command "make -C $out_dir --jobs=$most_procs  # ~50 min"
-    #     }
-    #     elseif ($IsWindows) {
-    #         $sln = Join-Path $out_dir OpenSceneGraph.sln
-    #         echo_command "msbuild $sln -p:Configuration=$config -maxCpuCount:$most_procs  # ~27 min"
-    #     }
-    # }
-
-    # ####
-    # # Qt
-    # ####
-    # Write-Host "Build Qt5..." -ForegroundColor Green
-    # $QT_DIR = Join-Path $THIRD_PARTY_DIR qt5
-    # if ($IsLinux) {$most_procs = $(nproc) - 1}
-    # if ($IsMacOS) {$most_procs = $(sysctl -n hw.ncpu) - 1}
-    # if ($IsWindows) {$most_procs = (Get-CimInstance –ClassName Win32_Processor).NumberOfLogicalProcessors - 1}
-    # echo_command "git clone --branch v5.15.0 https://github.com/qt/qt5.git $QT_DIR -c advice.detachedHead=false"
-    # echo_command "Set-Location $QT_DIR"
-    # echo_command "perl ./init-repository  # ~57 min"
-    # if ($IsLinux -or $IsMacOS) {
-    #     $configs = "Release", "Debug"   
-    #     foreach ($config in $configs) {
-    #         $out_dir = Join-Path $QT_DIR build $config
-    #         $null = New-Item -ItemType Directory -Force $out_dir
-    #         echo_command "Set-Location $out_dir"
-    #         if ($config -eq "Release") {echo_command "$QT_DIR/configure -opensource -confirm-license -$config -developer-build # ~2 min"}
-    #         if ($config -eq "Debug")   {echo_command "$QT_DIR/configure -opensource -confirm-license -$config -developer-build -qtlibinfix d -qtlibinfix-plugins -nomake examples -nomake tools -nomake tests  # ~2 min"}
-    #         echo_command "make --jobs=$most_procs  # ~55 min"
-    #     }
-    # }
-    # if ($IsWindows) {
-    #     $out_dir = Join-Path $QT_DIR build
-    #     $null = New-Item -ItemType Directory -Force $out_dir
-    #     echo_command "Set-Location $out_dir"
-
-    #     # Setup Qt's Jom - nmake with support for multiple processors https://wiki.qt.io/Jom
-    #     echo_command "Invoke-WebRequest -Uri https://download.qt.io/official_releases/jom/jom.zip -OutFile jom.zip"
-    #     echo_command "Expand-Archive jom.zip -Force"
-    #     $JOM_EXE = Join-Path jom jom.exe
-
-    #     $configure = Join-Path $QT_DIR configure.bat
-    #     echo_command "$configure -opensource -confirm-license -platform win32-msvc "
-    #     echo_command "$JOM_EXE /J $most_procs  # ~1 hour 20 min" 
-    #     # NOTE: nmake uses single processor and takes ~4 hours, 40 min" 
-    # }
-    # echo_command "Set-Location $ROOT_DIR"
 
     # Download OSG data (models, textures)
     Write-Host "git clone OpenSceneGraph-Data" -ForegroundColor Green
@@ -385,11 +210,9 @@ function setup_environment_file {
     $PATH = $new_path_array -join [IO.Path]::PathSeparator
 
     # LD_LIBRARY_PATH environment variable
-    $OSG_LIB_DIR = Join-Path $OSG_DIR build Release lib
-    $OSG_LIB_DIR_DEBUG = Join-Path $OSG_DIR build Debug lib
-    $QT_LIB_DIR = Join-Path $QT_DIR build Release qtbase lib
-    $QT_LIB_DIR_DEBUG = Join-Path $QT_DIR build Debug qtbase lib
-    $LD_LIBRARY_PATH = $OSG_LIB_DIR, $OSG_LIB_DIR_DEBUG, $QT_LIB_DIR, $QT_LIB_DIR_DEBUG -join [IO.Path]::PathSeparator
+    $VCPKG_LIB_DIR = Join-Path $VCPKG_DIR installed $TRIPLET lib
+    $VCPKG_LIB_DIR_DEBUG = Join-Path $VCPKG_DIR installed $TRIPLET debug lib
+    $LD_LIBRARY_PATH = $VCPKG_LIB_DIR, $VCPKG_LIB_DIR_DEBUG -join [IO.Path]::PathSeparator
 
     # Output .env
     if ($IsWindows) {
@@ -403,6 +226,7 @@ VSCMD_ARG_TGT_ARCH=$env:VSCMD_ARG_TGT_ARCH
 @"
 LD_LIBRARY_PATH=$LD_LIBRARY_PATH
 OSG_FILE_PATH=$OSG_FILE_PATH
+PATH=$PATH
 "@ | Set-Content $ENV_FILE
     }
     
@@ -442,4 +266,4 @@ OSG_FILE_PATH=$OSG_FILE_PATH
 setup_prerequisites
 setup_build_environment
 setup_third_party
-# setup_environment_file
+setup_environment_file
