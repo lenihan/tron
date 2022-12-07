@@ -252,7 +252,7 @@ function setup_third_party {
     #             "zlib"
     # if ($IsWindows) {$packages += "opencascade", "gstreamer", "wxwidgets"}
     foreach ($pkg in $packages) {
-        $cmd = "$VCPKG_EXE --triplet=$TRIPLET --recurse --overlay-triplets=$CUSTOMVCPKG_TRIPLETS_DIR install $pkg"
+        $cmd = "$VCPKG_EXE --recurse --overlay-triplets=$CUSTOMVCPKG_TRIPLETS_DIR install $pkg"
         Write-Host $cmd -ForegroundColor Cyan
         Invoke-Expression $cmd
     }
