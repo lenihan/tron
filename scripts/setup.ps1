@@ -254,12 +254,13 @@ function setup_third_party {
         # (e.g. installed/x64-linux/tools/pkgconf/pkgconf) 
         # need access to vcpkg build .so's 
         # (e.g. installed/x64-linux/debug/lib/libpkgconf.so)
-        $VCPKG_LIB_DIR = Join-Path $VCPKG_DIR install $TRIPLET lib
-        $VCPKG_LIB_DIR_DEBUG = Join-Path $VCPKG_DIR install $TRIPLET debug lib
+        $VCPKG_LIB_DIR = Join-Path $VCPKG_DIR installed $TRIPLET lib
+        $VCPKG_LIB_DIR_DEBUG = Join-Path $VCPKG_DIR installed $TRIPLET debug lib
         $sep = [IO.Path]::PathSeparator # : on linux/macos, ; on windows
-        $paths = $env:LD_LIBRARY_PATH -split $sep
-        if ($paths -notcontains $VCPKG_LIB_DIR) {$env:LD_LIBRARY_PATH += $VCPKG_LIB_DIR}
-        if ($paths -notcontains $VCPKG_LIB_DIR_DEBUG) {$env:LD_LIBRARY_PATH += $VCPKG_LIB_DIR_DEBUG}
+        $paths = if ($env:LD_LIBRARY_PATH) {$env:LD_LIBRARY_PATH -split $sep}
+        if ($paths -notcontains $VCPKG_LIB_DIR) {$paths += @($VCPKG_LIB_DIR)}
+        if ($paths -notcontains $VCPKG_LIB_DIR_DEBUG) {$paths += @($VCPKG_LIB_DIR_DEBUG)}
+        $env:LD_LIBRARY_PATH = $paths -join $sep
     }
     foreach ($pkg in $packages) {
         $cmd = "$VCPKG_EXE --recurse --overlay-triplets=$CUSTOMVCPKG_TRIPLETS_DIR install $pkg"
