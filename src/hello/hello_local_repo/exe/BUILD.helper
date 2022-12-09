@@ -1,0 +1,8 @@
+
+cc_import(
+  name = "helper_dll",
+  hdrs = ["helper.hh"],
+  static_library = "bazel-bin/libhelper.a",
+  shared_library = "bazel-bin/libhelper.so",
+  visibility = ["//visibility:public"],
+)

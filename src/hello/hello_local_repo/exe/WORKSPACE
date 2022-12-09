@@ -1,5 +1,13 @@
 
-local_repository(
+# This works but flags are shared bitween helper lib and the binary
+#local_repository(
+#    name = "helper_dll",
+#    path = "../dll/",
+#)
+
+new_local_repository(
     name = "helper_dll",
-    path = "../dll/",
+    path = "../dll",
+    build_file = "BUILD.helper",
 )
+

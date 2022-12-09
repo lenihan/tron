@@ -4,7 +4,6 @@ cc_library(
     name = "helper",
     srcs = ["helper.cc"],
     hdrs = ["helper.hh"],
-    linkstatic=False,
+    #linkstatic=False,
     visibility = ["//visibility:public"],
 )
-
