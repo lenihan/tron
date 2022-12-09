@@ -12,8 +12,7 @@ $QT_DIR = Join-Path $THIRD_PARTY_DIR qt5
 
 function echo_command($cmd) {
     Write-Host $cmd -ForegroundColor Cyan
-    $results = Invoke-Expression $cmd
-    if ($results.Count) {$results} else {$null}
+    Invoke-Expression $cmd
 }
 
 function setup_prerequisites {
@@ -134,9 +133,7 @@ function setup_third_party {
     # Build third party libraries
     Write-Host "Building third party libraries..." -ForegroundColor Green
     $VCPKG_EXE = Join-Path $VCPKG_DIR vcpkg
-    $SRC_DIR = Join-Path $ROOT_DIR src
-    $CUSTOMVCPKG_DIR = Join-Path $SRC_DIR custom_vcpkg 
-    $CUSTOMVCPKG_TRIPLETS_DIR = Join-Path $CUSTOMVCPKG_DIR triplets
+    $CUSTOMVCPKG_TRIPLET_FILEPATH = Join-Path $ROOT_DIR src custom_vcpkg triplets $TRIPLET
     $packages = "osg", 
                 "qt5"
 
@@ -154,10 +151,8 @@ function setup_third_party {
         if ($paths -notcontains $VCPKG_LIB_DIR_DEBUG) {$paths += @($VCPKG_LIB_DIR_DEBUG)}
         $env:LD_LIBRARY_PATH = $paths -join $sep
     }
-    foreach ($pkg in $packages) {
-        $cmd = "$VCPKG_EXE --recurse --overlay-triplets=$CUSTOMVCPKG_TRIPLETS_DIR install $pkg"
-        Write-Host $cmd -ForegroundColor Cyan
-        Invoke-Expression $cmd
+    foreach ($pkg in $packages) {   
+        echo_command "$VCPKG_EXE --recurse --overlay-triplets=$CUSTOMVCPKG_TRIPLET_FILEPATH install $pkg"
     }
 
     # Download OSG data (models, textures)
