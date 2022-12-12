@@ -81,7 +81,7 @@ A full build uses about 150 GB of disk space.
 1. Open Terminal
 2. Clone repo and run setup script (~2-3 hours)...
   ```pwsh
-  pwsh -Command 'git clone https://github.com/lenihan/tron.git ~/repos/tron; ~/repos/tron/scripts/setup.ps1'
+  pwsh -Command "git clone https://github.com/lenihan/tron.git $HOME/repos/tron; $HOME/repos/tron/scripts/setup.ps1"
   ```
 
 ## Debug
