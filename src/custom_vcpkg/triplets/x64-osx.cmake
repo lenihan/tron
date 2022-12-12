@@ -6,5 +6,10 @@ set(VCPKG_LIBRARY_LINKAGE dynamic)
 set(VCPKG_CMAKE_SYSTEM_NAME Darwin)
 set(VCPKG_OSX_ARCHITECTURES x86_64)
 
+####################################
+
+# Fix for vcpkg changed osg default to GL3, which breaks examples
+set(osg_OPENGL_PROFILE GL2)
+
 # Fix for OpenGL_GL_PREFERENCE has not been set to "GLVND" or "LEGACY"
 set(OpenGL_GL_PREFERENCE GLVND)         
