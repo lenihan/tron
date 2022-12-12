@@ -16,7 +16,7 @@
 *  THE SOFTWARE.
 */
 
-#include <osg/Geode>
+#include "osg/Geode"
 #include <osg/Geometry>
 #include <osg/MatrixTransform>
 #include <osg/Notify>

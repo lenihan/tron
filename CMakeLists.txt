@@ -4,6 +4,7 @@
 cmake_minimum_required(VERSION 3.13)
 project("tron")
 
+
 set(CMAKE_TOOLCHAIN_FILE "third_party/vcpkg/scripts/buildsystems/vcpkg.cmake" CACHE STRING "Vcpkg toolchain file")
 
 # Find Qt packages

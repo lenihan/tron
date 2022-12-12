@@ -90,7 +90,7 @@ A full build uses about 150 GB of disk space.
   1. Open Terminal
   2. Launch Visual Studio Code with repo folder
     ```pwsh
-    pwsh -Command 'code ~/repos/tron'
+    pwsh -Command 'code $HOME/repos/tron'
     ```
   3. Install Workspace Recommended extensions
      - View > Extensions > Filter Extensions... > Recommended

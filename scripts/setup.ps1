@@ -7,9 +7,6 @@ if ($IsLinux)   {$TRIPLET = "x64-linux"}
 if ($IsMacOS)   {$TRIPLET = "x64-osx"}     
 $VCPKG_DIR = Join-Path $THIRD_PARTY_DIR vcpkg
 
-$OSG_DIR = Join-Path $THIRD_PARTY_DIR OpenSceneGraph
-$QT_DIR = Join-Path $THIRD_PARTY_DIR qt5
-
 function echo_command($cmd) {
     Write-Host $cmd -ForegroundColor Cyan
     Invoke-Expression $cmd
@@ -133,7 +130,7 @@ function setup_third_party {
     # Build third party libraries
     Write-Host "Building third party libraries..." -ForegroundColor Green
     $VCPKG_EXE = Join-Path $VCPKG_DIR vcpkg
-    $CUSTOMVCPKG_TRIPLET_FILEPATH = Join-Path $ROOT_DIR src custom_vcpkg triplets $TRIPLET
+    $CUSTOMVCPKG_TRIPLET_DIR = Join-Path $ROOT_DIR src custom_vcpkg triplets
     $packages = "osg", 
                 "qt5"
 
@@ -152,7 +149,7 @@ function setup_third_party {
         $env:LD_LIBRARY_PATH = $paths -join $sep
     }
     foreach ($pkg in $packages) {   
-        echo_command "$VCPKG_EXE --recurse --overlay-triplets=$CUSTOMVCPKG_TRIPLET_FILEPATH install $pkg"
+        echo_command "$VCPKG_EXE --triplet=$TRIPLET --overlay-triplets=$CUSTOMVCPKG_TRIPLET_DIR install $pkg"
     }
 
     # Download OSG data (models, textures)
@@ -176,32 +173,20 @@ function setup_environment_file {
     $OSG_DATA_DIR = Join-Path $THIRD_PARTY_DIR OpenSceneGraph-Data
     $OSG_FILE_PATH = $RESOURCE_DIR, $OSG_DATA_DIR -join [IO.Path]::PathSeparator
 
-    # Qt
-    if ($IsWindows) {
-        $QT_BIN_DIR = Join-Path $QT_DIR build qtbase bin
-        $QT_BIN_DIR_DEBUG = Join-Path $QT_DIR build qtbase bin
-    }
-    if ($IsLinux -or $IsMacOS) {
-        $QT_BIN_DIR = Join-Path $QT_DIR build Release qtbase bin
-        $QT_BIN_DIR_DEBUG = Join-Path $THIRD_PARTY_DIR qt5 build Debug qtbase bin
-    }
-
     # VCPKG
-    $VCPKG_BIN_DIR = Join-PATH  $VCPKG_DIR installed $TRIPLET bin
-    $VCPKG_BIN_DIR_DEBUG = Join-PATH  $VCPKG_DIR installed $TRIPLET debug bin
+    $VCPKG_BIN_DIR = Join-Path $VCPKG_DIR installed $TRIPLET bin
+    $VCPKG_BIN_DIR_DEBUG = Join-Path $VCPKG_DIR installed $TRIPLET debug bin
 
-    # OSG
-    $OSG_BIN_DIR = Join-Path $OSG_DIR build Release bin
-    $OSG_BIN_DIR_DEBUG = Join-Path $OSG_DIR build Debug bin
+    # OSG Plugins
+    $OSG_PLUGINS_DIR = Join-Path $VCPKG_DIR installed $TRIPLET tools osg
+    $OSG_PLUGINS_DIR_DEBUG = Join-Path $VCPKG_DIR installed $TRIPLET debug tools osg
 
     # PATH environment variable
     $path_array = $env:PATH -Split [IO.Path]::PathSeparator
-    $new_path_array = @($QT_BIN_DIR, 
-                        $QT_BIN_DIR_DEBUG, 
-                        $OSG_BIN_DIR, 
-                        $OSG_BIN_DIR_DEBUG, 
-                        $VCPKG_BIN_DIR, 
-                        $VCPKG_BIN_DIR_DEBUG) + $path_array | Select-Object -Unique
+    $new_path_array = @($VCPKG_BIN_DIR, 
+                        $VCPKG_BIN_DIR_DEBUG,
+                        $OSG_PLUGINS_DIR,
+                        $OSG_PLUGINS_DIR_DEBUG) + $path_array | Select-Object -Unique
     $PATH = $new_path_array -join [IO.Path]::PathSeparator
 
     # LD_LIBRARY_PATH environment variable
