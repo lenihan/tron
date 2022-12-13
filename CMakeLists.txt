@@ -4,8 +4,8 @@
 cmake_minimum_required(VERSION 3.13)
 project("tron")
 
-
-set(CMAKE_TOOLCHAIN_FILE "third_party/vcpkg/scripts/buildsystems/vcpkg.cmake" CACHE STRING "Vcpkg toolchain file")
+# setup find_package() to search in vcpkg/installed/<TRIPLET>lib, vcpkg/installed<TRIPLET>/debug/lib
+set(CMAKE_TOOLCHAIN_FILE ${CMAKE_SOURCE_DIR}/third_party/vcpkg/scripts/buildsystems/vcpkg.cmake CACHE STRING "Vcpkg toolchain file")
 
 # Find Qt packages
 # find_package parses Qt5*Config.cmake files located in third_party/vcpkg/installed/x64-linux/share/cmake
