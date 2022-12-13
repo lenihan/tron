@@ -81,7 +81,7 @@ A full build uses about 150 GB of disk space.
 1. Open Terminal
 2. Clone repo and run setup script (~2-3 hours)...
   ```pwsh
-  pwsh -Command "git clone https://github.com/lenihan/tron.git $HOME/repos/tron; $HOME/repos/tron/scripts/setup.ps1"
+  pwsh -Command "git clone https://github.com/lenihan/tron.git $HOME/repos/tron; ~/repos/tron/scripts/setup.ps1"
   ```
 
 ## Debug
@@ -90,7 +90,7 @@ A full build uses about 150 GB of disk space.
   1. Open Terminal
   2. Launch Visual Studio Code with repo folder
     ```pwsh
-    pwsh -Command 'code $HOME/repos/tron'
+    pwsh -Command "code $HOME/repos/tron"
     ```
   3. Install Workspace Recommended extensions
      - View > Extensions > Filter Extensions... > Recommended
