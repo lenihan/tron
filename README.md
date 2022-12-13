@@ -107,7 +107,7 @@ A full build uses about 150 GB of disk space.
 - Windows: Visual Studio 2022
   1. Generate .sln file, launch in Visual Studio
     ```pwsh
-    pwsh -Command 'cmake -S ~/repos/tron -B ~/repos/tron/build; ~/repos/tron/build/tron.sln'
+    pwsh -Command "cmake -S ~/repos/tron -B ~/repos/tron/build; ~/repos/tron/build/tron.sln"
     ``` 
   2. Solution Explorer > Right click on project > Set as Startup Project
      - `hello_qt` to test Qt  
