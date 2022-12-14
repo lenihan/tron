@@ -1,5 +1,4 @@
 ﻿project(hello_osg)
 add_executable (${PROJECT_NAME} hello_osg.cpp)
 project_common()
-target_include_directories(${PROJECT_NAME} PUBLIC ${OSG_INCLUDE_DIR})
 target_link_libraries(${PROJECT_NAME} ${OSGFX_LIBRARY} ${OSGGA_LIBRARY} ${OSGDB_LIBRARY} ${OSGVIEWER_LIBRARY} ${OSG_LIBRARY} ${OPENGL_LIBRARY})

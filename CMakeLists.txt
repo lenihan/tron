@@ -4,10 +4,6 @@
 cmake_minimum_required(VERSION 3.16)
 project("tron")
 
-# setup find_package() to search in vcpkg/installed/<TRIPLET>lib, vcpkg/installed<TRIPLET>/debug/lib
-# This line must come before any calls to `find_package()`
-include(${CMAKE_SOURCE_DIR}/third_party/vcpkg/scripts/buildsystems/vcpkg.cmake)
-
 # Use `dump_vars()` to see cmake variables. Helpful for debugging.
 function(dump_vars)
   get_cmake_property(_variableNames VARIABLES)
@@ -16,6 +12,10 @@ function(dump_vars)
       message(STATUS "${_variableName}=${${_variableName}}")
   endforeach()
 endfunction()
+
+# setup find_package() to search in vcpkg/installed/<TRIPLET>lib, vcpkg/installed<TRIPLET>/debug/lib
+# This line must come before any calls to `find_package()`
+include(${CMAKE_SOURCE_DIR}/third_party/vcpkg/scripts/buildsystems/vcpkg.cmake)
 
 # Find OpenSceneGraph packages
 find_package(osg REQUIRED)                          # To use: target_include_directories(${PROJECT_NAME} PUBLIC ${OSG_INCLUDE_DIR}); target_link_libraries(${PROJECT_NAME} ${OSG_LIBRARY});
@@ -60,6 +60,9 @@ find_package(Qt5Test REQUIRED)                      # To use: target_link_librar
 find_package(Qt5ThemeSupport REQUIRED)              # To use: target_link_libraries(${PROJECT_NAME} ${Qt5ThemeSupport_LIBRARIES});
 find_package(Qt5Widgets REQUIRED)                   # To use: target_link_libraries(${PROJECT_NAME} ${Qt5Widgets_LIBRARIES});
 find_package(Qt5Xml REQUIRED)                       # To use: target_link_libraries(${PROJECT_NAME} ${Qt5Xml_LIBRARIES});
+
+# Add vcpkg to include path: third_party/vcpkg/installed/<TRIPLET>/include (same location that osg header is in)
+include_directories(${OSG_INCLUDE_DIR})
 
 # Directory for output files
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib CACHE PATH "Output directory for static libraries.")

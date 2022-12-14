@@ -100,6 +100,8 @@ function setup_prerequisites {
         echo_command "brew install libtool"
         echo_command "brew install nasm"
         echo_command "brew install cmake"
+        echo_command "brew install autoconf-archive"
+        echo_command "brew install gettext"
     }
 }
 
