@@ -114,28 +114,28 @@ function setup_build_environment {
 
 function setup_third_party {
     Write-Host "Setup third party..." -ForegroundColor Green
-    #######
-    # vcpkg
-    #######
+
     # git clone vcpkg
     Write-Host "git clone vcpkg..." -ForegroundColor Green
     New-Item -ItemType Directory $THIRD_PARTY_DIR -Force | Out-Null
     $TAG = "2022.06.16.1"
     $REPO_URL = "https://github.com/Microsoft/vcpkg.git"
     echo_command "git clone --branch $TAG $REPO_URL $VCPKG_DIR -c advice.detachedHead=false"
+    
     # build vcpkg
     Write-Host "Build vcpkg..." -ForegroundColor Green
     if ($IsWindows) {$BOOTSTRAP_VCPKG_EXE = Join-Path $VCPKG_DIR bootstrap-vcpkg.bat}
     else {$BOOTSTRAP_VCPKG_EXE = Join-Path $VCPKG_DIR bootstrap-vcpkg.sh}
     echo_command "$BOOTSTRAP_VCPKG_EXE -disableMetrics"
-    # Build third party libraries
+    
+    # Setup variables used to build third party libraries
     Write-Host "Building third party libraries..." -ForegroundColor Green
     $VCPKG_EXE = Join-Path $VCPKG_DIR vcpkg
     $CUSTOMVCPKG_TRIPLET_DIR = Join-Path $ROOT_DIR src custom_vcpkg triplets
     $packages = "osg", 
                 "qt5"
 
-    # Setup LD_LIBRARY_PATH to access libraries in vcpkg
+    # Setup LD_LIBRARY_PATH
     if ($IsLinux -or $IsMacOS) {
         # vcpkg tools 
         # (e.g. installed/x64-linux/tools/pkgconf/pkgconf) 
@@ -149,6 +149,8 @@ function setup_third_party {
         if ($paths -notcontains $VCPKG_LIB_DIR_DEBUG) {$paths += @($VCPKG_LIB_DIR_DEBUG)}
         $env:LD_LIBRARY_PATH = $paths -join $sep
     }
+
+    # vcpkg install
     foreach ($pkg in $packages) {   
         echo_command "$VCPKG_EXE --triplet=$TRIPLET --overlay-triplets=$CUSTOMVCPKG_TRIPLET_DIR install $pkg"
     }
@@ -175,11 +177,11 @@ function setup_environment_file {
     $OSG_FILE_PATH = $RESOURCE_DIR, $OSG_DATA_DIR -join [IO.Path]::PathSeparator
 
     # VCPKG
-    $VCPKG_BIN_DIR = Join-Path $VCPKG_DIR installed $TRIPLET bin
+    $VCPKG_BIN_DIR       = Join-Path $VCPKG_DIR installed $TRIPLET bin
     $VCPKG_BIN_DIR_DEBUG = Join-Path $VCPKG_DIR installed $TRIPLET debug bin
 
     # OSG Plugins
-    $OSG_PLUGINS_DIR = Join-Path $VCPKG_DIR installed $TRIPLET tools osg
+    $OSG_PLUGINS_DIR       = Join-Path $VCPKG_DIR installed $TRIPLET tools osg
     $OSG_PLUGINS_DIR_DEBUG = Join-Path $VCPKG_DIR installed $TRIPLET debug tools osg
 
     # PATH environment variable
@@ -191,7 +193,7 @@ function setup_environment_file {
     $PATH = $new_path_array -join [IO.Path]::PathSeparator
 
     # LD_LIBRARY_PATH environment variable
-    $VCPKG_LIB_DIR = Join-Path $VCPKG_DIR installed $TRIPLET lib
+    $VCPKG_LIB_DIR       = Join-Path $VCPKG_DIR installed $TRIPLET lib
     $VCPKG_LIB_DIR_DEBUG = Join-Path $VCPKG_DIR installed $TRIPLET debug lib
     $LD_LIBRARY_PATH = $VCPKG_LIB_DIR, $VCPKG_LIB_DIR_DEBUG -join [IO.Path]::PathSeparator
 

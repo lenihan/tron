@@ -18,25 +18,25 @@ function(dump_vars)
 endfunction()
 
 # Find OpenSceneGraph packages
-find_package(osg REQUIRED)                    # To use: target_include_directories(${PROJECT_NAME} PUBLIC ${OSG_INCLUDE_DIR}); target_link_libraries(${PROJECT_NAME} ${OSG_LIBRARY});
-find_package(osgAnimation REQUIRED)           # To use: target_include_directories(${PROJECT_NAME} PUBLIC ${OSGANIMATION_INCLUDE_DIR}); target_link_libraries(${PROJECT_NAME} ${OSGANIMATION_LIBRARY});
-find_package(osgDB REQUIRED)                  # To use: target_include_directories(${PROJECT_NAME} PUBLIC ${OSGDB_INCLUDE_DIR}); target_link_libraries(${PROJECT_NAME} ${OSGDB_LIBRARY});
-find_package(osgFX REQUIRED)                  # To use: target_include_directories(${PROJECT_NAME} PUBLIC ${OSGFX_INCLUDE_DIR}); target_link_libraries(${PROJECT_NAME} ${OSGFX_LIBRARY});
-find_package(osgGA REQUIRED)                  # To use: target_include_directories(${PROJECT_NAME} PUBLIC ${OSGGA_INCLUDE_DIR}); target_link_libraries(${PROJECT_NAME} ${OSGGA_LIBRARY});
-find_package(osgManipulator REQUIRED)         # To use: target_include_directories(${PROJECT_NAME} PUBLIC ${OSGMANIPULATOR_INCLUDE_DIR}); target_link_libraries(${PROJECT_NAME} ${OSGMANIPULATOR_LIBRARY});
-find_package(osgParticle REQUIRED)            # To use: target_include_directories(${PROJECT_NAME} PUBLIC ${OSGPARTICLE_INCLUDE_DIR}); target_link_libraries(${PROJECT_NAME} ${OSGPARTICLE_LIBRARY});
-find_package(osgPresentation REQUIRED)        # To use: target_include_directories(${PROJECT_NAME} PUBLIC ${OSGPRESENTATION_INCLUDE_DIR}); target_link_libraries(${PROJECT_NAME} ${OSGPRESENTATION_LIBRARY});
-find_package(osgShadow REQUIRED)              # To use: target_include_directories(${PROJECT_NAME} PUBLIC ${OSGSHADOW_INCLUDE_DIR}); target_link_libraries(${PROJECT_NAME} ${OSGSHADOW_LIBRARY});
-find_package(osgSim REQUIRED)                 # To use: target_include_directories(${PROJECT_NAME} PUBLIC ${OSGSIM_INCLUDE_DIR}); target_link_libraries(${PROJECT_NAME} ${OSGSIM_LIBRARY});
-find_package(osgTerrain REQUIRED)             # To use: target_include_directories(${PROJECT_NAME} PUBLIC ${OSGTERRAIN_INCLUDE_DIR}); target_link_libraries(${PROJECT_NAME} ${OSGTERRAIN_LIBRARY});
-find_package(osgText REQUIRED)                # To use: target_include_directories(${PROJECT_NAME} PUBLIC ${OSGTEXT_INCLUDE_DIR}); target_link_libraries(${PROJECT_NAME} ${OSGTEXT_LIBRARY});
-find_package(osgUtil REQUIRED)                # To use: target_include_directories(${PROJECT_NAME} PUBLIC ${OSGUTIL_INCLUDE_DIR}); target_link_libraries(${PROJECT_NAME} ${OSGUTIL_LIBRARY});
-find_package(osgViewer REQUIRED)              # To use: target_include_directories(${PROJECT_NAME} PUBLIC ${OSGVIEWER_INCLUDE_DIR}); target_link_libraries(${PROJECT_NAME} ${OSGVIEWER_LIBRARY});
-find_package(osgVolume REQUIRED)              # To use: target_include_directories(${PROJECT_NAME} PUBLIC ${OSGVOLUME_INCLUDE_DIR}); target_link_libraries(${PROJECT_NAME} ${OSGVOLUME_LIBRARY});
-find_package(osgWidget REQUIRED)              # To use: target_include_directories(${PROJECT_NAME} PUBLIC ${OSGWIDGET_INCLUDE_DIR}); target_link_libraries(${PROJECT_NAME} ${OSGWIDGET_LIBRARY});
-
-# Find OpenGL
-find_package(OpenGL REQUIRED)                 # To use: target_link_libraries(${PROJECT_NAME} ${OPENGL_LIBRARY});
+find_package(osg REQUIRED)                          # To use: target_include_directories(${PROJECT_NAME} PUBLIC ${OSG_INCLUDE_DIR}); target_link_libraries(${PROJECT_NAME} ${OSG_LIBRARY});
+find_package(osgAnimation REQUIRED)                 # To use: target_include_directories(${PROJECT_NAME} PUBLIC ${OSGANIMATION_INCLUDE_DIR}); target_link_libraries(${PROJECT_NAME} ${OSGANIMATION_LIBRARY});
+find_package(osgDB REQUIRED)                        # To use: target_include_directories(${PROJECT_NAME} PUBLIC ${OSGDB_INCLUDE_DIR}); target_link_libraries(${PROJECT_NAME} ${OSGDB_LIBRARY});
+find_package(osgFX REQUIRED)                        # To use: target_include_directories(${PROJECT_NAME} PUBLIC ${OSGFX_INCLUDE_DIR}); target_link_libraries(${PROJECT_NAME} ${OSGFX_LIBRARY});
+find_package(osgGA REQUIRED)                        # To use: target_include_directories(${PROJECT_NAME} PUBLIC ${OSGGA_INCLUDE_DIR}); target_link_libraries(${PROJECT_NAME} ${OSGGA_LIBRARY});
+find_package(osgManipulator REQUIRED)               # To use: target_include_directories(${PROJECT_NAME} PUBLIC ${OSGMANIPULATOR_INCLUDE_DIR}); target_link_libraries(${PROJECT_NAME} ${OSGMANIPULATOR_LIBRARY});
+find_package(osgParticle REQUIRED)                  # To use: target_include_directories(${PROJECT_NAME} PUBLIC ${OSGPARTICLE_INCLUDE_DIR}); target_link_libraries(${PROJECT_NAME} ${OSGPARTICLE_LIBRARY});
+find_package(osgPresentation REQUIRED)              # To use: target_include_directories(${PROJECT_NAME} PUBLIC ${OSGPRESENTATION_INCLUDE_DIR}); target_link_libraries(${PROJECT_NAME} ${OSGPRESENTATION_LIBRARY});
+find_package(osgShadow REQUIRED)                    # To use: target_include_directories(${PROJECT_NAME} PUBLIC ${OSGSHADOW_INCLUDE_DIR}); target_link_libraries(${PROJECT_NAME} ${OSGSHADOW_LIBRARY});
+find_package(osgSim REQUIRED)                       # To use: target_include_directories(${PROJECT_NAME} PUBLIC ${OSGSIM_INCLUDE_DIR}); target_link_libraries(${PROJECT_NAME} ${OSGSIM_LIBRARY});
+find_package(osgTerrain REQUIRED)                   # To use: target_include_directories(${PROJECT_NAME} PUBLIC ${OSGTERRAIN_INCLUDE_DIR}); target_link_libraries(${PROJECT_NAME} ${OSGTERRAIN_LIBRARY});
+find_package(osgText REQUIRED)                      # To use: target_include_directories(${PROJECT_NAME} PUBLIC ${OSGTEXT_INCLUDE_DIR}); target_link_libraries(${PROJECT_NAME} ${OSGTEXT_LIBRARY});
+find_package(osgUtil REQUIRED)                      # To use: target_include_directories(${PROJECT_NAME} PUBLIC ${OSGUTIL_INCLUDE_DIR}); target_link_libraries(${PROJECT_NAME} ${OSGUTIL_LIBRARY});
+find_package(osgViewer REQUIRED)                    # To use: target_include_directories(${PROJECT_NAME} PUBLIC ${OSGVIEWER_INCLUDE_DIR}); target_link_libraries(${PROJECT_NAME} ${OSGVIEWER_LIBRARY});
+find_package(osgVolume REQUIRED)                    # To use: target_include_directories(${PROJECT_NAME} PUBLIC ${OSGVOLUME_INCLUDE_DIR}); target_link_libraries(${PROJECT_NAME} ${OSGVOLUME_LIBRARY});
+find_package(osgWidget REQUIRED)                    # To use: target_include_directories(${PROJECT_NAME} PUBLIC ${OSGWIDGET_INCLUDE_DIR}); target_link_libraries(${PROJECT_NAME} ${OSGWIDGET_LIBRARY});
+      
+# Find OpenGL     
+find_package(OpenGL REQUIRED)                       # To use: target_link_libraries(${PROJECT_NAME} ${OPENGL_LIBRARY});
 
 # Find Qt packages
 # find_package parses Qt5*Config.cmake files located in third_party/vcpkg/installed/x64-linux/share/cmake
