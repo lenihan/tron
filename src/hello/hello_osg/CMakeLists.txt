@@ -1,20 +1,5 @@
 ﻿project(hello_osg)
 add_executable (${PROJECT_NAME} hello_osg.cpp)
 project_common()
- # target_link_libraries(${PROJECT_NAME} ${OSGFX_LIB} ${OSGVIEWER_LIB} ${OSGGA_LIB} ${OSGDB_LIB} ${OSG_LIB} ${OPENGL_LIB})
-target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_SOURCE_DIR}/third_party/vcpkg/installed/x64-windows/include)
-find_package(opengl)
-find_package(osg)
-find_package(osgviewer)
-find_package(osgdb)
-find_package(osgga)
-find_package(osgfx)
-
-
-# target_link_libraries(${PROJECT_NAME} C:/Users/david/repos/tron/third_party/vcpkg/installed/x64-windows/debug/lib/osgd.lib)
+target_include_directories(${PROJECT_NAME} PUBLIC ${OSG_INCLUDE_DIR})
 target_link_libraries(${PROJECT_NAME} ${OSGFX_LIBRARY} ${OSGGA_LIBRARY} ${OSGDB_LIBRARY} ${OSGVIEWER_LIBRARY} ${OSG_LIBRARY} ${OPENGL_LIBRARY})
-
-# get_cmake_property(_variableNames VARIABLES)
-# foreach (_variableName ${_variableNames})
-#     message(STATUS "${_variableName}=${${_variableName}}")
-# endforeach()

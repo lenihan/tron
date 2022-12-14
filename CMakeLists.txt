@@ -1,34 +1,65 @@
 ﻿# CMakeList.txt : Top-level CMake project file, do global configuration
 # and include sub-projects here.
-#
-cmake_minimum_required(VERSION 3.13)
+
+cmake_minimum_required(VERSION 3.16)
 project("tron")
 
 # setup find_package() to search in vcpkg/installed/<TRIPLET>lib, vcpkg/installed<TRIPLET>/debug/lib
-set(CMAKE_TOOLCHAIN_FILE ${CMAKE_SOURCE_DIR}/third_party/vcpkg/scripts/buildsystems/vcpkg.cmake CACHE STRING "Vcpkg toolchain file")
+# This line must come before any calls to `find_package()`
+include(${CMAKE_SOURCE_DIR}/third_party/vcpkg/scripts/buildsystems/vcpkg.cmake)
+
+# Use `dump_vars()` to see cmake variables. Helpful for debugging.
+function(dump_vars)
+  get_cmake_property(_variableNames VARIABLES)
+  list (SORT _variableNames)
+  foreach (_variableName ${_variableNames})
+      message(STATUS "${_variableName}=${${_variableName}}")
+  endforeach()
+endfunction()
+
+# Find OpenSceneGraph packages
+find_package(osg REQUIRED)                    # To use: target_include_directories(${PROJECT_NAME} PUBLIC ${OSG_INCLUDE_DIR}); target_link_libraries(${PROJECT_NAME} ${OSG_LIBRARY});
+find_package(osgAnimation REQUIRED)           # To use: target_include_directories(${PROJECT_NAME} PUBLIC ${OSGANIMATION_INCLUDE_DIR}); target_link_libraries(${PROJECT_NAME} ${OSGANIMATION_LIBRARY});
+find_package(osgDB REQUIRED)                  # To use: target_include_directories(${PROJECT_NAME} PUBLIC ${OSGDB_INCLUDE_DIR}); target_link_libraries(${PROJECT_NAME} ${OSGDB_LIBRARY});
+find_package(osgFX REQUIRED)                  # To use: target_include_directories(${PROJECT_NAME} PUBLIC ${OSGFX_INCLUDE_DIR}); target_link_libraries(${PROJECT_NAME} ${OSGFX_LIBRARY});
+find_package(osgGA REQUIRED)                  # To use: target_include_directories(${PROJECT_NAME} PUBLIC ${OSGGA_INCLUDE_DIR}); target_link_libraries(${PROJECT_NAME} ${OSGGA_LIBRARY});
+find_package(osgManipulator REQUIRED)         # To use: target_include_directories(${PROJECT_NAME} PUBLIC ${OSGMANIPULATOR_INCLUDE_DIR}); target_link_libraries(${PROJECT_NAME} ${OSGMANIPULATOR_LIBRARY});
+find_package(osgParticle REQUIRED)            # To use: target_include_directories(${PROJECT_NAME} PUBLIC ${OSGPARTICLE_INCLUDE_DIR}); target_link_libraries(${PROJECT_NAME} ${OSGPARTICLE_LIBRARY});
+find_package(osgPresentation REQUIRED)        # To use: target_include_directories(${PROJECT_NAME} PUBLIC ${OSGPRESENTATION_INCLUDE_DIR}); target_link_libraries(${PROJECT_NAME} ${OSGPRESENTATION_LIBRARY});
+find_package(osgShadow REQUIRED)              # To use: target_include_directories(${PROJECT_NAME} PUBLIC ${OSGSHADOW_INCLUDE_DIR}); target_link_libraries(${PROJECT_NAME} ${OSGSHADOW_LIBRARY});
+find_package(osgSim REQUIRED)                 # To use: target_include_directories(${PROJECT_NAME} PUBLIC ${OSGSIM_INCLUDE_DIR}); target_link_libraries(${PROJECT_NAME} ${OSGSIM_LIBRARY});
+find_package(osgTerrain REQUIRED)             # To use: target_include_directories(${PROJECT_NAME} PUBLIC ${OSGTERRAIN_INCLUDE_DIR}); target_link_libraries(${PROJECT_NAME} ${OSGTERRAIN_LIBRARY});
+find_package(osgText REQUIRED)                # To use: target_include_directories(${PROJECT_NAME} PUBLIC ${OSGTEXT_INCLUDE_DIR}); target_link_libraries(${PROJECT_NAME} ${OSGTEXT_LIBRARY});
+find_package(osgUtil REQUIRED)                # To use: target_include_directories(${PROJECT_NAME} PUBLIC ${OSGUTIL_INCLUDE_DIR}); target_link_libraries(${PROJECT_NAME} ${OSGUTIL_LIBRARY});
+find_package(osgViewer REQUIRED)              # To use: target_include_directories(${PROJECT_NAME} PUBLIC ${OSGVIEWER_INCLUDE_DIR}); target_link_libraries(${PROJECT_NAME} ${OSGVIEWER_LIBRARY});
+find_package(osgVolume REQUIRED)              # To use: target_include_directories(${PROJECT_NAME} PUBLIC ${OSGVOLUME_INCLUDE_DIR}); target_link_libraries(${PROJECT_NAME} ${OSGVOLUME_LIBRARY});
+find_package(osgWidget REQUIRED)              # To use: target_include_directories(${PROJECT_NAME} PUBLIC ${OSGWIDGET_INCLUDE_DIR}); target_link_libraries(${PROJECT_NAME} ${OSGWIDGET_LIBRARY});
+
+# Find OpenGL
+find_package(OpenGL REQUIRED)                 # To use: target_link_libraries(${PROJECT_NAME} ${OPENGL_LIBRARY});
 
 # Find Qt packages
 # find_package parses Qt5*Config.cmake files located in third_party/vcpkg/installed/x64-linux/share/cmake
-find_package(Qt5AccessibilitySupport REQUIRED)      # To use: target_link_libraries(${PROJECT_NAME} Qt5::AccessibilitySupport)
-find_package(Qt5Concurrent REQUIRED)                # To use: target_link_libraries(${PROJECT_NAME} Qt5::Concurrent)
-find_package(Qt5Core REQUIRED)                      # To use: target_link_libraries(${PROJECT_NAME} Qt5::Core)
-find_package(Qt5DBus REQUIRED)                      # To use: target_link_libraries(${PROJECT_NAME} Qt5::DBus)
-find_package(Qt5DeviceDiscoverySupport REQUIRED)    # To use: target_link_libraries(${PROJECT_NAME} Qt5::DeviceDiscoverySupport)
-find_package(Qt5EdidSupport REQUIRED)               # To use: target_link_libraries(${PROJECT_NAME} Qt5::EdidSupport)
-find_package(Qt5EventDispatcherSupport REQUIRED)    # To use: target_link_libraries(${PROJECT_NAME} Qt5::EventDispatcherSupport)
-find_package(Qt5FbSupport REQUIRED)                 # To use: target_link_libraries(${PROJECT_NAME} Qt5::FbSupport)
-find_package(Qt5FontDatabaseSupport REQUIRED)       # To use: target_link_libraries(${PROJECT_NAME} Qt5::FontDatabaseSupport)
-find_package(Qt5Gui REQUIRED)                       # To use: target_link_libraries(${PROJECT_NAME} Qt5::Gui)
-find_package(Qt5Network REQUIRED)                   # To use: target_link_libraries(${PROJECT_NAME} Qt5::Network)
-find_package(Qt5OpenGL REQUIRED)                    # To use: target_link_libraries(${PROJECT_NAME} Qt5::OpenGL)
-find_package(Qt5OpenGLExtensions REQUIRED)          # To use: target_link_libraries(${PROJECT_NAME} Qt5::OpenGLExtensions)
-find_package(Qt5PlatformCompositorSupport REQUIRED) # To use: target_link_libraries(${PROJECT_NAME} Qt5::PlatformCompositorSupport)
-find_package(Qt5PrintSupport REQUIRED)              # To use: target_link_libraries(${PROJECT_NAME} Qt5::PrintSupport)
-find_package(Qt5Sql REQUIRED)                       # To use: target_link_libraries(${PROJECT_NAME} Qt5::Sql)
-find_package(Qt5Test REQUIRED)                      # To use: target_link_libraries(${PROJECT_NAME} Qt5::Test)
-find_package(Qt5ThemeSupport REQUIRED)              # To use: target_link_libraries(${PROJECT_NAME} Qt5::ThemeSupport)
-find_package(Qt5Widgets REQUIRED)                   # To use: target_link_libraries(${PROJECT_NAME} Qt5::Widgets)
-find_package(Qt5Xml REQUIRED)                       # To use: target_link_libraries(${PROJECT_NAME} Qt5::Xml)
+find_package(Qt5AccessibilitySupport REQUIRED)      # To use: target_link_libraries(${PROJECT_NAME} ${Qt5AccessibilitySupport_LIBRARIES});
+find_package(Qt5Concurrent REQUIRED)                # To use: target_link_libraries(${PROJECT_NAME} ${Qt5Concurrent_LIBRARIES});
+find_package(Qt5Core REQUIRED)                      # To use: target_link_libraries(${PROJECT_NAME} ${Qt5Core_LIBRARIES});
+find_package(Qt5DBus REQUIRED)                      # To use: target_link_libraries(${PROJECT_NAME} ${Qt5DBus_LIBRARIES});
+find_package(Qt5DeviceDiscoverySupport REQUIRED)    # To use: target_link_libraries(${PROJECT_NAME} ${Qt5DeviceDiscoverySupport_LIBRARIES});
+find_package(Qt5EdidSupport REQUIRED)               # To use: target_link_libraries(${PROJECT_NAME} ${Qt5EdidSupport_LIBRARIES});
+find_package(Qt5EventDispatcherSupport REQUIRED)    # To use: target_link_libraries(${PROJECT_NAME} ${Qt5EventDispatcherSupport_LIBRARIES});
+find_package(Qt5FbSupport REQUIRED)                 # To use: target_link_libraries(${PROJECT_NAME} ${Qt5FbSupport_LIBRARIES});
+find_package(Qt5FontDatabaseSupport REQUIRED)       # To use: target_link_libraries(${PROJECT_NAME} ${Qt5FontDatabaseSupport_LIBRARIES});
+find_package(Qt5Gui REQUIRED)                       # To use: target_link_libraries(${PROJECT_NAME} ${Qt5Gui_LIBRARIES});
+find_package(Qt5Network REQUIRED)                   # To use: target_link_libraries(${PROJECT_NAME} ${Qt5Network_LIBRARIES});
+find_package(Qt5OpenGL REQUIRED)                    # To use: target_link_libraries(${PROJECT_NAME} ${Qt5OpenGL_LIBRARIES});
+find_package(Qt5OpenGLExtensions REQUIRED)          # To use: target_link_libraries(${PROJECT_NAME} ${Qt5OpenGLExtensions_LIBRARIES});
+find_package(Qt5PlatformCompositorSupport REQUIRED) # To use: target_link_libraries(${PROJECT_NAME} ${Qt5PlatformCompositorSupport_LIBRARIES});
+find_package(Qt5PrintSupport REQUIRED)              # To use: target_link_libraries(${PROJECT_NAME} ${Qt5PrintSupport_LIBRARIES});
+find_package(Qt5Sql REQUIRED)                       # To use: target_link_libraries(${PROJECT_NAME} ${Qt5Sql_LIBRARIES});
+find_package(Qt5Test REQUIRED)                      # To use: target_link_libraries(${PROJECT_NAME} ${Qt5Test_LIBRARIES});
+find_package(Qt5ThemeSupport REQUIRED)              # To use: target_link_libraries(${PROJECT_NAME} ${Qt5ThemeSupport_LIBRARIES});
+find_package(Qt5Widgets REQUIRED)                   # To use: target_link_libraries(${PROJECT_NAME} ${Qt5Widgets_LIBRARIES});
+find_package(Qt5Xml REQUIRED)                       # To use: target_link_libraries(${PROJECT_NAME} ${Qt5Xml_LIBRARIES});
 
 # Directory for output files
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib CACHE PATH "Output directory for static libraries.")
@@ -57,13 +88,6 @@ endfunction()
 
 # Group ALL_BUILD.vcxproj and ZERO_CHECK.vcxproj under "CMakePredifinedTargets"
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
-
-# # Utility function that will exit with error if PATH does not exist
-# function(require_path_exists PATH)
-#   if(NOT EXISTS ${PATH})
-#     message(FATAL_ERROR "Required file not found: ${PATH}")
-#   endif()
-# endfunction()
 
 # # Setup Qt include paths, library variables
 # #   Example use: ${QT5CORE_LIB} for Qt5Core.lib, ${QT5WIDGETS_LIB} for Qt5Widgets.lib

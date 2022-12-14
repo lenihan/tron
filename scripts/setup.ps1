@@ -40,6 +40,7 @@ function setup_prerequisites {
                     "bison",                # for gettext  (used by osg)
                     "python3-distutils",    # for fontconfig (used by osg)
                     "libgl1-mesa-dev",      # for osg "Could not find OpenGL"
+                    "libtool",              # for osg
 
                     # for qt5: Some learned from https://github.com/microsoft/vcpkg/blob/master/scripts/azure-pipelines/linux/provision-image.sh
                     "libglu1-mesa-dev",     # for freeglut (used by qt5)
