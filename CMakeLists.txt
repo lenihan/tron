@@ -4,6 +4,7 @@
 cmake_minimum_required(VERSION 3.16)
 project("tron")
 
+
 # Use `dump_vars()` to see cmake variables. Helpful for debugging.
 function(dump_vars)
   get_cmake_property(_variableNames VARIABLES)
@@ -13,9 +14,22 @@ function(dump_vars)
   endforeach()
 endfunction()
 
-# setup find_package() to search in vcpkg/installed/<TRIPLET>lib, vcpkg/installed<TRIPLET>/debug/lib
+
+# setup find_package() to search in vcpkg/installed/<TRIPLET>/lib, vcpkg/installed/<TRIPLET>/debug/lib
 # This line must come before any calls to `find_package()`
 include(${CMAKE_SOURCE_DIR}/third_party/vcpkg/scripts/buildsystems/vcpkg.cmake)
+
+# Windows-only fix
+# When VCPKG_APPLOCAL_DEPS is set to ON (default), it copies the needed third party .dll's to same
+# directory as the built binary app. BUT...it does NOT copy over the .pdb files. .pdb files are
+# used by the debugger to connect a .dll to its source code.
+# Set VCPKG_APPLOCAL_DEPS to "OFF" and built binary app will use PATH environment
+# variable to get its third party .dll's from where the originals live: 
+#   vcpkg/installed/<TRIPLET>/bin 
+#   vcpkg/installed/<TRIPLET>/debug/bin
+# In the case of debug libraries, the .dll lives next to the .pdb so it will be found by the debugger and
+# thus you will be able to step into third party source code.
+set(VCPKG_APPLOCAL_DEPS OFF)
 
 # Find OpenSceneGraph packages
 find_package(osg REQUIRED)                          # To use: target_link_libraries(${PROJECT_NAME} ${OSG_LIBRARY});
