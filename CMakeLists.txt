@@ -4,7 +4,6 @@
 cmake_minimum_required(VERSION 3.16)
 project("tron")
 
-
 # Use `dump_vars()` to see cmake variables. Helpful for debugging.
 function(dump_vars)
   get_cmake_property(_variableNames VARIABLES)
@@ -13,7 +12,6 @@ function(dump_vars)
       message(STATUS "${_variableName}=${${_variableName}}")
   endforeach()
 endfunction()
-
 
 # setup find_package() to search in vcpkg/installed/<TRIPLET>/lib, vcpkg/installed/<TRIPLET>/debug/lib
 # This line must come before any calls to `find_package()`
