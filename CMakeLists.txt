@@ -29,6 +29,8 @@ include(${CMAKE_SOURCE_DIR}/third_party/vcpkg/scripts/buildsystems/vcpkg.cmake)
 #   vcpkg/installed/<TRIPLET>/debug/bin
 # In the case of debug libraries, the .dll lives next to the .pdb so it will be found by the debugger and
 # thus you will be able to step into third party source code.
+# The vcpkg code that does the .dll copying is located here:
+# https://github.com/microsoft/vcpkg/blob/619b29470031781e0c787eff32dbc7d8568bdbe6/scripts/buildsystems/vcpkg.cmake#L360:L408
 set(VCPKG_APPLOCAL_DEPS OFF)
 
 # Find OpenSceneGraph packages
