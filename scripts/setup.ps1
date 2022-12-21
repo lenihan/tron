@@ -153,7 +153,17 @@ function setup_third_party {
         if ($paths -notcontains $VCPKG_LIB_DIR_DEBUG) {$paths += @($VCPKG_LIB_DIR_DEBUG)} 
         $env_var = $paths -join $sep 
         if ($IsLinux) {$env:LD_LIBRARY_PATH = $env_var}  
-        if ($IsMacOS) {$env:DYLD_LIBRARY_PATH = $env_var} 
+        if ($IsMacOS) {$env:DYLD_LIBRARY_PATH = $env_var}
+        
+        # MacOS does not allow passing DYLD_LIBRARY_PATH to subprocesses because of System Integrity Protect (SIP) acording to:
+        # https://stackoverflow.com/questions/60126159/how-to-set-ld-library-path-dyld-library-path-on-macos
+        # We need another way to do it. This approach modifies .zshenv to set DYLD_LIBRARY_PATH for all new shells.
+        if ($IsMacOS) {
+            $ZSHENV = Join-Path $HOME .zshenv
+            $ZSHENV_BACKUP = Join-Path $HOME .zshenv.setup-backup
+            if (Test-Path $ZSHENV) {Move-Item $ZSHENV $ZSHENV_BACKUP -Force}
+            "export DYLD_LIBRARY_PATH=$env:DYLD_LIBRARY_PATH" | Set-Content $ZSHENV
+        }
     }
     
     # MacOS qt build fix for: 
@@ -176,6 +186,11 @@ function setup_third_party {
     # vcpkg install
     foreach ($pkg in $packages) {   
         echo_command "$VCPKG_EXE --triplet=$TRIPLET --overlay-triplets=$CUSTOMVCPKG_TRIPLET_DIR install $pkg"
+    }
+
+    # MacOS fix: restore .zshenv
+    if ($IsMacOS) {
+        if (Test-Path $ZSHENV_BACKUP) {Move-Item $ZSHENV_BACKUP $ZSHENV -Force}
     }
 
     # Download OSG data (models, textures)
