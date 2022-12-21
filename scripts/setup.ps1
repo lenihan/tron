@@ -137,19 +137,40 @@ function setup_third_party {
     $packages = "osg", 
                 "qt5"
 
-    # Setup LD_LIBRARY_PATH
-    if ($IsLinux -or $IsMacOS) {
-        # vcpkg tools 
-        # (e.g. installed/x64-linux/tools/pkgconf/pkgconf) 
-        # need access to vcpkg build .so's 
-        # (e.g. installed/x64-linux/debug/lib/libpkgconf.so)
-        $VCPKG_LIB_DIR = Join-Path $VCPKG_DIR installed $TRIPLET lib
-        $VCPKG_LIB_DIR_DEBUG = Join-Path $VCPKG_DIR installed $TRIPLET debug lib
-        $sep = [IO.Path]::PathSeparator # : on linux/macos, ; on windows
-        $paths = if ($env:LD_LIBRARY_PATH) {$env:LD_LIBRARY_PATH -split $sep}
-        if ($paths -notcontains $VCPKG_LIB_DIR) {$paths += @($VCPKG_LIB_DIR)}
-        if ($paths -notcontains $VCPKG_LIB_DIR_DEBUG) {$paths += @($VCPKG_LIB_DIR_DEBUG)}
-        $env:LD_LIBRARY_PATH = $paths -join $sep
+    # Setup LD_LIBRARY_PATH/DYLD_LIBRARY_PATH 
+    if ($IsLinux -or $IsMacOS) { 
+        # vcpkg tools  
+        # (e.g. installed/x64-linux/tools/pkgconf/pkgconf)  
+        # need access to vcpkg build .so's  
+        # (e.g. installed/x64-linux/debug/lib/libpkgconf.so) 
+        $VCPKG_LIB_DIR = Join-Path $VCPKG_DIR installed $TRIPLET lib 
+        $VCPKG_LIB_DIR_DEBUG = Join-Path $VCPKG_DIR installed $TRIPLET debug lib 
+        $sep = [IO.Path]::PathSeparator # : on linux/macos, ; on windows 
+        if ($IsLinux) {$env_var = $env:LD_LIBRARY_PATH}  
+        if ($IsMacOS) {$env_var = $env:DYLD_LIBRARY_PATH}  
+        $paths = if ($env_var) {$env_var -split $sep} 
+        if ($paths -notcontains $VCPKG_LIB_DIR) {$paths += @($VCPKG_LIB_DIR)} 
+        if ($paths -notcontains $VCPKG_LIB_DIR_DEBUG) {$paths += @($VCPKG_LIB_DIR_DEBUG)} 
+        $env_var = $paths -join $sep 
+        if ($IsLinux) {$env:LD_LIBRARY_PATH = $env_var}  
+        if ($IsMacOS) {$env:DYLD_LIBRARY_PATH = $env_var} 
+    }
+    
+    # MacOS qt build fix for: 
+    #    ERROR: debug-only framework builds are not supported. Configure with -no-framework if you want a pure debug build. 
+    if ($IsMacOS) {
+        $file_path = Join-Path $VCPKG_DIR ports qt5-base cmake configure_qt.cmake
+        $content = Get-Content $file_path
+        $find_text = "    list\(APPEND _csc_OPTIONS_DEBUG -debug\)"
+        $replace_text = @"
+    list(APPEND _csc_OPTIONS_DEBUG -debug) 
+    # START Added by David Lenihan 
+    if(VCPKG_TARGET_IS_OSX) 
+        list(APPEND _csc_OPTIONS_DEBUG -no-framework) 
+    endif() 
+    # END Added by David Lenihan 
+"@
+        $content -replace $find_text, $replace_text | Set-Content $file_path
     }
 
     # vcpkg install
