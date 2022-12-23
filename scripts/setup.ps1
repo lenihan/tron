@@ -94,6 +94,18 @@ function setup_prerequisites {
         }
     }
     elseif ($IsMacOS) {
+        # Unable to build qt5 (moc can't find libbz2d.1.0.dylib) because SIP (System Integrity Protection) won't pass
+        # DYLD_LIBRARY_PATH to subprocesses.
+        # Fix: Disable SIP
+        # If SIP is enabled, exit
+        $SIP_enabled = (csrutil status) -match "enabled."
+        if ($SIP_enabled) {
+            Write-Host "SIP (System Integrity Protection) must be disabled to build third party libraries." -ForegroundColor Red
+            Write-Host "To disable, follow instructions here:" -ForegroundColor Red
+            Write-Host "https://developer.apple.com/documentation/security/disabling_and_enabling_system_integrity_protection" -ForegroundColor Red
+            exit           
+        }
+
         echo_command "brew install --cask visual-studio-code"
         echo_command "brew install autoconf"
         echo_command "brew install automake"
@@ -154,16 +166,6 @@ function setup_third_party {
         $env_var = $paths -join $sep 
         if ($IsLinux) {$env:LD_LIBRARY_PATH = $env_var}  
         if ($IsMacOS) {$env:DYLD_LIBRARY_PATH = $env_var}
-        
-        # MacOS does not allow passing DYLD_LIBRARY_PATH to subprocesses because of System Integrity Protect (SIP) acording to:
-        # https://stackoverflow.com/questions/60126159/how-to-set-ld-library-path-dyld-library-path-on-macos
-        # We need another way to do it. This approach modifies .zshenv to set DYLD_LIBRARY_PATH for all new shells.
-        if ($IsMacOS) {
-            $ZSHENV = Join-Path $HOME .zshenv
-            $ZSHENV_BACKUP = Join-Path $HOME .zshenv.setup-backup
-            if (Test-Path $ZSHENV) {Move-Item $ZSHENV $ZSHENV_BACKUP -Force}
-            "export DYLD_LIBRARY_PATH=$env:DYLD_LIBRARY_PATH" | Set-Content $ZSHENV
-        }
     }
     
     # MacOS qt build fix for: 
@@ -186,11 +188,6 @@ function setup_third_party {
     # vcpkg install
     foreach ($pkg in $packages) {   
         echo_command "$VCPKG_EXE --triplet=$TRIPLET --overlay-triplets=$CUSTOMVCPKG_TRIPLET_DIR install $pkg"
-    }
-
-    # MacOS fix: restore .zshenv
-    if ($IsMacOS) {
-        if (Test-Path $ZSHENV_BACKUP) {Move-Item $ZSHENV_BACKUP $ZSHENV -Force}
     }
 
     # Download OSG data (models, textures)

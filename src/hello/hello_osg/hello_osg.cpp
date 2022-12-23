@@ -16,25 +16,12 @@
 *  THE SOFTWARE.
 */
 
-#include "osg/Geode"
-#include <osg/Geometry>
-#include <osg/MatrixTransform>
+#include <osg/Geode>
 #include <osg/Notify>
 #include <osg/State>
 #include <osg/TexGen>
-#include <osg/Texture2D>
-#include <osg/ShapeDrawable>
-#include <osgUtil/DelaunayTriangulator>
-
 #include <osgDB/ReadFile>
 #include <osgGA/StateSetManipulator>
-#include <osgFX/Outline>
-
-#include <osgSim/Impostor>
-
-#include <osgViewer/config/SingleWindow>
-#include <osgViewer/View>
-#include <osgViewer/Viewer>
 #include <osgViewer/ViewerEventHandlers>
 
 
@@ -314,9 +301,9 @@ protected:
 };
 
 
-osg::Geode* createTeapot()
+osg::ref_ptr<osg::Geode> createTeapot()
 {
-    osg::Geode* geode = new osg::Geode();
+    osg::ref_ptr<osg::Geode> geode = new osg::Geode();
 
     // add the teapot to the geode.
     geode->addDrawable(new Teapot);
@@ -325,13 +312,13 @@ osg::Geode* createTeapot()
     osg::ref_ptr<osg::Image> image = osgDB::readRefImageFile("Images/reflect.rgb");
     if (image)
     {
-        osg::Texture2D* texture = new osg::Texture2D;
+        osg::ref_ptr<osg::Texture2D> texture = new osg::Texture2D;
         texture->setImage(image);
 
-        osg::TexGen* texgen = new osg::TexGen;
+        osg::ref_ptr<osg::TexGen> texgen = new osg::TexGen;
         texgen->setMode(osg::TexGen::SPHERE_MAP);
 
-        osg::StateSet* stateset = new osg::StateSet;
+        osg::ref_ptr<osg::StateSet> stateset = new osg::StateSet;
         stateset->setTextureAttributeAndModes(0, texture, osg::StateAttribute::ON);
         stateset->setTextureAttributeAndModes(0, texgen, osg::StateAttribute::ON);
 
@@ -343,50 +330,25 @@ osg::Geode* createTeapot()
 
 int main(int argc, char** argv)
 {
-    osg::ref_ptr<osg::Group> root = new osg::Group;
-
     // show all messages
-    osg::setNotifyLevel(osg::DEBUG_FP);
+    osg::setNotifyLevel(osg::DEBUG_INFO);
 
-    // construct the viewer.
+    // construct the viewer
     osg::ref_ptr<osgViewer::Viewer> viewer = new osgViewer::Viewer;
 
-    // Run at fastest frame rate possible
-    // NOTE: "Sync to VBlank" will limit frame rate to that of monitor (60 fps). To turn off:
-    //       Start > Nvidia X Server Settigns > OpenGL Settings > [ ] Sync to VBlank
-    viewer->setRunFrameScheme(osgViewer::ViewerBase::CONTINUOUS);
+    // create teapot
+    osg::ref_ptr<osg::Geode> teapot = createTeapot();
 
-    // Set max frame rate to high number
-    // viewer->setRunMaxFrameRate(100);
-
-    // turn off swap buffer sync
-    // osg::DisplaySettings::instance()->setSyncSwapBuffers(0);
-
-    osgFX::Outline* outline = new osgFX::Outline;
-    outline->setWidth(8);
-    outline->setColor(osg::Vec4(1,1,0,1));
-    root->addChild(outline);
-
-    osg::Geode* teapot = createTeapot();
-    outline->addChild(teapot);
-    // root->addChild(teapot);
-
-    // add model to viewer.
-    viewer->setSceneData(root.get());
+    // add teapot to viewer
+    viewer->setSceneData(teapot);
 
     // add the help handler
+    // 'h' - help text
     viewer->addEventHandler(new osgViewer::HelpHandler());
 
+    // add stats handler
     // 's' - toggle stats
-    auto stats = new osgViewer::StatsHandler;
-    viewer->addEventHandler(stats);
-
-    // windowed
-    const int x = 100;
-    const int y = 100;
-    const int width = 640;
-    const int height = 480;
-    viewer->apply(new osgViewer::SingleWindow(x, y, width, height));
+    viewer->addEventHandler(new osgViewer::StatsHandler);
 
     // add the state manipulator.
     // 'w' - wireframe, points, fill
@@ -395,12 +357,13 @@ int main(int argc, char** argv)
     // 'b' - backface culling toggle
     viewer->addEventHandler(new osgGA::StateSetManipulator(viewer->getCamera()->getOrCreateStateSet()));
 
+    // windowed
+    const int x = 100;
+    const int y = 100;
+    const int width = 640;
+    const int height = 480;
+    viewer->setUpViewInWindow(x, y, width, height);
 
-    // For outline, must clear stencil buffer...
-    osg::DisplaySettings::instance()->setMinimumNumStencilBits(1);
-    const unsigned int clearMask = viewer->getCamera()->getClearMask();
-    viewer->getCamera()->setClearMask(clearMask | GL_STENCIL_BUFFER_BIT);
-    viewer->getCamera()->setClearStencil(0);
-
+    // run loop
     return viewer->run();
 }

@@ -74,6 +74,7 @@ find_package(Qt5Test REQUIRED)                      # To use: target_link_librar
 find_package(Qt5ThemeSupport REQUIRED)              # To use: target_link_libraries(${PROJECT_NAME} ${Qt5ThemeSupport_LIBRARIES});
 find_package(Qt5Widgets REQUIRED)                   # To use: target_link_libraries(${PROJECT_NAME} ${Qt5Widgets_LIBRARIES});
 find_package(Qt5Xml REQUIRED)                       # To use: target_link_libraries(${PROJECT_NAME} ${Qt5Xml_LIBRARIES});
+find_package(OpenThreads REQUIRED)                  # To use: target_link_libraries(${PROJECT_NAME} ${OPENTHREADS_LIBRARY});
 
 # Add vcpkg to include path: third_party/vcpkg/installed/<TRIPLET>/include (same location that osg header is in)
 include_directories(${OSG_INCLUDE_DIR})
