@@ -1,6 +1,7 @@
 # tron - Qt/OpenSceneGraph based libraries and apps
 
 - [tron - Qt/OpenSceneGraph based libraries and apps](#tron---qtopenscenegraph-based-libraries-and-apps)
+  - [Features](#features)
   - [Goals](#goals)
   - [Prerequisites](#prerequisites)
     - [Disk Space](#disk-space)
@@ -25,6 +26,18 @@
   - [Visual Studio Code](#visual-studio-code)
     - [Environment](#environment)
     - [To run CMake configure](#to-run-cmake-configure)
+
+## Features
+- F12 to look up symbols (both local and third party)
+- Builds all third party dependencies locally
+- Debug symbols including third party
+- Source for third party
+- Debug via one mouse click in VS Code (builds code, launches debug executable with gdb for active project)
+- Cross platform: works on Linux, Mac, Windows
+- Built around VS Code, but supports any IDE (including - Visual Studio on Windows)
+- Builds/runs locally (after setup, can disconnect from internet and continue developing)
+- Fast compilation via precompiled headers
+- Fast linking via visibility/dllexport (only export symbols designated as public)
 
 ## Goals
 
@@ -66,7 +79,7 @@ A full build uses about 150 GB of disk space.
   1. SIP (System Integrity Protection) must be disabled to run setup script. Follow [these](https://developer.apple.com/documentation/security/disabling_and_enabling_system_integrity_protection) instructions.
   2. Open terminal and install `brew` and `PowerShell`
   ```shell
-  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"; brew install –cask powershell
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"; brew install --cask powershell
   ```
 
 ## Setup
