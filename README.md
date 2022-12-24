@@ -43,7 +43,7 @@ A full build uses about 150 GB of disk space.
 
 ### Apps
 
-- Windows
+- ![Windows](./resources/icons/windows_16x16.png) Windows
   1. Install *Visual Studio 2022 Community*
      1. Download and open [vs_Community.exe](https://aka.ms/vs/17/release/vs_community.exe)
      2. Select *"Desktop development with C++"* Workload
@@ -56,20 +56,21 @@ A full build uses about 150 GB of disk space.
     ```
   4. Close Terminal (this terminal must be restarted to access newly installed apps)
      
-- Linux
+- ![Linux](./resources/icons/linux_16x16.png) Linux
   1. Open Terminal
   2. Install apps: pwsh, git, code
     ```pwsh
     sudo snap install powershell --channel=lts/stable --classic; sudo apt-get install git --yes; sudo snap install code --classic
     ```
 
-- Mac
+- ![MacOS](./resources/icons/macos_16x16.png) Mac
   1. Install brew: `/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"`
   2. Install PowerShell: `brew install –cask powershell`
 
 
 ## Setup
 
+![Windows](./resources/icons/windows_16x16.png) Windows/![Linux](./resources/icons/linux_16x16.png) Linux/![MacOS](./resources/icons/macos_16x16.png) Mac
 1. Open Terminal
 2. Clone repo and run setup script (~1-2 hours)...
   ```pwsh
@@ -78,7 +79,7 @@ A full build uses about 150 GB of disk space.
 
 ## Build/Run/Debug
 
-- Visual Studio Code
+- Visual Studio Code (![Windows](./resources/icons/windows_16x16.png) Windows/![Linux](./resources/icons/linux_16x16.png) Linux/![MacOS](./resources/icons/macos_16x16.png) Mac)
   1. Open Terminal
   2. Launch Visual Studio Code with repo folder
     ```pwsh
@@ -97,7 +98,7 @@ A full build uses about 150 GB of disk space.
      - `hello_osg` to test OpenSceneGraph
      - `hello_qt` to test Qt  
   7. To launch debugger, click the "debug" icon in the status bar (bottom) 
-- Windows: Visual Studio 2022
+- Visual Studio 2022 (![Windows](./resources/icons/windows_16x16.png) Windows)
   1. Open Terminal
   2. Generate .sln file, launch in Visual Studio
     ```pwsh
