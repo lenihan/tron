@@ -49,16 +49,14 @@ A full build uses about 150 GB of disk space.
      2. Select *"Desktop development with C++"* Workload
      3. Click *"Install"* button
      * NOTE: To verify proper install, you should be able to run `cl` from the "Developer Command Prompt for VS 2022" without error.
-  2. Open Terminal
-  3. Install `git`, `pwsh`, `cmake`, `perl`, and `code`
+  2. Open terminal and install `git`, `pwsh`, `cmake`, `perl`, and `code`
     ```pwsh
     'Git.Git', '9MZ1SNWT0N5D', 'cmake', 'StrawberryPerl.StrawberryPerl', 'XP9KHM4BK9FZ7Q' | % {winget install $_ --accept-source-agreements --accept-package-agreements}
     ```
-  4. Close Terminal (this terminal must be restarted to access newly installed apps)
+  3. Close terminal (this terminal must be restarted to access newly installed apps)
      
 - ![Linux](./resources/icons/linux_16x16.png) Linux
-  1. Open Terminal
-  2. Install `pwsh`, `git`, and `code`
+  1. Open terminal and install `pwsh`, `git`, and `code`
     ```pwsh
     sudo snap install powershell --channel=lts/stable --classic; sudo apt-get install git --yes; sudo snap install code --classic
     ```
@@ -66,8 +64,7 @@ A full build uses about 150 GB of disk space.
 - ![MacOS](./resources/icons/macos_16x16.png) Mac
   
   1. SIP (System Integrity Protection) must be disabled to run setup script. Follow [these](https://developer.apple.com/documentation/security/disabling_and_enabling_system_integrity_protection) instructions.
-  2. Open Terminal
-  3. Install `brew` and `PowerShell`
+  2. Open terminal and install `brew` and `PowerShell`
   ```shell
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"; brew install –cask powershell
   ```
@@ -75,8 +72,7 @@ A full build uses about 150 GB of disk space.
 ## Setup
 
 ![Windows](./resources/icons/windows_16x16.png) Windows/![Linux](./resources/icons/linux_16x16.png) Linux/![MacOS](./resources/icons/macos_16x16.png) Mac
-1. Open Terminal
-2. Clone repo and run setup script (~1-2 hours)...
+1. Open terminal and clone repo, run setup script (~1-2 hours)
   ```pwsh
   pwsh -Command "git clone https://github.com/lenihan/tron.git $HOME/repos/tron; ~/repos/tron/scripts/setup.ps1"
   ```
@@ -84,35 +80,33 @@ A full build uses about 150 GB of disk space.
 ## Build/Run/Debug
 
 - Visual Studio Code (![Windows](./resources/icons/windows_16x16.png) Windows/![Linux](./resources/icons/linux_16x16.png) Linux/![MacOS](./resources/icons/macos_16x16.png) Mac)
-  1. Open Terminal
-  2. Launch Visual Studio Code with repo folder
+  1. Open terminal and launch Visual Studio Code with repo folder
     ```pwsh
     pwsh -Command "code $HOME/repos/tron"
     ```
-  3. Install Workspace Recommended extensions
+  2. Install Workspace Recommended extensions
      - View > Extensions > Filter Extensions... > Recommended
      - Click "Install" on each extension
-  4. To launch a target, click the "play" icon the status bar (bottom)
-  5. Select a Kit
+  3. To launch a target, click the "play" icon the status bar (bottom)
+  4. Select a Kit
      - Windows: `Visual Studio Community 2022 Release - amd64`
      - Linux: `GCC 9.4.0 x86_64-linux-gnu`
      - Mac: `Clang 14.0.0 x86_64-apple-darwin 21.6.0`
-  6. Select a launch target
+  5. Select a launch target
      - `hello_cmake` to test CMake 
      - `hello_osg` to test OpenSceneGraph
      - `hello_qt` to test Qt  
-  7. To launch debugger, click the "debug" icon in the status bar (bottom) 
+  6. To launch debugger, click the "debug" icon in the status bar (bottom) 
 - Visual Studio 2022 (![Windows](./resources/icons/windows_16x16.png) Windows)
-  1. Open Terminal
-  2. Generate .sln file, launch in Visual Studio
+  1. Open terminal and generate .sln file, launch in Visual Studio
     ```pwsh
     pwsh -Command "cmake -S ~/repos/tron -B ~/repos/tron/build; ~/repos/tron/build/tron.sln"
     ``` 
-  3. Solution Explorer > Right click on project > Set as Startup Project
+  2. Solution Explorer > Right click on project > Set as Startup Project
      - `hello_cmake` to test CMake 
      - `hello_osg` to test OpenSceneGraph
      - `hello_qt` to test Qt  
-  4. Debug > Start Debugging 
+  3. Debug > Start Debugging 
 
 ## Clean
 
