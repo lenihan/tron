@@ -50,7 +50,7 @@ A full build uses about 150 GB of disk space.
      3. Click *"Install"* button
      * NOTE: To verify proper install, you should be able to run `cl` from the "Developer Command Prompt for VS 2022" without error.
   2. Open Terminal
-  3. Install apps: git, pwsh, cmake, perl, code...
+  3. Install `git`, `pwsh`, `cmake`, `perl`, and `code`
     ```pwsh
     'Git.Git', '9MZ1SNWT0N5D', 'cmake', 'StrawberryPerl.StrawberryPerl', 'XP9KHM4BK9FZ7Q' | % {winget install $_ --accept-source-agreements --accept-package-agreements}
     ```
@@ -58,19 +58,19 @@ A full build uses about 150 GB of disk space.
      
 - ![Linux](./resources/icons/linux_16x16.png) Linux
   1. Open Terminal
-  2. Install apps: pwsh, git, code
+  2. Install `pwsh`, `git`, and `code`
     ```pwsh
     sudo snap install powershell --channel=lts/stable --classic; sudo apt-get install git --yes; sudo snap install code --classic
     ```
 
 - ![MacOS](./resources/icons/macos_16x16.png) Mac
-  1. Open Terminal
-  2. Install brew & PowerShell
-    ```shell
+  
+  1. SIP (System Integrity Protection) must be disabled to run setup script. Follow [these](https://developer.apple.com/documentation/security/disabling_and_enabling_system_integrity_protection) instructions.
+  2. Open Terminal
+  3. Install `brew` and `PowerShell`
+  ```shell
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"; brew install –cask powershell
-    ```
-
-
+  ```
 
 ## Setup
 
@@ -96,7 +96,7 @@ A full build uses about 150 GB of disk space.
   5. Select a Kit
      - Windows: `Visual Studio Community 2022 Release - amd64`
      - Linux: `GCC 9.4.0 x86_64-linux-gnu`
-     - Mac: TODO
+     - Mac: `Clang 14.0.0 x86_64-apple-darwin 21.6.0`
   6. Select a launch target
      - `hello_cmake` to test CMake 
      - `hello_osg` to test OpenSceneGraph
