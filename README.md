@@ -52,7 +52,7 @@ A full build uses about 150 GB of disk space.
   2. Open Terminal
   3. Install apps: git, pwsh, cmake, perl, code...
     ```pwsh
-    powershell -Command "& {('Git.Git', '9MZ1SNWT0N5D', 'cmake', 'StrawberryPerl.StrawberryPerl', 'XP9KHM4BK9FZ7Q') | % {winget install $_ --accept-source-agreements --accept-package-agreements}}"
+    'Git.Git', '9MZ1SNWT0N5D', 'cmake', 'StrawberryPerl.StrawberryPerl', 'XP9KHM4BK9FZ7Q' | % {winget install $_ --accept-source-agreements --accept-package-agreements}
     ```
   4. Close Terminal (this terminal must be restarted to access newly installed apps)
      
@@ -64,8 +64,12 @@ A full build uses about 150 GB of disk space.
     ```
 
 - ![MacOS](./resources/icons/macos_16x16.png) Mac
-  1. Install brew: `/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"`
-  2. Install PowerShell: `brew install –cask powershell`
+  1. Open Terminal
+  2. Install brew & PowerShell
+    ```shell
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"; brew install –cask powershell
+    ```
+
 
 
 ## Setup
