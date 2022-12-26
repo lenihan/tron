@@ -330,40 +330,19 @@ osg::ref_ptr<osg::Geode> createTeapot()
 
 int main(int argc, char** argv)
 {
-    // show all messages
-    osg::setNotifyLevel(osg::DEBUG_INFO);
-
-    // construct the viewer
-    osg::ref_ptr<osgViewer::Viewer> viewer = new osgViewer::Viewer;
-
-    // create teapot
-    osg::ref_ptr<osg::Geode> teapot = createTeapot();
-
-    // add teapot to viewer
-    viewer->setSceneData(teapot);
-
-    // add the help handler
-    // 'h' - help text
-    viewer->addEventHandler(new osgViewer::HelpHandler());
-
-    // add stats handler
-    // 's' - toggle stats
-    viewer->addEventHandler(new osgViewer::StatsHandler);
-
-    // add the state manipulator.
-    // 'w' - wireframe, points, fill
-    // 't' - texture toggle
-    // 'l' - lighting toggle
-    // 'b' - backface culling toggle
-    viewer->addEventHandler(new osgGA::StateSetManipulator(viewer->getCamera()->getOrCreateStateSet()));
-
-    // windowed
+    osgViewer::Viewer viewer;
     const int x = 100;
     const int y = 100;
     const int width = 640;
     const int height = 480;
-    viewer->setUpViewInWindow(x, y, width, height);
-
-    // run loop
-    return viewer->run();
+    viewer.setUpViewInWindow(x, y, width, height);
+    viewer.addEventHandler(new osgViewer::HelpHandler);                                                 // 'h' - show help text
+    viewer.addEventHandler(new osgViewer::StatsHandler);                                                // 's' - toggle stats
+    viewer.addEventHandler(new osgGA::StateSetManipulator(viewer.getCamera()->getOrCreateStateSet()));  // 'w' - wireframe, points, fill
+                                                                                                        // 't' - texture toggle
+                                                                                                        // 'l' - lighting toggle
+                                                                                                        // 'b' - backface culling toggle
+    viewer.setSceneData(createTeapot());
+    viewer.setThreadingModel(osgViewer::ViewerBase::ThreadingModel::ThreadPerCamera);
+    return viewer.run();
 }
