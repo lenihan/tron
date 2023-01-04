@@ -146,7 +146,7 @@ function setup_third_party {
     Write-Host "Building third party libraries..." -ForegroundColor Green
     $VCPKG_EXE = Join-Path $VCPKG_DIR vcpkg
     $CUSTOMVCPKG_TRIPLET_DIR = Join-Path $ROOT_DIR src custom_vcpkg triplets
-    $packages = "osg", 
+    $packages = "osg[tools]", 
                 "qt5"
 
     # Setup LD_LIBRARY_PATH/DYLD_LIBRARY_PATH 
@@ -187,7 +187,7 @@ function setup_third_party {
 
     # vcpkg install
     foreach ($pkg in $packages) {   
-        echo_command "$VCPKG_EXE --triplet=$TRIPLET --overlay-triplets=$CUSTOMVCPKG_TRIPLET_DIR install $pkg"
+        echo_command "$VCPKG_EXE --triplet=$TRIPLET --overlay-triplets=$CUSTOMVCPKG_TRIPLET_DIR install $pkg --recurse"
     }
 
     # Download OSG data (models, textures)
