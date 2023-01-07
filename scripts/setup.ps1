@@ -185,6 +185,17 @@ function setup_third_party {
         $content -replace $find_text, $replace_text | Set-Content $file_path
     }
 
+    # MacOS osg build fix. When you try to build osg[tools], you get an error because sdl1 (a dependency of osg[tools]) is not supported
+    # on MacOS. From third_party/vcpkg/ports/sdl1/vcpkg.json...
+    #    "supports": "!osx & !uwp"
+    # I verified if I removed sdl1 dependency from osg[tools], I could build osg[tools] on MacOS.
+    # For this fix, removing the sdl1 dependency from osg[tools]. I haven't noticed it is needed for osg tools (i.e. osgviewer, osgconv)
+    $file_path = Join-Path $VCPKG_DIR ports osg vcpkg.json
+    $content = Get-Content $file_path -Raw
+    $find_text = ",`n *`"sdl1`"`n"
+    $replace_text = "`n"
+    $content -replace $find_text, $replace_text | Set-Content $file_path
+
     # vcpkg install
     foreach ($pkg in $packages) {   
         echo_command "$VCPKG_EXE --triplet=$TRIPLET --overlay-triplets=$CUSTOMVCPKG_TRIPLET_DIR install $pkg --recurse"
@@ -240,14 +251,21 @@ PATH=$PATH
 VSCMD_ARG_TGT_ARCH=$env:VSCMD_ARG_TGT_ARCH
 "@ | Set-Content $ENV_FILE
     }
-    if ($IsLinux -or $IsMacOS) {
+    if ($IsLinux) {
 @"
 LD_LIBRARY_PATH=$LD_LIBRARY_PATH
 OSG_FILE_PATH=$OSG_FILE_PATH
 PATH=$PATH
 "@ | Set-Content $ENV_FILE
     }
-    
+    if ($IsMacOS) {
+@"
+DYLD_LIBRARY_PATH=$LD_LIBRARY_PATH
+OSG_FILE_PATH=$OSG_FILE_PATH
+PATH=$PATH
+"@ | Set-Content $ENV_FILE
+    }    
+
     # Add environment variables to vs code workspace
     $VS_CODE_WORKSPACE_SETTINGS_PATH = Join-Path $ROOT_DIR .vscode settings.json
     if (Test-Path $VS_CODE_WORKSPACE_SETTINGS_PATH) {
