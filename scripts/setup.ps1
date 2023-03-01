@@ -185,6 +185,78 @@ function setup_third_party {
         $content -replace $find_text, $replace_text | Set-Content $file_path
     }
 
+    # Linux fix: debug binaries have same name as release binaries and are stored in same location.
+    #            Add "_debug" postfix (like Windows "d") so both release/debug can live side-by-side.
+    $file_contents = @'
+diff --git a/mkspecs/features/create_cmake.prf b/mkspecs/features/create_cmake.prf
+index 4aa5dad46..cee6d2882 100644
+--- a/mkspecs/features/create_cmake.prf
++++ b/mkspecs/features/create_cmake.prf
+@@ -212,7 +212,7 @@ contains(CONFIG, plugin) {
+     CMAKE_PLUGIN_TYPE_ESCAPED = $$replace(PLUGIN_TYPE, [-/], _)
+ 
+     win32 {
+-        !mingw|qtConfig(debug_and_release): debug_suffix="d"
++        debug_suffix="d"
+ 
+         CMAKE_PRL_FILE_LOCATION_RELEASE = $$PLUGIN_TYPE/$${CMAKE_QT_STEM}.prl
+         CMAKE_PRL_FILE_LOCATION_DEBUG = $$PLUGIN_TYPE/$${CMAKE_QT_STEM}$${debug_suffix}.prl
+@@ -241,9 +241,9 @@ contains(CONFIG, plugin) {
+             else: CMAKE_PLUGIN_EXT = .a
+ 
+             CMAKE_PLUGIN_LOCATION_RELEASE = $$PLUGIN_TYPE/lib$${CMAKE_QT_STEM}$${CMAKE_PLUGIN_EXT}
+-            CMAKE_PLUGIN_LOCATION_DEBUG = $$PLUGIN_TYPE/lib$${CMAKE_QT_STEM}$${CMAKE_PLUGIN_EXT}
++            CMAKE_PLUGIN_LOCATION_DEBUG = $$PLUGIN_TYPE/lib$${CMAKE_QT_STEM}_debug$${CMAKE_PLUGIN_EXT}
+             CMAKE_PRL_FILE_LOCATION_RELEASE = $$PLUGIN_TYPE/lib$${CMAKE_QT_STEM}.prl
+-            CMAKE_PRL_FILE_LOCATION_DEBUG = $$PLUGIN_TYPE/lib$${CMAKE_QT_STEM}.prl
++            CMAKE_PRL_FILE_LOCATION_DEBUG = $$PLUGIN_TYPE/lib$${CMAKE_QT_STEM}_debug.prl
+         }
+     }
+     cmake_target_file.input = $$PWD/data/cmake/Qt5PluginTarget.cmake.in
+@@ -295,6 +295,7 @@ CMAKE_FEATURE_PROPERTY_PREFIX = ""
+ equals(TEMPLATE, aux): CMAKE_FEATURE_PROPERTY_PREFIX = "INTERFACE_"
+ 
+ mac {
++    CMAKE_FIND_OTHER_LIBRARY_BUILD = "true"
+     !isEmpty(CMAKE_STATIC_TYPE) {
+         CMAKE_LIB_FILE_LOCATION_DEBUG = lib$${CMAKE_QT_STEM}_debug.a
+         CMAKE_LIB_FILE_LOCATION_RELEASE = lib$${CMAKE_QT_STEM}.a
+@@ -316,7 +317,7 @@ mac {
+     CMAKE_WINDOWS_BUILD = "true"
+     CMAKE_FIND_OTHER_LIBRARY_BUILD = "true"
+ 
+-    !mingw|qtConfig(debug_and_release): debug_suffix="d"
++    debug_suffix="d"
+ 
+     CMAKE_LIB_FILE_LOCATION_DEBUG = $${CMAKE_QT_STEM}$${debug_suffix}.dll
+     CMAKE_LIB_FILE_LOCATION_RELEASE = $${CMAKE_QT_STEM}.dll
+@@ -342,17 +343,18 @@ mac {
+         CMAKE_IMPLIB_FILE_LOCATION_RELEASE = $${CMAKE_QT_STEM}.lib
+     }
+ } else {
++    CMAKE_FIND_OTHER_LIBRARY_BUILD = "true"
+     !isEmpty(CMAKE_STATIC_TYPE) {
+-        CMAKE_LIB_FILE_LOCATION_DEBUG = lib$${CMAKE_QT_STEM}.a
++        CMAKE_LIB_FILE_LOCATION_DEBUG = lib$${CMAKE_QT_STEM}_debug.a
+         CMAKE_LIB_FILE_LOCATION_RELEASE = lib$${CMAKE_QT_STEM}.a
+-        CMAKE_PRL_FILE_LOCATION_DEBUG = lib$${CMAKE_QT_STEM}.prl
++        CMAKE_PRL_FILE_LOCATION_DEBUG = lib$${CMAKE_QT_STEM}_debug.prl
+         CMAKE_PRL_FILE_LOCATION_RELEASE = lib$${CMAKE_QT_STEM}.prl
+     } else:unversioned_libname {
+-        CMAKE_LIB_FILE_LOCATION_DEBUG = lib$${CMAKE_QT_STEM}.so
++        CMAKE_LIB_FILE_LOCATION_DEBUG = lib$${CMAKE_QT_STEM}_debug.so
+         CMAKE_LIB_FILE_LOCATION_RELEASE = lib$${CMAKE_QT_STEM}.so
+         CMAKE_LIB_SONAME = lib$${CMAKE_QT_STEM}.so
+     } else {
+-        CMAKE_LIB_FILE_LOCATION_DEBUG = lib$${CMAKE_QT_STEM}.so.$$eval(QT.$${MODULE}.VERSION)
++        CMAKE_LIB_FILE_LOCATION_DEBUG = lib$${CMAKE_QT_STEM}_debug.so.$$eval(QT.$${MODULE}.VERSION)
+         CMAKE_LIB_FILE_LOCATION_RELEASE = lib$${CMAKE_QT_STEM}.so.$$eval(QT.$${MODULE}.VERSION)
+         CMAKE_LIB_SONAME = lib$${CMAKE_QT_STEM}.so.$$section(QT.$${MODULE}.VERSION, ., 0, 0)
+     }
+'@
+    $file_path = Join-Path $VCPKG_DIR ports qt5-base patches create_cmake.patch
+    $file_contents | Set-Content $file_path
+
     # MacOS osg build fix. When you try to build osg[tools], you get an error because sdl1 (a dependency of osg[tools]) is not supported
     # on MacOS. From third_party/vcpkg/ports/sdl1/vcpkg.json...
     #    "supports": "!osx & !uwp"
