@@ -79,6 +79,9 @@ find_package(OpenThreads REQUIRED)                  # To use: target_link_librar
 # Add vcpkg to include path: third_party/vcpkg/installed/<TRIPLET>/include (same location that osg header is in)
 include_directories(${OSG_INCLUDE_DIR})
 
+# TODO - use relative rpath so that linux/mac libraries can be found without issues with name collision (Qt libraries have same debug/release name)
+#        Also, means app won't need a LD_LIBRARY_APTH to find libraries
+
 # Directory for output files
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib CACHE PATH "Output directory for static libraries.")
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib CACHE PATH "Output directory for shared libraries.")
